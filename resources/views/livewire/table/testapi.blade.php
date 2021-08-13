@@ -1,3 +1,11 @@
+<?php
+
+echo json_encode($users);
+
+$test = $users
+
+?>
+
 
 <div>
     <x-data-table :data="$data" :model="$users">

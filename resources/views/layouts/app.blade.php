@@ -24,6 +24,13 @@
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free-v4-font-face.min.css" media="all">
         <link rel="stylesheet" href="https://kit-free.fontawesome.com/releases/latest/css/free.min.css" media="all">
 
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" /> -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css" /> -->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.bootstrap4.min.css" /> -->
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.1.0/dataTables.bootstrap4.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-select-bs4/1.3.3/select.bootstrap4.css">
+
         <livewire:styles />
 
         <!-- Scripts -->
@@ -54,6 +61,15 @@
             </div>
         </div>
 
+        <footer class="main-footer" style="margin-top: 0px;">
+            <div class="footer-left">
+            Copyright &copy; 2021 <div class="bullet"></div> Develop By <a href="https://symplified.biz/">Symplified</a>
+            </div>
+            <div class="footer-right">
+            1.1.0
+            </div>
+        </footer>
+
         @stack('modals')
 
         <!-- General JS Scripts -->
@@ -74,6 +90,12 @@
 
         <livewire:scripts />
         <script src="{{ mix('js/app.js') }}" defer></script>
+
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/select.bootstrap4.min.js"></script>
+        
+        
 
         @isset($script)
             {{ $script }}
