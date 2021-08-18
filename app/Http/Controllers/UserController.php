@@ -14,20 +14,68 @@ class UserController extends Controller
         ]);
     }
 
-    public function dashboard_view (){
+    public function daily_sales (){
 
         // return view('dashboard', [
         //     'user' => User::class
         // ]);
 
-        $posts = Http::get('https://jsonplaceholder.typicode.com/posts')->object();
+        // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/daily_sales?from=2021-06-01&to=2021-08-16')->object();
 
-        return view('dashboard', compact('posts'));
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+            'from' => '2021-06-01',
+            'to' => '2021-08-16',
+        ]);
+
+        if($request->successful()){
+
+            $days = $request['data']['content'];
+
+            // $sales_arr = array();
+
+            // foreach ($days as $index => $item) {
+            //     // if index is greater than zero, you could access to previous element:
+            //     // if ($item['qty'] == 0 && $index > 0 && $days[$index-1]['qty'] > 5) {
+            //     //   $current_name = $item['name'];
+            //     //   $previous_name = $myArray[$index-1]['name'];
+            //     //   echo "'$current_name' is empty, check '$previous_name' for replenishment!";
+            //     // } else {
+            //     //   continue;
+            //     // }
+
+            //     if($index > 0){
+
+            //     }else{
+            //         $sales_arr[] = $item;
+            //         $old_date = $item['date'];
+            //     }
+            // }
+
+            // return $sales_arr;
+        }
+
+        // return $days;
+
+        // die();
+
+        return view('dashboard', compact('days'));
     }
 
-    public function test_api(){
-        $response = Http::get('https://jsonplaceholder.typicode.com/posts');
+    public function daily_details(){
+        
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
+            'startDate' => '2021-07-01',
+            'endDate' => '2021-08-16',
+        ]); 
+        
+        // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
+        if($request->successful()){
 
-        return $response->json();
+            $datas = $request['data'];
+
+        }
+
+        // return $datas;
+        return view('components.daily-details', compact('datas'));
     }
 }

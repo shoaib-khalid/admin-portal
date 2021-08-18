@@ -26,8 +26,8 @@ Route::get('/', function () {
 
 Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
-    Route::get('/dashboard', [UserController::class, "dashboard_view"])->name('dashboard');
-    Route::get('/revenue', [UserController::class, "dashboard_view"])->name('revenue');
+    Route::get('/dashboard', [UserController::class, "daily_sales"])->name('dashboard');
+    Route::get('/detail', [UserController::class, "daily_details"])->name('detail');
     Route::get('/settlement', [UserController::class, "dashboard_view"])->name('settlement');
     Route::get('/test_api', [UserController::class, "test_api"]);
     Route::get('/user', [ UserController::class, "index_view" ])->name('user');

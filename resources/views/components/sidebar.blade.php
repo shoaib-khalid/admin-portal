@@ -41,8 +41,8 @@ $navigation_links = array_to_object($links);
                 <a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-fire"></i><span>Sales Summary</span></a>
             </li>
 
-            <li class="{{ Request::routeIs('revenue') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('revenue') }}"><i class="fas fa-fire"></i><span>Revenue Summary</span></a>
+            <li class="{{ Request::routeIs('detail') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('detail') }}"><i class="fas fa-fire"></i><span>Daily Detail Sales</span></a>
             </li>
 
             <li class="{{ Request::routeIs('settlement') ? 'active' : '' }}">

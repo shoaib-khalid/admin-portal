@@ -1,41 +1,59 @@
 
 <div class="card">
     <div class="card-header">
-        <h4>Daily Summary</h4>
+        <h4>Daily Sales Summary</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped" id="table-1">
+            <table class="table table-bordered table-md" id="table-1">
                 <thead>
-                    <tr>
+                    <tr class="text-center">
                     <th class="text-center">
                         #
                     </th>
-                    <th>Task Name</th>
-                    <th>Progress</th>
                     <th>Due Date</th>
-                    <th>Status</th>
+                    <th>Store Name</th>
+                    <th>Total Order</th>
                     <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($posts as $post)
-                        <tr>
+                    @php $index = 1; @endphp
+                    @foreach ($days as $day)
+                        <tr class="text-center">
                             <td>
-                                {{ $post->id }}
+                                {{ $index }}
                             </td>
                             <td>
-                                {{ $post->title }}
+                                {{ \Carbon\Carbon::parse($day['date'])->format('d/m/Y')}}
                             </td>
-                            <td class="align-middle">
-                                <div class="progress" data-height="4" data-toggle="tooltip" title="100%">
-                                    <div class="progress-bar bg-success" data-width="100%"></div>
-                                </div>
+                            <td>
+                                {{ $day['storeId'] }}
                             </td>
-                            <td>2018-01-20</td>
-                            <td><div class="badge badge-success">Completed</div></td>
-                            <td><a href="#" class="btn btn-secondary">Detail</a></td>
+                            <td>
+                                <strong>
+                                    {{ $day['totalOrders'] }}
+                                </strong>
+                            </td>
+                            <td>
+                                <button class="btn btn-dark" 
+                                data-toggle="modal" 
+                                data-target="#dailySalesModal"
+                                data-date="{{ $day['date'] }}"
+                                data-total_order="{{ $day['totalOrders'] }}"
+                                data-success_order="{{ $day['successFullOrders'] }}"
+                                data-cancel_order="{{ $day['canceledOrders'] }}"
+                                data-amount_earn="{{ $day['amountEarned'] }}"
+                                data-commision="{{ $day['commision'] }}"
+                                data-total_amount="{{ $day['totalAmount'] }}"
+                                data-settlement_id="{{ $day['settlementReferenceId'] }}"
+                                >
+                                    <i class="far fa-check-circle"></i>
+                                    Details
+                                </button>
+                            </td>
                         </tr>
+                        @php $index++; @endphp
                     @endforeach
                     
                 </tbody>
