@@ -5,8 +5,27 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\User;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+
 class UserController extends Controller
 {
+
+    public function export() 
+    {
+        // $data = new UsersExport;
+
+        // return $data;
+
+        $from = "2021-08-01";
+        $to = "2021-08-30";
+
+        return Excel::download(new UsersExport($from, $to), 'users.xlsx');
+
+        // return Excel::download(new MttRegistrationsExport($request->id), 'MttRegistrations.xlsx');
+    }
+
     public function index_view ()
     {
         return view('pages.user.user-data', [
@@ -75,7 +94,42 @@ class UserController extends Controller
 
         }
 
+
+        // $newArray = array();
+        
+        // foreach($datas as $data){
+        //     $date = $data['date'];
+
+        //     foreach($data['sales'] as $item){
+
+        //         $cur_item = array();
+
+        //         array_push( 
+        //             $cur_item,
+        //             $data['date'],
+        //             $item['storeId'], 
+        //             $item['merchantName'],
+        //             $item['storeName'],
+        //             $item['subTotal'],
+        //             $item['total'],
+        //             $item['serviceCharge'],
+        //             $item['deliveryCharge'],
+        //             $item['customerName'],
+        //             $item['orderStatus'],
+        //             $item['deliveryStatus'],
+        //             $item['commission']
+        //         );
+
+        //         $newArray[] = $cur_item;
+        //     }
+        // }
+        
+        // return $newArray;
+
+        // die();
+
         // return $datas;
+        // return json_decode($datas);
         return view('components.daily-details', compact('datas'));
     }
 }

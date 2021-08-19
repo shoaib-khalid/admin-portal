@@ -34,6 +34,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::view('/user/new', "pages.user.user-new")->name('user.new');
     Route::view('/user/edit/{userId}', "pages.user.user-edit")->name('user.edit');
 
+    Route::get('/export', [UserController::class, "export"])->name('export');
+
 });
 
 
