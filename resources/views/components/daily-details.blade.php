@@ -48,6 +48,26 @@
             var commision = (commision!= null) ? $('#commision').val(commision) : $('#commision').val('N/A');
 
         });
+
+        // $('#date_chosen2').val("");
+
+        $('.daterange-btn2').daterangepicker({
+            locale: {format: 'MMMM D, YYYY'},
+            ranges: {
+                'Today'       : [moment(), moment()],
+                'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(29, 'days'),
+            endDate  : moment()
+        }, function (start, end) {
+            $('.daterange-btn2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            $('#date_chosen2').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            $('#date_chosen2_copy').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+        });
         
     });
     

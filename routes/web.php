@@ -27,7 +27,13 @@ Route::get('/', function () {
 Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/dashboard', [UserController::class, "daily_sales"])->name('dashboard');
+    Route::post('/filter_dashboard', [UserController::class, "daily_sales_filter"])->name('filter_dashboard');
+    Route::post('/export_dashboard', [UserController::class, "export_dashboard"])->name('export_dashboard');
+
     Route::get('/detail', [UserController::class, "daily_details"])->name('detail');
+    Route::post('/filter_detail', [UserController::class, "daily_details_filter"])->name('filter_detail');
+    Route::post('/export_detail', [UserController::class, "export_detail"])->name('export_detail');
+
     Route::get('/settlement', [UserController::class, "dashboard_view"])->name('settlement');
     Route::get('/test_api', [UserController::class, "test_api"]);
     Route::get('/user', [ UserController::class, "index_view" ])->name('user');

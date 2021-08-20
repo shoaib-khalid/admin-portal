@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\User;
+use DateTime;
 
 use App\Exports\UsersExport;
+use App\Exports\DetailsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -26,6 +28,44 @@ class UserController extends Controller
         // return Excel::download(new MttRegistrationsExport($request->id), 'MttRegistrations.xlsx');
     }
 
+    public function export_dashboard(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // $from = "2021-08-01";
+        // $to = "2021-08-30";
+
+        return Excel::download(new UsersExport($start_date, $end_date), 'dailySalesSummary.xlsx');
+    }
+
+    public function export_detail(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        // return $start_date."|".$end_date;
+        // return $data;
+        // die();
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // $from = "2021-08-01";
+        // $to = "2021-08-30";
+
+        return Excel::download(new DetailsExport($start_date, $end_date), 'dailyDetailsSales.xlsx');
+    }
+
     public function index_view ()
     {
         return view('pages.user.user-data', [
@@ -40,10 +80,17 @@ class UserController extends Controller
         // ]);
 
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/daily_sales?from=2021-06-01&to=2021-08-16')->object();
+        $to = date("Y-m-d");
+        $date = new DateTime('7 days ago');
+        $from = $date->format('Y-m-d');
+
+        // return $from."|".$to;
+
+        // die();
 
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
-            'from' => '2021-06-01',
-            'to' => '2021-08-16',
+            'from' => $from,
+            'to' => $to,
         ]);
 
         if($request->successful()){
@@ -80,11 +127,43 @@ class UserController extends Controller
         return view('dashboard', compact('days'));
     }
 
+    public function daily_sales_filter(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+            'from' => $start_date,
+            'to' => $end_date,
+        ]);
+
+        if($request->successful()){
+
+            $days = $request['data']['content'];
+
+        }
+
+        // return $days;
+        // die();
+        return view('dashboard', compact('days'));
+
+    }
+
     public function daily_details(){
+
+        $to = date("Y-m-d");
+        $date = new DateTime('7 days ago');
+        $from = $date->format("Y-m-d");
         
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
-            'startDate' => '2021-07-01',
-            'endDate' => '2021-08-16',
+            'startDate' => $from,
+            'endDate' => $to,
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -130,6 +209,33 @@ class UserController extends Controller
 
         // return $datas;
         // return json_decode($datas);
+        return view('components.daily-details', compact('datas'));
+    }
+
+    public function daily_details_filter(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
+            'startDate' => $start_date,
+            'endDate' => $end_date,
+        ]); 
+        
+        // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
+        if($request->successful()){
+
+            $datas = $request['data'];
+
+        }
+
+        // return $datas;
         return view('components.daily-details', compact('datas'));
     }
 }
