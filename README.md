@@ -1,4 +1,4 @@
-# Laravel 8 + Stisla + Jetstream + Livewire
+# Laravel 8 + Stisla + Jetstream + Livewire 
 
 ## What next?
 After clone or download this repository, next step is install all dependency required by laravel and laravel-mix.
