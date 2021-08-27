@@ -58,39 +58,44 @@
                 <tbody>
                     @php 
                         $index = 1; 
-                    @endphp
-                    @foreach ($datas as $data)
-                        @if ($data['totalTransactionValue'] != null)
-                            <tr class="text-center">
 
-                                <td>
-                                    {{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y')}}
-                                </td>
-                                <td>
-                                    {{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y')}}
-                                </td>
-                                <td>
-                                    {{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y')}}
-                                </td>
-                                <td>
-                                    {{ $data['totalServiceCharges'] }}
-                                </td>
-                                <td>
-                                    {{ $data['totalServiceCharges'] }}
-                                </td>
-                                <td>
-                                    {{ $data['totalServiceCharges'] }}
-                                </td>
-                                <td>
-                                    {{ $data['totalCommissionFee'] }}
-                                </td>
-                                <td>
-                                    {{ $data['totalCommissionFee'] }}
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                    
+                        $length = count($datas);
+
+                        // var_dump($length);
+                    @endphp
+                    @if ($length > 0)
+                        @foreach ($datas as $data)
+                            @if ($data['totalTransactionValue'] != null)
+                                <tr class="text-center">
+
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y')}}
+                                    </td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y')}}
+                                    </td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y')}}
+                                    </td>
+                                    <td>
+                                        {{ $length }}
+                                    </td>
+                                    <td>
+                                        {{ $data['totalServiceFee'] }}
+                                    </td>
+                                    <td>
+                                        {{ $data['totalServiceFee'] }}
+                                    </td>
+                                    <td>
+                                        {{ $data['totalCommisionFee'] }}
+                                    </td>
+                                    <td>
+                                        {{ $data['totalCommisionFee'] }}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

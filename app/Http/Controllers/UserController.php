@@ -8,6 +8,7 @@ use DateTime;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
+use App\Exports\SettlementsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -65,6 +66,30 @@ class UserController extends Controller
 
         return Excel::download(new DetailsExport($start_date, $end_date), 'dailyDetailsSales.xlsx');
     }
+
+
+    public function export_settlement(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen3 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        // return $start_date."|".$end_date;
+        // return $data;
+        // die();
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // $from = "2021-08-01";
+        // $to = "2021-08-30";
+
+        return Excel::download(new SettlementsExport($start_date, $end_date), 'settlement.xlsx');
+    }
+
+
 
     public function index_view ()
     {
@@ -246,6 +271,7 @@ class UserController extends Controller
         $date = new DateTime('30 days ago');
         $from = $date->format("Y-m-d");
         
+        // https://api.symplified.biz/report-service/v1/store/null/settlement?from=2021-7-28&page=0&pageSize=20&sortBy=startDate&sortingOrder=ASC&to=2021-8-25
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
             'from' => $from,
             'to' => $to,
@@ -260,7 +286,36 @@ class UserController extends Controller
         }
 
         // return $datas;
+        // die();
         // return json_decode($datas);
+        return view('components.settlement', compact('datas'));
+    }
+
+    public function filter_settlement(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen3 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
+            'from' => $start_date,
+            'to' => $end_date,
+            'sortingOrder' => "DESC",
+        ]); 
+        
+        // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
+        if($request->successful()){
+
+            $datas = $request['data']['content'];
+
+        }
+
+        // return $datas;
         return view('components.settlement', compact('datas'));
     }
 }

@@ -34,6 +34,9 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_detail', [UserController::class, "daily_details_filter"])->name('filter_detail');
     Route::post('/export_detail', [UserController::class, "export_detail"])->name('export_detail');
 
+    // enhancement 
+    // 1. After sort, url changed to filter_settlement instead of changed url name, better go with settlement?from=data&to=date
+    // 2. By doing that, current page load can use datarange data from previous on excel upload
     Route::get('/settlement', [UserController::class, "settlement"])->name('settlement');
     Route::post('/filter_settlement', [UserController::class, "filter_settlement"])->name('filter_settlement');
     Route::post('/export_settlement', [UserController::class, "export_settlement"])->name('export_settlement');
