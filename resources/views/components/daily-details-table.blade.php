@@ -39,15 +39,20 @@
             <table class="table table-md table-hover table-borderless" id="table-2">
                 <thead>
                     <tr class="text-center">
-                    <th>
+                    {{-- <th>
                         #
-                    </th>
-                    <th>Customer Name</th>
-                    <th>Store Name</th>
+                    </th> --}}
                     <th>Date</th>
+                    <th>Store Name</th>
+                    <th>Customer Name</th>
+                    <th>Sub Total</th>
+                    <th>Service Charge</th>
+                    <th>Delivery Charge</th>
+                    <th>Commision</th>
+                    <th>Total</th>
                     <th>Order Status</th>
                     <th>Delivery Status</th>
-                    <th>Action</th>
+                    {{-- <th>Action</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -57,17 +62,32 @@
                             @php $date = $data['date']  @endphp
                             @foreach ($data['sales'] as $item)
                                 <tr class="text-center">
-                                    <td>
+                                    {{-- <td>
                                         {{ $index }}
-                                    </td>
+                                    </td> --}}
                                     <td>
-                                        {{ $item['customerName'] }}
+                                        {{ \Carbon\Carbon::parse($date)->format('d/m/Y')}}
                                     </td>
                                     <td>
                                         {{ $item['storeName'] }}
                                     </td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($date)->format('d/m/Y')}}
+                                        {{ $item['customerName'] }}
+                                    </td>
+                                    <td>
+                                        {{ $item['subTotal'] }}
+                                    </td>
+                                    <td>
+                                        {{ $item['serviceCharge'] }}
+                                    </td>
+                                    <td>
+                                        {{ $item['deliveryCharge'] }}
+                                    </td>
+                                    <td>
+                                        {{ $item['commission'] }}
+                                    </td>
+                                    <td>
+                                        {{ $item['total'] }}
                                     </td>
                                     <td>
                                         @if ($item['orderStatus'] == "PAID")
@@ -87,7 +107,7 @@
                                             <div class="badge badge-light">{{ $item['deliveryStatus'] }}</div>
                                         @endif
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <button class="btn btn-dark" 
                                         data-toggle="modal" 
                                         data-target="#exampleModal"
@@ -102,12 +122,11 @@
                                         data-order_status="{{ $item['orderStatus'] }}"
                                         data-delivery_status="{{ $item['deliveryStatus'] }}"
                                         data-commision="{{ $item['commission'] }}"
-                                        {{-- id="toggle-modal" --}}
                                         >
                                             <i class="far fa-check-circle"></i>
                                             Details
                                         </button>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @php $index++; @endphp
                             @endforeach

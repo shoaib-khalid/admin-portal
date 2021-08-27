@@ -238,4 +238,29 @@ class UserController extends Controller
         // return $datas;
         return view('components.daily-details', compact('datas'));
     }
+
+
+    public function settlement(){
+
+        $to = date("Y-m-d");
+        $date = new DateTime('30 days ago');
+        $from = $date->format("Y-m-d");
+        
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
+            'from' => $from,
+            'to' => $to,
+            'sortingOrder' => "DESC",
+        ]); 
+
+        // https://api.symplified.biz/report-service/v1/store/8913d06f-a63f-4a16-8059-2a30a517663a/settlement?from=2021-7-29&page=0&pageSize=20&sortBy=startDate&sortingOrder=DESC&to=2021-8-26
+        
+        // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
+        if($request->successful()){
+            $datas = $request['data']['content'];
+        }
+
+        // return $datas;
+        // return json_decode($datas);
+        return view('components.settlement', compact('datas'));
+    }
 }

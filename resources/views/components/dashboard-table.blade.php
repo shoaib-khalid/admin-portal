@@ -38,22 +38,23 @@
             <table class="table table-md table-hover table-borderless" id="table-1">
                 <thead>
                     <tr class="text-center">
-                    <th class="text-center">
+                    {{-- <th class="text-center">
                         #
-                    </th>
-                    <th>Due Date</th>
+                    </th> --}}
+                    <th>Date</th>
                     <th>Store Name</th>
                     <th>Total Order</th>
-                    <th>Action</th>
+                    <th>Amount Earned</th>
+                    {{-- <th>Action</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @php $index = 1; @endphp
                     @foreach ($days as $day)
                         <tr class="text-center">
-                            <td>
+                            {{-- <td>
                                 {{ $index }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ \Carbon\Carbon::parse($day['date'])->format('d/m/Y')}}
                             </td>
@@ -66,6 +67,9 @@
                                 </strong>
                             </td>
                             <td>
+                                {{ $day['amountEarned'] }}
+                            </td>
+                            {{-- <td>
                                 <button class="btn btn-dark" 
                                 data-toggle="modal" 
                                 data-target="#dailySalesModal"
@@ -81,7 +85,7 @@
                                     <i class="far fa-check-circle"></i>
                                     Details
                                 </button>
-                            </td>
+                            </td> --}}
                         </tr>
                         @php $index++; @endphp
                     @endforeach
