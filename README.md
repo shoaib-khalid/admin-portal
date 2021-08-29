@@ -23,4 +23,12 @@ $ php artisan key:generate
 $ php artisan migrate
 ```
 
+Install & Get version
+```
+# install versioning
+composer require pragmarx/version
+php artisan vendor:publish --provider="PragmaRX\Version\Package\ServiceProvider"
 
+# get version
+php artisan version:show --format=semver --suppress-app-name
+```
