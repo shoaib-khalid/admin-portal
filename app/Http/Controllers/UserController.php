@@ -145,9 +145,9 @@ class UserController extends Controller
             // return $sales_arr;
         }
 
-        return $days;
+        // return $days;
 
-        die();
+        // die();
 
         return view('dashboard', compact('days'));
     }
