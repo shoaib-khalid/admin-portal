@@ -65,7 +65,7 @@
                     @endphp
                     @if ($length > 0)
                         @foreach ($datas as $data)
-                            @if ($data['totalTransactionValue'] != null)
+                            @if ($data['totalTransactionValue'] == null)
                                 <tr class="text-center">
 
                                     <td>
