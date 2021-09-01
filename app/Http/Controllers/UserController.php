@@ -116,6 +116,7 @@ class UserController extends Controller
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
             'from' => $from,
             'to' => $to,
+            'sortingOrder' => "DESC",
         ]);
 
         if($request->successful()){
@@ -166,6 +167,7 @@ class UserController extends Controller
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
             'from' => $start_date,
             'to' => $end_date,
+            'sortingOrder' => "DESC",
         ]);
 
         if($request->successful()){
@@ -189,6 +191,7 @@ class UserController extends Controller
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $from,
             'endDate' => $to,
+            'sortingOrder' => "DESC",
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -251,6 +254,7 @@ class UserController extends Controller
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $start_date,
             'endDate' => $end_date,
+            'sortingOrder' => "DESC",
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -317,5 +321,27 @@ class UserController extends Controller
 
         // return $datas;
         return view('components.settlement', compact('datas'));
+    }
+
+    public function merchant(){
+
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/product-service/v1/stores', [
+            // 'from' => $start_date,
+            // 'to' => $end_date,
+            // 'sortingOrder' => "DESC",
+        ]); 
+
+        if($request->successful()){
+
+            $datas = $request['data']['content'];
+
+        }
+
+        // return $datas;
+
+        // die();
+
+
+        return view('components.merchants');
     }
 }

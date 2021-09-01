@@ -48,6 +48,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/export', [UserController::class, "export"])->name('export');
 
+    Route::get('/merchant', [UserController::class, "merchant"])->name('merchant');
+
 });
 
 

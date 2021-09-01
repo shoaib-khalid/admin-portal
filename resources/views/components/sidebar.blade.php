@@ -48,6 +48,10 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('settlement') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('settlement') }}"><i class="fas fa-fire"></i><span>Settlement</span></a>
             </li>
+
+            <li class="{{ Request::routeIs('merchant') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('merchant') }}"><i class="fas fa-fire"></i><span>Merchant</span></a>
+            </li>
             
         </ul>
     </aside>

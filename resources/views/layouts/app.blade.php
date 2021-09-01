@@ -40,6 +40,8 @@
 
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
         
         <livewire:styles />
 
