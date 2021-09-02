@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-merchants-table></x-merchants-table>
+        <x-merchants-table :datas="$datas"></x-merchants-table>
     </div>
 </x-app-layout>
 
@@ -20,6 +20,10 @@
         //     { "sortable": false, "targets": [2,3] }
         // ]
         // });
+
+        var datas = {!! json_encode($datas) !!};
+
+        console.log('datas: ', datas)
 
         function format(rowData) { 
             var childTable = '<tr>' +
@@ -43,13 +47,19 @@
   
   var table = $('#table-4').DataTable({
     // 'dom' : 't',
+    // "bPaginate": true,
+    // "bLengthChange": false,
+    // "bFilter": true,
+    // "bInfo": false,
+    // "bAutoWidth": false,
     'columns': [
-      {
-        'className': 'details-control',
-        'orderable': false,
-        'data': null,
-        'defaultContent': ''
-      },
+    //   {
+    //     'className': 'details-control',
+    //     'orderable': false,
+    //     'data': null,
+    //     'defaultContent': ''
+    //   },
+      null,
       null,
       null,
       null,
@@ -60,7 +70,7 @@
         { "sortable": false, "targets": [2,3] },
       {
         'targets': [0],
-        'width': '10px',
+        'width': 'auto',
       },
       {
         'targets': [1,2],
@@ -74,10 +84,23 @@
     ]
   });
 
+
   // Add event listener for opening and closing details
-  $('#table-4 tbody').on('click', 'td.details-control', function () {
+  $('#table-4 tbody').on('click', '.view_store', function () {
+
+    var storeId = $(this).attr("storeId");
     var tr = $(this).closest('tr');
     var row = table.row(tr);
+
+    // alert('storeId: ' + storeId)
+
+    // return false
+
+    var newObj = datas.find(x => x.storeId === storeId)
+
+    console.log('obj', newObj)
+
+    return false;
 
     if (row.child.isShown()) {
       // This row is already open - close it

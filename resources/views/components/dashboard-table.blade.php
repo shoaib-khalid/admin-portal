@@ -59,7 +59,7 @@
                                 {{ \Carbon\Carbon::parse($day['date'])->format('d/m/Y')}}
                             </td>
                             <td>
-                                {{ $day['storeId'] }}
+                                {{ $day['store']['name'] }}
                             </td>
                             <td>
                                 <strong>

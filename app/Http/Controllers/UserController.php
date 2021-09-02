@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\User;
+use App\Models\Client;
+use App\Models\PaymentDetail as Payment;
+use App\Models\Store;
+use App\Models\StoreDeliveryDetail as StoreDelivery;
 use DateTime;
 
 use App\Exports\UsersExport;
@@ -325,23 +329,163 @@ class UserController extends Controller
 
     public function merchant(){
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/product-service/v1/stores', [
-            // 'from' => $start_date,
-            // 'to' => $end_date,
-            // 'sortingOrder' => "DESC",
-        ]); 
+        $datas = Client::all();
 
-        if($request->successful()){
+        // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
+        //                 ->select(
+        //                     'client.username', 
+        //                     'client.name', 
+        //                     'client.phoneNumber', 
+        //                     'client.email', 
+        //                     'client.created',
+        //                     'client.storeId',
+        //                     'payment.bankName', 
+        //                     'payment.bankAccountNumber',
+        //                     'payment.bankAccountTitle'
+        //                     )
+        //                 ->get();
 
-            $datas = $request['data']['content'];
+        $newArray = array();
 
+        foreach ($datas as $data) {
+
+            $payment_info = Payment::where('clientId', $data['id'])
+                                    ->get();
+
+            $stores = Store::where('id', $data['storeId'])
+                                    ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
+                                    ->get();
+
+            $pay_array = array();
+            $store_array = array();
+
+            if (count($payment_info) > 0) {
+                foreach ($payment_info as $payment) {
+
+                    $payment_data = [
+                        'bankName' => $payment['bankName'],
+                        'bankAccountNumber' => $payment['bankAccountNumber'],
+                        'bankAccountTitle' => $payment['bankAccountTitle'],
+                        'clientId' => $payment['clientId'],
+                    ];
+    
+                    array_push( 
+                        $pay_array,
+                        $payment_data
+                    );
+    
+                }
+            }
+
+            if (count($stores) > 0) {
+                foreach ($stores as $store) {
+
+                    $store_details = [
+                        'storeId' => $store['id'],
+                        'name' => $store['name'],
+                        'storeDescription' => $store['storeDescription'],
+                        'address' => $store['address'],
+                        'city' => $store['city'],
+                        'postcode' => $store['postcode'],
+                        'state' => $store['state'],
+                        'email' => $store['email'],
+                        'phone' => $store['phone'],
+                        'verticalCode' => $store['verticalCode'],
+                        'type' => $store['type'],
+                    ];
+    
+                    array_push( 
+                        $store_array,
+                        $store_details
+                    );
+                   
+                }
+            }
+
+            $object = [
+                'id' => $data['id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'storeId' => $data['storeId'],
+                'bank_details' => $pay_array,
+                'store_details' => $store_array
+            ];
+
+            array_push( 
+                $newArray,
+                $object
+            );
+
+            // $newArray[] = $cur_item;
         }
+        return $newArray;
+        die();
+
+        // $client = Payment::get();
+
+        // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
+                        // ->select(
+                        //     'client.username', 
+                        //     'client.name', 
+                        //     'client.phoneNumber', 
+                        //     'client.email', 
+                        //     'client.created',
+                        //     'client.storeId',
+                        //     'payment.bankName', 
+                        //     'payment.bankAccountNumber',
+                        //     'payment.bankAccountTitle'
+                        //     )
+                        // ->get();
+
+        $newArray = array();
+
+        foreach($clients as $client){
+            $date = $client['date'];
+
+            foreach($data['sales'] as $item){
+
+                $cur_item = array();
+
+                array_push( 
+                    $cur_item,
+                    $data['date'],
+                    $item['storeId'], 
+                    $item['merchantName'],
+                    $item['storeName'],
+                    $item['subTotal'],
+                    $item['total'],
+                    $item['serviceCharge'],
+                    $item['deliveryCharge'],
+                    $item['customerName'],
+                    $item['orderStatus'],
+                    $item['deliveryStatus'],
+                    $item['commission']
+                );
+
+                $newArray[] = $cur_item;
+            }
+        }
+
+        return $datas;
+        die();
+
+        // $request = Http::withToken('accessToken')->get('https://api.symplified.biz/product-service/v1/stores', [
+        //     // 'from' => $start_date,
+        //     // 'to' => $end_date,
+        //     // 'sortingOrder' => "DESC",
+        // ]); 
+
+        // if($request->successful()){
+
+        //     $datas = $request['data']['content'];
+
+        // }
 
         // return $datas;
 
         // die();
 
 
-        return view('components.merchants');
+        return view('components.merchants', compact('datas'));
     }
 }

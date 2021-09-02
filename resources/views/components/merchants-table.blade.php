@@ -41,25 +41,60 @@
                 <thead>
                     <tr class="text-center">
                         <th></th>
-                        <th>Client</th>
-                        <th>Project</th>
-                        <th>Hours</th>
-                        <th>Billed</th>
-                        <th>Collected</th>
+                        <th>Merchant</th>
+                        <th>Email</th>
+                        <th>Bank Name</th>
+                        <th>Account No.</th>
+                        <th>Account Name</th>
                     </tr>
                 </thead>
         
                 <tbody>
-                    <tr class="text-center">
-                        <td></td>
-                        <td>ABC Company</td>
-                        <td>1001-01</td>
-                        <td>100</td>
-                        <td>$5000</td>
-                        <td>$2500</td>
-                    </tr>
+
+                    @foreach ($datas as $data)
+                        <tr class="text-center">
+                            <td>
+                                <a href="#" class="btn btn-primary view_store" storeId="{{ $data->storeId }}">
+                                    <i class="far fa-check-circle"></i>
+                                    Store Details
+                                </a>
+                            </td>
+                            <td>{{ $data->name }}</td>
+                            <td>{{ $data->email }}</td>
+                            <td>{{ $data->bankName }}</td>
+                            <td>{{ $data->bankAccountNumber }}</td>
+                            <td>{{ $data->bankAccountTitle }}</td>
+                        </tr>
+                    @endforeach
+
                 </tbody>
             </table>
+            {{-- <div class="row" style="margin-top: 5px;">
+                <div class="col">
+                    <span>Showing 1 to 1 of 1 entries</span>
+                </div>
+                <div class="col">
+                    <nav aria-label="..." class="float-right">
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div> --}}
             
         </div>
     </div>
