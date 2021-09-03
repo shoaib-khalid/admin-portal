@@ -329,7 +329,8 @@ class UserController extends Controller
 
     public function merchant(){
 
-        $datas = Client::limit(100)->get();
+        // $datas = Client::limit(100)->get();
+        $datas = Client::all();
 
         // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
         //                 ->select(
