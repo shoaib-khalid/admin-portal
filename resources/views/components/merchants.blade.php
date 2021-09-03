@@ -23,25 +23,59 @@
 
         var datas = {!! json_encode($datas) !!};
 
-        console.log('datas: ', datas)
+        // console.log('datas: ', datas)
 
-        function format(rowData) { 
-            var childTable = '<tr>' +
-                '<td></td>' +
-                    '<td>Brown, John</td>' +
-                    '<td>Staff</td>' +
-                    '<td>50</td>' +
-                    '<td>$2,500</td>' +
-                    '<td>$1,500</td>' +
-                '</tr>'+
-                '<tr>' +
-                    '<td></td>' +
-                    '<td>Smith, Mary</td>' +
-                    '<td>Consultant</td>' +
-                    '<td>50</td>' +
-                    '<td>$2,500</td>' +
-                    '<td>$1,000</td>' +
-                '</tr>' ;
+        function formatTable(rowData, obj) { 
+
+            // alert(JSON.stringify(obj))
+
+            // return false;
+            var childTable;
+
+            childTable = '<tr class="bg-light">' +
+                    '<th class="font-weight-bold">Name</th>' +
+                    '<th class="font-weight-bold">Store Info</th>' +
+                    '<th class="font-weight-bold">Address</th>' +
+                    '<th class="font-weight-bold">City</th>' +
+                    '<th class="font-weight-bold">Postcode</th>' +
+                    '<th class="font-weight-bold">State</th>' +
+                    '<th class="font-weight-bold">Email</th>' +
+                    '<th class="font-weight-bold">Phone</th>' +
+                    '<th class="font-weight-bold">Vertical</th>' +
+                    '<th class="font-weight-bold">Delivery Type</th>' +
+                '</tr>';
+
+            if(obj){
+
+                store_obj = obj.store_details
+
+                // alert(store_obj.length)
+
+                store_obj.forEach(element => {
+
+                    childTable += '<tr>' +
+                        '<td class="">'+element.name+'</td>' +
+                        '<td class="">'+element.storeDescription+'</td>' +
+                        '<td class="">'+element.address+'</td>' +
+                        '<td class="">'+element.city+'</td>' +
+                        '<td class="">'+element.postcode+'</td>' +
+                        '<td class="">'+element.state+'</td>' +
+                        '<td class="">'+element.email+'</td>' +
+                        '<td class="">'+element.phone+'</td>' +
+                        '<td class="">'+element.verticalCode+'</td>' +
+                        '<td class="">'+element.type+'</td>' +
+                    '</tr>';
+
+                });
+
+            }else{
+                // alert('toasa')
+                childTable += '<tr>' +
+                                '<td colspan="10" class="text-danger font-weight-bold">No Store Available</td>' +
+                            '</tr>';
+            }
+
+            
             return childTable;
         }
   
@@ -98,9 +132,11 @@
 
     var newObj = datas.find(x => x.storeId === storeId)
 
-    console.log('obj', newObj)
+    // alert(JSON.stringify(newObj))
 
-    return false;
+    // console.log('obj', newObj)
+
+    // return false;
 
     if (row.child.isShown()) {
       // This row is already open - close it
@@ -110,7 +146,7 @@
       else
     {
       // Open this row
-      row.child(format(row.data())).show();
+      row.child(formatTable(row.data(), newObj)).show();
       tr.addClass('shown');
     }
   });

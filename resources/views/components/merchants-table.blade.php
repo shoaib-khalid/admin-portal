@@ -1,4 +1,6 @@
-
+@php
+    // var_dump();
+@endphp
 <div class="card section">
     <div class="card-header">
         <h4>Settlement</h4>
@@ -40,12 +42,12 @@
             <table id="table-4" class="table table-md table-hover table-borderless">
                 <thead>
                     <tr class="text-center">
-                        <th></th>
                         <th>Merchant</th>
                         <th>Email</th>
                         <th>Bank Name</th>
                         <th>Account No.</th>
                         <th>Account Name</th>
+                        <th></th>
                     </tr>
                 </thead>
         
@@ -53,17 +55,27 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center">
+                            <td>{{ $data['name'] }}</td>
+                            <td>{{ $data['email'] }}</td>
+                            @if ($data['bank_details'])
+                                <td>{{ $data['bank_details'][0]['bankName'] }}</td>
+                                <td>{{ $data['bank_details'][0]['bankAccountNumber'] }}</td>
+                                <td>{{ $data['bank_details'][0]['bankAccountTitle'] }}</td>
+                            @else
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                            @endif
+                            
                             <td>
-                                <a href="#" class="btn btn-primary view_store" storeId="{{ $data->storeId }}">
+                                <a href="#" class="btn btn-primary view_store" storeId="{{ $data['storeId'] }}">
                                     <i class="far fa-check-circle"></i>
-                                    Store Details
+                                    Details
                                 </a>
                             </td>
-                            <td>{{ $data->name }}</td>
-                            <td>{{ $data->email }}</td>
-                            <td>{{ $data->bankName }}</td>
+                            {{-- <td>{{ $data->bankName }}</td>
                             <td>{{ $data->bankAccountNumber }}</td>
-                            <td>{{ $data->bankAccountTitle }}</td>
+                            <td>{{ $data->bankAccountTitle }}</td> --}}
                         </tr>
                     @endforeach
 

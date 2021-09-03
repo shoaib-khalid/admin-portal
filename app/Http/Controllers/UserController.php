@@ -329,7 +329,7 @@ class UserController extends Controller
 
     public function merchant(){
 
-        $datas = Client::all();
+        $datas = Client::limit(100)->get();
 
         // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
         //                 ->select(
@@ -350,6 +350,7 @@ class UserController extends Controller
         foreach ($datas as $data) {
 
             $payment_info = Payment::where('clientId', $data['id'])
+                                    ->limit(1)
                                     ->get();
 
             $stores = Store::where('id', $data['storeId'])
@@ -418,8 +419,8 @@ class UserController extends Controller
 
             // $newArray[] = $cur_item;
         }
-        return $newArray;
-        die();
+        // return $newArray;
+        // die();
 
         // $client = Payment::get();
 
@@ -437,37 +438,37 @@ class UserController extends Controller
                         //     )
                         // ->get();
 
-        $newArray = array();
+        // $newArray = array();
 
-        foreach($clients as $client){
-            $date = $client['date'];
+        // foreach($clients as $client){
+        //     $date = $client['date'];
 
-            foreach($data['sales'] as $item){
+        //     foreach($data['sales'] as $item){
 
-                $cur_item = array();
+        //         $cur_item = array();
 
-                array_push( 
-                    $cur_item,
-                    $data['date'],
-                    $item['storeId'], 
-                    $item['merchantName'],
-                    $item['storeName'],
-                    $item['subTotal'],
-                    $item['total'],
-                    $item['serviceCharge'],
-                    $item['deliveryCharge'],
-                    $item['customerName'],
-                    $item['orderStatus'],
-                    $item['deliveryStatus'],
-                    $item['commission']
-                );
+        //         array_push( 
+        //             $cur_item,
+        //             $data['date'],
+        //             $item['storeId'], 
+        //             $item['merchantName'],
+        //             $item['storeName'],
+        //             $item['subTotal'],
+        //             $item['total'],
+        //             $item['serviceCharge'],
+        //             $item['deliveryCharge'],
+        //             $item['customerName'],
+        //             $item['orderStatus'],
+        //             $item['deliveryStatus'],
+        //             $item['commission']
+        //         );
 
-                $newArray[] = $cur_item;
-            }
-        }
+        //         $newArray[] = $cur_item;
+        //     }
+        // }
 
-        return $datas;
-        die();
+        // return $datas;
+        // die();
 
         // $request = Http::withToken('accessToken')->get('https://api.symplified.biz/product-service/v1/stores', [
         //     // 'from' => $start_date,
@@ -485,6 +486,10 @@ class UserController extends Controller
 
         // die();
 
+        $datas = $newArray;
+
+        // return $datas;
+        // die();
 
         return view('components.merchants', compact('datas'));
     }
