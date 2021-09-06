@@ -75,19 +75,19 @@
                                         {{ $item['customerName'] }}
                                     </td>
                                     <td>
-                                        {{ $item['subTotal'] }}
+                                        {{ number_format($item['subTotal'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $item['serviceCharge'] }}
+                                        {{ number_format($item['serviceCharge'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $item['deliveryCharge'] }}
+                                        {{ number_format($item['deliveryCharge'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $item['commission'] }}
+                                        {{ number_format($item['commission'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $item['total'] }}
+                                        {{ number_format($item['total'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
                                         @if ($item['orderStatus'] == "PAID")

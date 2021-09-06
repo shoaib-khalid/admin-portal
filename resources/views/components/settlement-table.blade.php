@@ -43,6 +43,7 @@
                         #
                     </th> --}}
                     <th>Payout Date</th>
+                    <th>Store Name</th>
                     <th>Start Date</th>
                     <th>Cut-Off Date</th>
                     <th>Gross Amount</th>
@@ -72,25 +73,29 @@
                                         {{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y')}}
                                     </td>
                                     <td>
+                                        {{ $data['storeName'] }}
+                                    </td>
+                                    <td>
                                         {{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y')}}
                                     </td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y')}}
                                     </td>
                                     <td>
-                                        {{ $length }}
+                                        {{ number_format($data['totalTransactionValue'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $data['totalServiceFee'] }}
+                                        {{ number_format($data['totalServiceFee'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $data['totalServiceFee'] }}
+                                        {{-- {{ No Data }} --}}
+                                        0.00
                                     </td>
                                     <td>
-                                        {{ $data['totalCommisionFee'] }}
+                                        {{ number_format($data['totalCommisionFee'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
-                                        {{ $data['totalCommisionFee'] }}
+                                        {{ number_format($data['totalStoreShare'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                 </tr>
                             @endif

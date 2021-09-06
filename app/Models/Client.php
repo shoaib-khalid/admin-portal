@@ -21,7 +21,7 @@ class Client extends Model
     protected $casts = ['id' => 'string'];
 
     protected $fillable = ['id', 'username', 'name', 'phoneNumber', 
-                            'email', 'deactivated', 'locked', 'created', 
+                            'email', 'roleId', 'deactivated', 'locked', 'created', 
                             'updated', 'roleId', 'storeId', 'liveChatAgentId'];
 
     protected $hidden = [

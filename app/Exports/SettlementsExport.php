@@ -7,8 +7,10 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class SettlementsExport implements FromCollection
+class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
@@ -33,7 +35,7 @@ class SettlementsExport implements FromCollection
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
             'from' => $this->from,
             'to' => $this->to,
-            'sortingOrder' => "DESC",
+            'sortingOrder' => "ASC",
         ]); 
         
         
@@ -55,6 +57,7 @@ class SettlementsExport implements FromCollection
                 array_push( 
                     $cur_item,
                     Carbon::parse($data['settlementDate'])->format('d/m/Y'),
+                    $data['storeName'],
                     Carbon::parse($data['cycleStartDate'])->format('d/m/Y'), 
                     Carbon::parse($data['cycleEndDate'])->format('d/m/Y'),
                     $data['totalServiceFee'],
@@ -76,5 +79,20 @@ class SettlementsExport implements FromCollection
         // ]);
         
         return new Collection($newArray);
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Payout Date',
+            'Store Name',
+            'Start Date',
+            'Cutoff Date',
+            'Gross Amount',
+            'Service Charge',
+            'Delivery Charge',
+            'Commision',
+            'Nett Amount',
+        ];
     }
 }

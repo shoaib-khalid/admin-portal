@@ -49,6 +49,9 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/export', [UserController::class, "export"])->name('export');
 
     Route::get('/merchant', [UserController::class, "merchant"])->name('merchant');
+    Route::post('/filter_merchant', [UserController::class, "filter_merchant"])->name('filter_merchant');
+    Route::post('/export_merchant', [UserController::class, "export_merchant"])->name('export_merchant');
+    
 
 });
 

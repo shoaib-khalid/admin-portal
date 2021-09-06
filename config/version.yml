@@ -2,9 +2,9 @@ mode: 'absorb' # or 'increment'
 blade-directive: version
 current:
   label: v
-  major: 0
-  minor: 0
-  patch: 4
+  major: 1
+  minor: 1
+  patch: 5
   prerelease: 
   buildmetadata:
   commit: 100001

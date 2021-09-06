@@ -1,5 +1,6 @@
 @php
-    // var_dump();
+    // var_dump($datas);
+    // dd($datas);
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -12,7 +13,7 @@
             <div class="row">
                 <div class="col">
                     
-                    <form action="#" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    <form action="filter_merchant" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         <div class="input-group mb-3">
                             <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4">
@@ -26,7 +27,7 @@
                     
                 </div>
                 <div class="col">
-                    <form action="#" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    <form action="export_merchant" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         <input type="text" name="date_chosen4" id="date_chosen4_copy" class="form-control daterange-btn4" hidden>
                         <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
@@ -55,7 +56,7 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center">
-                            <td>{{ $data['name'] }}</td>
+                            <td>{{ $data['username'] }}</td>
                             <td>{{ $data['email'] }}</td>
                             @if ($data['bank_details'])
                                 <td>{{ $data['bank_details'][0]['bankName'] }}</td>

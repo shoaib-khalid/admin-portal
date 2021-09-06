@@ -13,6 +13,7 @@ use DateTime;
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
 use App\Exports\SettlementsExport;
+use App\Exports\MerchantExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -93,7 +94,26 @@ class UserController extends Controller
         return Excel::download(new SettlementsExport($start_date, $end_date), 'settlement.xlsx');
     }
 
+    public function export_merchant(Request $req) 
+    {
+        $data = $req->input();
 
+        $dateRange = explode( '-', $req->date_chosen4 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        // return $start_date."|".$end_date;
+        // return $data;
+        // die();
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // $from = "2021-08-01";
+        // $to = "2021-08-30";
+
+        return Excel::download(new MerchantExport($start_date, $end_date), 'merchant.xlsx');
+    }
 
     public function index_view ()
     {
@@ -330,21 +350,7 @@ class UserController extends Controller
     public function merchant(){
 
         // $datas = Client::limit(100)->get();
-        $datas = Client::all();
-
-        // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
-        //                 ->select(
-        //                     'client.username', 
-        //                     'client.name', 
-        //                     'client.phoneNumber', 
-        //                     'client.email', 
-        //                     'client.created',
-        //                     'client.storeId',
-        //                     'payment.bankName', 
-        //                     'payment.bankAccountNumber',
-        //                     'payment.bankAccountTitle'
-        //                     )
-        //                 ->get();
+        $datas = Client::where('roleId', 'STORE_OWNER')->get();
 
         $newArray = array();
 
@@ -406,6 +412,7 @@ class UserController extends Controller
 
             $object = [
                 'id' => $data['id'],
+                'username' => $data['username'],
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'storeId' => $data['storeId'],
@@ -418,74 +425,111 @@ class UserController extends Controller
                 $object
             );
 
-            // $newArray[] = $cur_item;
         }
-        // return $newArray;
-        // die();
+       
 
-        // $client = Payment::get();
-
-        // $datas = Client::leftJoin('client_payment_detail as payment', 'client.id', '=', 'payment.clientId')
-                        // ->select(
-                        //     'client.username', 
-                        //     'client.name', 
-                        //     'client.phoneNumber', 
-                        //     'client.email', 
-                        //     'client.created',
-                        //     'client.storeId',
-                        //     'payment.bankName', 
-                        //     'payment.bankAccountNumber',
-                        //     'payment.bankAccountTitle'
-                        //     )
-                        // ->get();
-
-        // $newArray = array();
-
-        // foreach($clients as $client){
-        //     $date = $client['date'];
-
-        //     foreach($data['sales'] as $item){
-
-        //         $cur_item = array();
-
-        //         array_push( 
-        //             $cur_item,
-        //             $data['date'],
-        //             $item['storeId'], 
-        //             $item['merchantName'],
-        //             $item['storeName'],
-        //             $item['subTotal'],
-        //             $item['total'],
-        //             $item['serviceCharge'],
-        //             $item['deliveryCharge'],
-        //             $item['customerName'],
-        //             $item['orderStatus'],
-        //             $item['deliveryStatus'],
-        //             $item['commission']
-        //         );
-
-        //         $newArray[] = $cur_item;
-        //     }
-        // }
+        $datas = $newArray;
 
         // return $datas;
         // die();
 
-        // $request = Http::withToken('accessToken')->get('https://api.symplified.biz/product-service/v1/stores', [
-        //     // 'from' => $start_date,
-        //     // 'to' => $end_date,
-        //     // 'sortingOrder' => "DESC",
-        // ]); 
+        return view('components.merchants', compact('datas'));
+    }
 
-        // if($request->successful()){
+    public function filter_merchant(Request $req){
 
-        //     $datas = $request['data']['content'];
+        $data = $req->input();
 
-        // }
+        $dateRange = explode( '-', $req->date_chosen4 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // Reservation::whereBetween('reservation_from', [$from, $to])->get();
+        $datas = Client::whereBetween('created', [$start_date, $end_date])
+                        ->where('roleId', 'STORE_OWNER')
+                        ->get();
 
         // return $datas;
-
         // die();
+
+        $newArray = array();
+
+        foreach ($datas as $data) {
+
+            $payment_info = Payment::where('clientId', $data['id'])
+                                    ->limit(1)
+                                    ->get();
+
+            $stores = Store::where('id', $data['storeId'])
+                                    ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
+                                    ->get();
+
+            $pay_array = array();
+            $store_array = array();
+
+            if (count($payment_info) > 0) {
+                foreach ($payment_info as $payment) {
+
+                    $payment_data = [
+                        'bankName' => $payment['bankName'],
+                        'bankAccountNumber' => $payment['bankAccountNumber'],
+                        'bankAccountTitle' => $payment['bankAccountTitle'],
+                        'clientId' => $payment['clientId'],
+                    ];
+    
+                    array_push( 
+                        $pay_array,
+                        $payment_data
+                    );
+    
+                }
+            }
+
+            if (count($stores) > 0) {
+                foreach ($stores as $store) {
+
+                    $store_details = [
+                        'storeId' => $store['id'],
+                        'name' => $store['name'],
+                        'storeDescription' => $store['storeDescription'],
+                        'address' => $store['address'],
+                        'city' => $store['city'],
+                        'postcode' => $store['postcode'],
+                        'state' => $store['state'],
+                        'email' => $store['email'],
+                        'phone' => $store['phone'],
+                        'verticalCode' => $store['verticalCode'],
+                        'type' => $store['type'],
+                    ];
+    
+                    array_push( 
+                        $store_array,
+                        $store_details
+                    );
+                   
+                }
+            }
+
+            $object = [
+                'id' => $data['id'],
+                'username' => $data['username'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'storeId' => $data['storeId'],
+                'bank_details' => $pay_array,
+                'store_details' => $store_array
+            ];
+
+            array_push( 
+                $newArray,
+                $object
+            );
+
+        }
+       
 
         $datas = $newArray;
 

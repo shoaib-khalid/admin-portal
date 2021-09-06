@@ -67,7 +67,7 @@
                                 </strong>
                             </td>
                             <td>
-                                {{ $day['amountEarned'] }}
+                                {{ number_format($day['amountEarned'], 2, '.', ',') ?? '0.00' }}
                             </td>
                             {{-- <td>
                                 <button class="btn btn-dark" 

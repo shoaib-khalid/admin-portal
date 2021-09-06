@@ -6,8 +6,10 @@ use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class DetailsExport implements FromCollection
+class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
@@ -27,7 +29,7 @@ class DetailsExport implements FromCollection
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $this->from,
             'endDate' => $this->to,
-            'sortingOrder' => "DESC",
+            'sortingOrder' => "ASC",
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -74,6 +76,22 @@ class DetailsExport implements FromCollection
         // ]);
         
         return new Collection($newArray);
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Date',
+            'Store Name',
+            'Customer Name',
+            'Sub Total',
+            'Service Charge',
+            'Delivery Charge',
+            'Commision',
+            'Total',
+            'Order Status',
+            'Delivery Status',
+        ];
     }
 }
 

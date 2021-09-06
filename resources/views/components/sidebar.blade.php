@@ -38,19 +38,19 @@ $navigation_links = array_to_object($links);
             <li class="menu-header">Reporting</li>
             
             <li class="{{ Request::routeIs('dashboard') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-fire"></i><span>Sales Summary</span></a>
+                <a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-hand-holding-usd"></i><span>Sales Summary</span></a>
             </li>
 
             <li class="{{ Request::routeIs('detail') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('detail') }}"><i class="fas fa-fire"></i><span>Daily Detail Sales</span></a>
+                <a class="nav-link" href="{{ route('detail') }}"><i class="fas fa-search-dollar"></i><span>Daily Detail Sales</span></a>
             </li>
 
             <li class="{{ Request::routeIs('settlement') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('settlement') }}"><i class="fas fa-fire"></i><span>Settlement</span></a>
+                <a class="nav-link" href="{{ route('settlement') }}"><i class="fas fa-file-invoice-dollar"></i><span>Settlement</span></a>
             </li>
 
             <li class="{{ Request::routeIs('merchant') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('merchant') }}"><i class="fas fa-fire"></i><span>Merchant</span></a>
+                <a class="nav-link" href="{{ route('merchant') }}"><i class="fas fa-store"></i><span>Merchant</span></a>
             </li>
             
         </ul>

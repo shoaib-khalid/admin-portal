@@ -6,8 +6,10 @@ use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UsersExport implements FromCollection
+class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
@@ -24,16 +26,16 @@ class UsersExport implements FromCollection
     {
         // return User::all();
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
-            'startDate' => $this->from,
-            'endDate' => $this->to,
-            'sortingOrder' => "DESC",
+        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+            'from' => $this->from,
+            'to' => $this->to,
+            'sortingOrder' => "ASC",
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
         if($request->successful()){
 
-            $datas = $request['data'];
+            $datas = $request['data']['content'];
 
         }
 
@@ -41,30 +43,17 @@ class UsersExport implements FromCollection
         $newArray = array();
         
         foreach($datas as $data){
-            $date = $data['date'];
+            $cur_item = array();
 
-            foreach($data['sales'] as $item){
+            array_push( 
+                $cur_item,
+                $data['date'],
+                $data['store']['name'],
+                $data['totalOrders'], 
+                $data['amountEarned']
+            );
 
-                $cur_item = array();
-
-                array_push( 
-                    $cur_item,
-                    $data['date'],
-                    $item['storeId'], 
-                    $item['merchantName'],
-                    $item['storeName'],
-                    $item['subTotal'],
-                    $item['total'],
-                    $item['serviceCharge'],
-                    $item['deliveryCharge'],
-                    $item['customerName'],
-                    $item['orderStatus'],
-                    $item['deliveryStatus'],
-                    $item['commission']
-                );
-
-                $newArray[] = $cur_item;
-            }
+            $newArray[] = $cur_item;
         }
 
         // Array Format
@@ -74,5 +63,15 @@ class UsersExport implements FromCollection
         // ]);
         
         return new Collection($newArray);
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Date',
+            'Store Name',
+            'Total Order',
+            'Amount Earned',
+        ];
     }
 }

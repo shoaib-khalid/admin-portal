@@ -79,7 +79,7 @@
             Copyright &copy; 2021 <div class="bullet"></div> Powered By <a href="https://symplified.biz/">Symplified</a>
             </div>
             <div class="footer-right">
-            1.1.0
+                @version('label').@version('major').@version('minor').@version('patch')
             </div>
         </footer>
 
