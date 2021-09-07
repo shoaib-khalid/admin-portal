@@ -64,9 +64,9 @@
             startDate: moment().subtract(29, 'days'),
             endDate  : moment()
         }, function (start, end) {
-            $('.daterange-btn2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-            $('#date_chosen2').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
-            $('#date_chosen2_copy').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            $('.daterange-btn3 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            $('#date_chosen3').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            $('#date_chosen3_copy').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         });
         
     });

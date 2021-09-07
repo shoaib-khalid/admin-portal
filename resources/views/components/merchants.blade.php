@@ -33,7 +33,7 @@
             var childTable;
 
             childTable = '<tr class="bg-light">' +
-                    '<th class="font-weight-bold">Name</th>' +
+                    '<th class="font-weight-bold">Store Name</th>' +
                     '<th class="font-weight-bold">Store Info</th>' +
                     '<th class="font-weight-bold">Address</th>' +
                     '<th class="font-weight-bold">City</th>' +
@@ -122,15 +122,15 @@
   // Add event listener for opening and closing details
   $('#table-4 tbody').on('click', '.view_store', function () {
 
-    var storeId = $(this).attr("storeId");
+    var clientId = $(this).attr("clientId");
     var tr = $(this).closest('tr');
     var row = table.row(tr);
 
-    // alert('storeId: ' + storeId)
+    // alert('clientId: ' + clientId)
 
     // return false
 
-    var newObj = datas.find(x => x.storeId === storeId)
+    var newObj = datas.find(x => x.id === clientId)
 
     // alert(JSON.stringify(newObj))
 

@@ -28,7 +28,7 @@ class MerchantExport implements FromCollection, ShouldAutoSize, WithHeadings
         $datas = Client::whereBetween('client.created', [$this->from, $this->to])
                         ->where('client.roleId', 'STORE_OWNER')
                         ->leftJoin('client_payment_detail as bank', 'bank.clientId', '=', 'client.id')
-                        ->orderBy('created', 'ASC')
+                        ->orderBy('client.created', 'ASC')
                         ->get();
 
         $newArray = array();

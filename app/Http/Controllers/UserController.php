@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\PaymentDetail as Payment;
 use App\Models\Store;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
+use Carbon\Carbon;
 use DateTime;
 
 use App\Exports\UsersExport;
@@ -313,6 +314,7 @@ class UserController extends Controller
             $datas = $request['data']['content'];
         }
 
+
         // return $datas;
         // die();
         // return json_decode($datas);
@@ -360,7 +362,7 @@ class UserController extends Controller
                                     ->limit(1)
                                     ->get();
 
-            $stores = Store::where('id', $data['storeId'])
+            $stores = Store::where('clientId', $data['id'])
                                     ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
                                     ->get();
 
@@ -390,6 +392,7 @@ class UserController extends Controller
 
                     $store_details = [
                         'storeId' => $store['id'],
+                        'clientId' => $store['clientId'],
                         'name' => $store['name'],
                         'storeDescription' => $store['storeDescription'],
                         'address' => $store['address'],

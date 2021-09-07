@@ -69,7 +69,7 @@
                             @endif
                             
                             <td>
-                                <a href="#" class="btn btn-primary view_store" storeId="{{ $data['storeId'] }}">
+                                <a href="#" class="btn btn-primary view_store" clientId="{{ $data['id'] }}">
                                     <i class="far fa-check-circle"></i>
                                     Details
                                 </a>

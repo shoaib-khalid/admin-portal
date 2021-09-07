@@ -51,24 +51,22 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
         
         foreach($datas as $data){
 
-            if ($data['totalTransactionValue'] != null) {
-                $cur_item = array();
+            $cur_item = array();
 
-                array_push( 
-                    $cur_item,
-                    Carbon::parse($data['settlementDate'])->format('d/m/Y'),
-                    $data['storeName'],
-                    Carbon::parse($data['cycleStartDate'])->format('d/m/Y'), 
-                    Carbon::parse($data['cycleEndDate'])->format('d/m/Y'),
-                    $data['totalServiceFee'],
-                    $data['totalServiceFee'],
-                    $data['totalServiceFee'],
-                    $data['totalCommisionFee'],
-                    $data['totalCommisionFee']
-                );
+            array_push( 
+                $cur_item,
+                Carbon::parse($data['settlementDate'])->format('d/m/Y'),
+                $data['storeName'],
+                Carbon::parse($data['cycleStartDate'])->format('d/m/Y'), 
+                Carbon::parse($data['cycleEndDate'])->format('d/m/Y'),
+                $data['totalTransactionValue'],
+                $data['totalServiceFee'],
+                $data['totalServiceFee'],
+                $data['totalCommisionFee'],
+                $data['totalStoreShare']
+            );
 
-                $newArray[] = $cur_item;
-            }
+            $newArray[] = $cur_item;
 
         }
 
