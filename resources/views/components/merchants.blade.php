@@ -100,9 +100,10 @@
       null,
       null,
     ],
+    "aaSorting": [],
     'columnDefs': [
 
-        { "sortable": false, "targets": [2,3] },
+        { "sortable": false, "targets": [0,2,3] },
       {
         'targets': [0],
         'width': 'auto',
