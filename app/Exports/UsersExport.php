@@ -26,7 +26,7 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
     {
         // return User::all();
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/daily_sales', [
             'from' => $this->from,
             'to' => $this->to,
             'sortingOrder' => "DESC",

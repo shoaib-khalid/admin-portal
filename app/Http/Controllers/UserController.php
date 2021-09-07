@@ -138,7 +138,7 @@ class UserController extends Controller
 
         // die();
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/daily_sales', [
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
@@ -189,7 +189,7 @@ class UserController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/daily_sales', [
             'from' => $start_date,
             'to' => $end_date,
             'sortingOrder' => "DESC",
@@ -213,7 +213,7 @@ class UserController extends Controller
         $date = new DateTime('7 days ago');
         $from = $date->format("Y-m-d");
         
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $from,
             'endDate' => $to,
             'sortingOrder' => "DESC",
@@ -276,7 +276,7 @@ class UserController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $start_date,
             'endDate' => $end_date,
             'sortingOrder' => "DESC",
@@ -301,7 +301,7 @@ class UserController extends Controller
         $from = $date->format("Y-m-d");
         
         // https://api.symplified.biz/report-service/v1/store/null/settlement?from=2021-7-28&page=0&pageSize=20&sortBy=startDate&sortingOrder=ASC&to=2021-8-25
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/settlement', [
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
@@ -332,7 +332,7 @@ class UserController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
+        $request = Http::withToken('accessToken')->get('https://api.symplified.it/report-service/v1/store/null/settlement', [
             'from' => $start_date,
             'to' => $end_date,
             'sortingOrder' => "DESC",
