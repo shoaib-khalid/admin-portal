@@ -35,7 +35,7 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
             'from' => $this->from,
             'to' => $this->to,
-            'sortingOrder' => "ASC",
+            'sortingOrder' => "DESC",
         ]); 
         
         

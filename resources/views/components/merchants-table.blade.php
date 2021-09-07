@@ -40,9 +40,10 @@
 
         <div class="table-responsive">
 
-            <table id="table-4" class="table table-md table-hover table-borderless">
+            <table id="table-4" class="table table-striped">
                 <thead>
                     <tr class="text-center">
+                        <th>Date created</th>
                         <th>Merchant</th>
                         <th>Email</th>
                         <th>Bank Name</th>
@@ -56,6 +57,7 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center">
+                            <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
                             <td>{{ $data['username'] }}</td>
                             <td>{{ $data['email'] }}</td>
                             @if ($data['bank_details'])

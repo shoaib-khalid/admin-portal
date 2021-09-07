@@ -352,7 +352,9 @@ class UserController extends Controller
     public function merchant(){
 
         // $datas = Client::limit(100)->get();
-        $datas = Client::where('roleId', 'STORE_OWNER')->get();
+        $datas = Client::where('roleId', 'STORE_OWNER')
+                        ->orderBy('created', 'DESC')
+                        ->get();
 
         $newArray = array();
 
@@ -363,8 +365,8 @@ class UserController extends Controller
                                     ->get();
 
             $stores = Store::where('clientId', $data['id'])
-                                    ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
-                                    ->get();
+                            ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
+                            ->get();
 
             $pay_array = array();
             $store_array = array();
@@ -419,6 +421,7 @@ class UserController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'storeId' => $data['storeId'],
+                'created' => $data['created'],
                 'bank_details' => $pay_array,
                 'store_details' => $store_array
             ];
@@ -453,6 +456,7 @@ class UserController extends Controller
         // Reservation::whereBetween('reservation_from', [$from, $to])->get();
         $datas = Client::whereBetween('created', [$start_date, $end_date])
                         ->where('roleId', 'STORE_OWNER')
+                        ->orderBy('created', 'DESC')
                         ->get();
 
         // return $datas;

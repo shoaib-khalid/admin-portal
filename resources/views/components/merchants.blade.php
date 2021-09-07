@@ -32,7 +32,7 @@
             // return false;
             var childTable;
 
-            childTable = '<tr class="bg-light">' +
+            childTable = '<tr class="bg-secondary">' +
                     '<th class="font-weight-bold">Store Name</th>' +
                     '<th class="font-weight-bold">Store Info</th>' +
                     '<th class="font-weight-bold">Address</th>' +
@@ -53,7 +53,7 @@
 
                 store_obj.forEach(element => {
 
-                    childTable += '<tr>' +
+                    childTable += '<tr class="bg-light">' +
                         '<td class="">'+element.name+'</td>' +
                         '<td class="">'+element.storeDescription+'</td>' +
                         '<td class="">'+element.address+'</td>' +
@@ -70,7 +70,7 @@
 
             }else{
                 // alert('toasa')
-                childTable += '<tr>' +
+                childTable += '<tr class="bg-light">' +
                                 '<td colspan="10" class="text-danger font-weight-bold">No Store Available</td>' +
                             '</tr>';
             }
@@ -98,6 +98,7 @@
       null,
       null,
       null,
+      null,
     ],
     'columnDefs': [
 
@@ -111,7 +112,7 @@
         'className' : 'dt-left',
       },
       {
-        'targets' : [3,4,5],
+        'targets' : [3,4,5,6],
         'className' : 'dt-right',
         'width': '100px',
       },

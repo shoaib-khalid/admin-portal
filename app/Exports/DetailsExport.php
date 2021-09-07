@@ -29,7 +29,7 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
         $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales', [
             'startDate' => $this->from,
             'endDate' => $this->to,
-            'sortingOrder' => "ASC",
+            'sortingOrder' => "DESC",
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
