@@ -1,4 +1,6 @@
-
+@php
+    // dd($datas);
+@endphp
 <div class="card section">
     <div class="card-header">
         <h4>Settlement</h4>
@@ -66,39 +68,36 @@
                     @endphp
                     @if ($length > 0)
                         @foreach ($datas as $data)
-                            @if ($data['totalTransactionValue'] == null)
-                                <tr class="text-center">
-
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y')}}
-                                    </td>
-                                    <td>
-                                        {{ $data['storeName'] }}
-                                    </td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y')}}
-                                    </td>
-                                    <td>
-                                        {{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y')}}
-                                    </td>
-                                    <td>
-                                        {{ number_format($data['totalTransactionValue'], 2, '.', ',') ?? '0.00' }}
-                                    </td>
-                                    <td>
-                                        {{ number_format($data['totalServiceFee'], 2, '.', ',') ?? '0.00' }}
-                                    </td>
-                                    <td>
-                                        {{-- {{ No Data }} --}}
-                                        0.00
-                                    </td>
-                                    <td>
-                                        {{ number_format($data['totalCommisionFee'], 2, '.', ',') ?? '0.00' }}
-                                    </td>
-                                    <td>
-                                        {{ number_format($data['totalStoreShare'], 2, '.', ',') ?? '0.00' }}
-                                    </td>
-                                </tr>
-                            @endif
+                            <tr class="text-center">
+                                <td>
+                                    {{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y')}}
+                                </td>
+                                <td>
+                                    {{ $data['storeName'] }}
+                                </td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y')}}
+                                </td>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y')}}
+                                </td>
+                                <td>
+                                    {{ number_format($data['totalTransactionValue'], 2, '.', ',') ?? '0.00' }}
+                                </td>
+                                <td>
+                                    {{ number_format($data['totalServiceFee'], 2, '.', ',') ?? '0.00' }}
+                                </td>
+                                <td>
+                                    {{-- {{ No Data }} --}}
+                                    0.00
+                                </td>
+                                <td>
+                                    {{ number_format($data['totalCommisionFee'], 2, '.', ',') ?? '0.00' }}
+                                </td>
+                                <td>
+                                    {{ number_format($data['totalStoreShare'], 2, '.', ',') ?? '0.00' }}
+                                </td>
+                            </tr>
                         @endforeach
                     @endif
                 </tbody>

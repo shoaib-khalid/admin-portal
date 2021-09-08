@@ -103,12 +103,13 @@ class UserController extends Controller
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
         // return $start_date."|".$end_date;
         // return $data;
         // die();
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
+        
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
@@ -346,6 +347,7 @@ class UserController extends Controller
         }
 
         // return $datas;
+        // die();
         return view('components.settlement', compact('datas'));
     }
 
@@ -470,7 +472,7 @@ class UserController extends Controller
                                     ->limit(1)
                                     ->get();
 
-            $stores = Store::where('id', $data['storeId'])
+            $stores = Store::where('clientId', $data['id'])
                                     ->join('store_delivery_detail as delivery', 'store.id', '=', 'delivery.storeId')
                                     ->get();
 
@@ -526,6 +528,7 @@ class UserController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'storeId' => $data['storeId'],
+                'created' => $data['created'],
                 'bank_details' => $pay_array,
                 'store_details' => $store_array
             ];
