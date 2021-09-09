@@ -4,8 +4,8 @@ current:
   label: v
   major: 1
   minor: 1
-  patch: 10
-  prerelease: 
+  patch: 11
+  prerelease: alpha
   buildmetadata:
   commit: 100001
   timestamp:

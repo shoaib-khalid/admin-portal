@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'report_svc' => [
+        'url' => env('URL_REPORT_SERVICE'),
+        'token' => env('TOKEN_REPORT_SERVICE'),
+    ],
+
 ];
