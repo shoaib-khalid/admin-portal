@@ -88,8 +88,7 @@
                                     {{ number_format($data['totalServiceFee'], 2, '.', ',') ?? '0.00' }}
                                 </td>
                                 <td>
-                                    {{-- {{ No Data }} --}}
-                                    0.00
+                                    {{ number_format($data['totalDeliveryFee'], 2, '.', ',') ?? '0.00' }}
                                 </td>
                                 <td>
                                     {{ number_format($data['totalCommisionFee'], 2, '.', ',') ?? '0.00' }}
