@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RefundController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,7 +53,14 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_merchant', [UserController::class, "filter_merchant"])->name('filter_merchant');
     Route::post('/export_merchant', [UserController::class, "export_merchant"])->name('export_merchant');
     
+    Route::get('/pendingrefund', [RefundController::class, "pendingrefund"])->name('pendingrefund');
+    Route::post('/filter_pendingrefund', [RefundController::class, "filter_pendingrefund"])->name('filter_pendingrefund');
+    Route::post('/export_pendingrefund', [RefundController::class, "export_pendingrefund"])->name('export_pendingrefund');
+    Route::post('/update_refund', [RefundController::class, "update_refund"])->name('update_refund');
 
+    Route::get('/refundhistory', [RefundController::class, "refundhistory"])->name('refundhistory');
+    Route::post('/filter_refundhistory', [RefundController::class, "filter_refundhistory"])->name('filter_refundhistory');
+    Route::post('/export_refundhistory', [RefundController::class, "export_refundhistory"])->name('export_refundhistory');
 });
 
 

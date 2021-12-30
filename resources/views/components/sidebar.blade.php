@@ -52,6 +52,16 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('merchant') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('merchant') }}"><i class="fas fa-store"></i><span>Merchant</span></a>
             </li>
+
+            <li class="menu-header">Refund</li>
+
+            <li class="{{ Request::routeIs('pendingrefund') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('pendingrefund') }}"><i class="fas fa-store"></i><span>Pending Refund</span></a>
+            </li>
+
+            <li class="{{ Request::routeIs('refundhistory') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('refundhistory') }}"><i class="fas fa-store"></i><span>Refund History</span></a>
+            </li>
             
         </ul>
     </aside>
