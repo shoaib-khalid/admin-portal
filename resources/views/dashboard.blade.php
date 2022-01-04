@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-dashboard-table :days="$days"></x-dashboard-table>
+        <x-dashboard-table :days="$days" :datechosen="$datechosen"></x-dashboard-table>
     </div>
 </x-app-layout>
 
@@ -55,8 +55,8 @@ $(document).ready(function () {
             'This Month'  : [moment().startOf('month'), moment().endOf('month')],
             'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
-        startDate: moment().subtract(29, 'days'),
-        endDate  : moment()
+        //startDate: moment().subtract(29, 'days'),
+        //endDate  : moment()
     }, function (start, end) {
         $('.daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         $('#date_chosen').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))

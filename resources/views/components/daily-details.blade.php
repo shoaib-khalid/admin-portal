@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Daily Detailed Sales</h1>
+        <h1>Daily Details Sales</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item">Daile Detailed Sales</div>
         </div>
     </x-slot>
     <div>
-        <x-daily-details-table :datas="$datas"></x-daily-details-table>
+        <x-daily-details-table :datas="$datas" :datechosen="$datechosen"></x-daily-details-table>
     </div>
 </x-app-layout>
 
@@ -61,8 +61,8 @@
                 'This Month'  : [moment().startOf('month'), moment().endOf('month')],
                 'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             },
-            startDate: moment().subtract(29, 'days'),
-            endDate  : moment()
+            //startDate: moment().subtract(29, 'days'),
+            //endDate  : moment()
         }, function (start, end) {
             $('.daterange-btn2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             $('#date_chosen2').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))

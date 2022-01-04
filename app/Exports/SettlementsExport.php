@@ -61,7 +61,7 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
                 Carbon::parse($data['cycleEndDate'])->format('d/m/Y'),
                 $data['totalTransactionValue'],
                 $data['totalServiceFee'],
-                $data['totalServiceFee'],
+                $data['totalDeliveryFee'],
                 $data['totalCommisionFee'],
                 $data['totalStoreShare']
             );

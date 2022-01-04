@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-merchants-table :datas="$datas"></x-merchants-table>
+        <x-merchants-table :datas="$datas" :datechosen="$datechosen"></x-merchants-table>
     </div>
 </x-app-layout>
 
@@ -193,8 +193,8 @@
                 'This Month'  : [moment().startOf('month'), moment().endOf('month')],
                 'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             },
-            startDate: moment().subtract(29, 'days'),
-            endDate  : moment()
+            //startDate: moment().subtract(29, 'days'),
+            //endDate  : moment()
         }, function (start, end) {
             $('.daterange-btn4 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             $('#date_chosen4').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))

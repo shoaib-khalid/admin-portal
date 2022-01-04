@@ -34,20 +34,25 @@ class RefundController extends Controller
 
     public function pendingrefund(){
 
+        $to = date("Y-m-d");
+        $date = new DateTime('365 days ago');
+        $from = $date->format("Y-m-d");
+
         // $datas = Client::limit(100)->get();
-        $datas = Refund::select('order_refund.id','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
+        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', 'PENDING')
+                        ->whereBetween('order_refund.created', [$from, $to])  
                         ->orderBy('order_refund.created', 'ASC')
                         ->get();
         //print_r($datas);                    
 
         // return $datas;
-        // die();
-
-        return view('components.pendingrefund', compact('datas'));
+        // die();        
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
+        return view('components.pendingrefund', compact('datas','datechosen'));
     }
 
     
@@ -62,7 +67,7 @@ class RefundController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-         $datas = Refund::select('order_refund.id','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
+         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
@@ -75,8 +80,8 @@ class RefundController extends Controller
 
         // return $datas;
         // die();
-
-        return view('components.pendingrefund', compact('datas'));
+        $datechosen = $req->date_chosen4;                
+        return view('components.pendingrefund', compact('datas', 'datechosen'));
 
     }
 
@@ -95,7 +100,7 @@ class RefundController extends Controller
             return $ex->getMessage(); 
         }
 
-        $datas = Refund::select('order_refund.id','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
+        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
@@ -109,7 +114,7 @@ class RefundController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen4 );
+        $dateRange = explode( '-', $req->date_chosen4_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
@@ -130,20 +135,26 @@ class RefundController extends Controller
 
      public function refundhistory(){
 
+        $to = date("Y-m-d");
+        $date = new DateTime('365 days ago');
+        $from = $date->format("Y-m-d");
+
         // $datas = Client::limit(100)->get();
-        $datas = Refund::select('order_refund.id','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded')
+        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', '<>', 'PENDING')
+                        ->whereBetween('order_refund.created', [$from, $to])  
                         ->orderBy('order_refund.created', 'DESC')
                         ->get();
         //print_r($datas);                    
 
         // return $datas;
         // die();
-
-        return view('components.refundhistory', compact('datas'));
+       
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.refundhistory', compact('datas','datechosen'));
     }
 
     public function filter_refundhistory(Request $req){
@@ -157,7 +168,7 @@ class RefundController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-         $datas = Refund::select('order_refund.id','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
+         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
@@ -170,7 +181,10 @@ class RefundController extends Controller
         // return $datas;
         // die();
 
-        return view('components.refundhistory', compact('datas'));
+        //echo $start_date." - ".$end_date;
+        //exit;                        
+        $datechosen = $req->date_chosen4;   
+        return view('components.refundhistory', compact('datas','datechosen'));
 
     }
 
@@ -178,7 +192,7 @@ class RefundController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen4 );
+        $dateRange = explode( '-', $req->date_chosen4_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
@@ -188,7 +202,6 @@ class RefundController extends Controller
         // return $start_date."|".$end_date;
         // return $data;
         // die();
-        
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";

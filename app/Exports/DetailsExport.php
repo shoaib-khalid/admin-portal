@@ -52,17 +52,15 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
                 array_push( 
                     $cur_item,
                     $data['date'],
-                    $item['storeId'], 
-                    $item['merchantName'],
-                    $item['storeName'],
+                    $item['storeName'], 
+                    $item['customerName'],
                     $item['subTotal'],
-                    $item['total'],
                     $item['serviceCharge'],
                     $item['deliveryCharge'],
-                    $item['customerName'],
+                    $item['commission'],
+                    $item['total'],
                     $item['orderStatus'],
                     $item['deliveryStatus'],
-                    $item['commission']
                 );
 
                 $newArray[] = $cur_item;

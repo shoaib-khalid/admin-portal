@@ -15,20 +15,20 @@
                     <form action="/filter_settlement" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         <div class="input-group mb-3">
-                            <input type="text" name="date_chosen3" id="date_chosen3" class="form-control daterange-btn3">
+                            <input type="text" name="date_chosen3" id="date_chosen3" class="form-control daterange-btn3" value="{{$datechosen}}">
                             <div class="input-group-append">
                                 <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col">
+                <div class="col-1">
                     
                 </div>
                 <div class="col">
                     <form action="/export_settlement" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
-                        <input type="text" name="date_chosen3" id="date_chosen3_copy" class="form-control daterange-btn3" hidden>
+                        <input type="text" name="date_chosen3_copy" id="date_chosen3_copy" class="form-control daterange-btn3" value="{{$datechosen}}" hidden>
                         <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
                         </button>
                     </form>

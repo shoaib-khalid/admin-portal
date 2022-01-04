@@ -47,12 +47,14 @@ class UserController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen );
+        $dateRange = explode( '-', $req->date_chosen_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
+
+        //dd($dateRange);
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
@@ -64,7 +66,7 @@ class UserController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen2 );
+        $dateRange = explode( '-', $req->date_chosen2_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
@@ -86,10 +88,11 @@ class UserController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen3 );
+        $dateRange = explode( '-', $req->date_chosen3_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
+        //dd($dateRange);
         // return $start_date."|".$end_date;
         // return $data;
         // die();
@@ -107,13 +110,13 @@ class UserController extends Controller
     {
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen4 );
+        $dateRange = explode( '-', $req->date_chosen4_copy );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
-
+        //dd($dateRange);
         // return $start_date."|".$end_date;
         // return $data;
         // die();
@@ -140,7 +143,7 @@ class UserController extends Controller
 
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/daily_sales?from=2021-06-01&to=2021-08-16')->object();
         $to = date("Y-m-d");
-        $date = new DateTime('7 days ago');
+        $date = new DateTime('7 days ago');             
         $from = $date->format('Y-m-d');
 
         // return $from."|".$to;
@@ -183,8 +186,10 @@ class UserController extends Controller
         // return $days;
 
         // die();
-
-        return view('dashboard', compact('days'));
+        //dd($days);
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');        
+        //dd($testdata);
+        return view('dashboard', compact('datechosen','days'));
     }
 
     public function daily_sales_filter(Request $req){
@@ -210,9 +215,12 @@ class UserController extends Controller
 
         }
 
+        //dd($req->date_chosen);
+        $datechosen = $req->date_chosen;
+
         // return $days;
         // die();
-        return view('dashboard', compact('days'));
+        return view('dashboard', compact('days','datechosen'));
 
     }
 
@@ -271,7 +279,8 @@ class UserController extends Controller
 
         // return $datas;
         // return json_decode($datas);
-        return view('components.daily-details', compact('datas'));
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.daily-details', compact('datas','datechosen'));
     }
 
     public function daily_details_filter(Request $req){
@@ -299,7 +308,8 @@ class UserController extends Controller
         }
 
         // return $datas;
-        return view('components.daily-details', compact('datas'));
+        $datechosen = $req->date_chosen2;
+        return view('components.daily-details', compact('datas','datechosen'));
     }
 
 
@@ -327,7 +337,8 @@ class UserController extends Controller
         // return $datas;
         // die();
         // return json_decode($datas);
-        return view('components.settlement', compact('datas'));
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.settlement', compact('datas','datechosen'));
     }
 
     public function filter_settlement(Request $req){
@@ -356,16 +367,22 @@ class UserController extends Controller
 
         // return $datas;
         // die();
-        return view('components.settlement', compact('datas'));
+        $datechosen = $req->date_chosen3;
+        return view('components.settlement', compact('datas','datechosen'));
     }
 
     public function merchant(){
 
+        $to = date("Y-m-d");
+        $date = new DateTime('365 days ago');
+        $from = $date->format("Y-m-d");
+
         // $datas = Client::limit(100)->get();
-        $datas = Client::where('roleId', 'STORE_OWNER')
+        $datas = Client::whereBetween('created', [$from, $to])
+                        ->where('roleId', 'STORE_OWNER')
                         ->orderBy('created', 'DESC')
                         ->get();
-
+       
         $newArray = array();
 
         foreach ($datas as $data) {
@@ -448,8 +465,9 @@ class UserController extends Controller
 
         // return $datas;
         // die();
-
-        return view('components.merchants', compact('datas'));
+        
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.merchants', compact('datas','datechosen'));
     }
 
     public function filter_merchant(Request $req){
@@ -553,7 +571,7 @@ class UserController extends Controller
 
         // return $datas;
         // die();
-
-        return view('components.merchants', compact('datas'));
+        $datechosen = $req->date_chosen4;
+        return view('components.merchants', compact('datas','datechosen'));
     }
 }

@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-settlement-table :datas="$datas"></x-settlement-table>
+        <x-settlement-table :datas="$datas" :datechosen="$datechosen"></x-settlement-table>
     </div>
 </x-app-layout>
 
@@ -61,8 +61,8 @@
                 'This Month'  : [moment().startOf('month'), moment().endOf('month')],
                 'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             },
-            startDate: moment().subtract(29, 'days'),
-            endDate  : moment()
+            //startDate: moment().subtract(29, 'days'),
+            //endDate  : moment()
         }, function (start, end) {
             $('.daterange-btn3 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             $('#date_chosen3').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
