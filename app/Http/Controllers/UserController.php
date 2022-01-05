@@ -154,6 +154,7 @@ class UserController extends Controller
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]);
 
         if($request->successful()){
@@ -207,6 +208,7 @@ class UserController extends Controller
             'from' => $start_date,
             'to' => $end_date,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]);
 
         if($request->successful()){
@@ -234,6 +236,7 @@ class UserController extends Controller
             'startDate' => $from,
             'endDate' => $to,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -298,6 +301,7 @@ class UserController extends Controller
             'startDate' => $start_date,
             'endDate' => $end_date,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -324,6 +328,7 @@ class UserController extends Controller
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]); 
 
         // https://api.symplified.biz/report-service/v1/store/8913d06f-a63f-4a16-8059-2a30a517663a/settlement?from=2021-7-29&page=0&pageSize=20&sortBy=startDate&sortingOrder=DESC&to=2021-8-26
@@ -356,6 +361,7 @@ class UserController extends Controller
             'from' => $start_date,
             'to' => $end_date,
             'sortingOrder' => "DESC",
+            'pageSize' => 1000
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
