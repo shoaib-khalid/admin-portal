@@ -72,7 +72,7 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
         }
 
         //dd($cur_item);
-        dd($newArray);
+        //dd($newArray);
 
         //$settlementDate = array_column($newArray, 'settlementDate');
         //array_multisort($settlementDate, SORT_DESC, $newArray);
