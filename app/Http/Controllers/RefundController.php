@@ -34,8 +34,8 @@ class RefundController extends Controller
 
     public function pendingrefund(){
 
-        $to = date("Y-m-d");
-        $date = new DateTime('365 days ago');
+        $to = date("Y-m-d H:i:s");
+        $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
