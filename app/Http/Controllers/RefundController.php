@@ -72,7 +72,7 @@ class RefundController extends Controller
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', 'PENDING')
-                        ->whereBetween('order_refund.created', [$start_date, $end_date])                        
+                        ->whereBetween('order_refund.created', [$start_date, $end_date." 23:59:59"])                        
                         ->orderBy('order_refund.created', 'ASC')
                         ->get();
         
@@ -129,14 +129,14 @@ class RefundController extends Controller
         // $from = "2021-08-01";
         // $to = "2021-08-30";
 
-        return Excel::download(new PendingRefundExport($start_date, $end_date), 'pendingrefund.xlsx');
+        return Excel::download(new PendingRefundExport($start_date, $end_date." 23:59:59"), 'pendingrefund.xlsx');
     }
 
 
      public function refundhistory(){
 
-        $to = date("Y-m-d");
-        $date = new DateTime('365 days ago');
+        $to = date("Y-m-d H:i:s");
+        $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
@@ -173,7 +173,7 @@ class RefundController extends Controller
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', '<>', 'PENDING')
-                        ->whereBetween('order_refund.created', [$start_date, $end_date])  
+                        ->whereBetween('order_refund.created', [$start_date, $end_date." 23:59:59"])  
                         ->orderBy('order_refund.created', 'ASC')
                         ->get();
         //print_r($datas);                    
@@ -206,7 +206,7 @@ class RefundController extends Controller
         // $from = "2021-08-01";
         // $to = "2021-08-30";
 
-        return Excel::download(new RefundHistoryExport($start_date, $end_date), 'refundhistory.xlsx');
+        return Excel::download(new RefundHistoryExport($start_date, $end_date." 23:59:59"), 'refundhistory.xlsx');
     }
 
 }
