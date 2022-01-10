@@ -34,7 +34,7 @@ class RefundController extends Controller
 
     public function pendingrefund(){
 
-        $to = date("Y-m-d H:i:s");
+        $to = date("Y-m-d");
         $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
 
@@ -44,7 +44,7 @@ class RefundController extends Controller
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', 'PENDING')
-                        ->whereBetween('order_refund.created', [$from, $to])  
+                        ->whereBetween('order_refund.created', [$from, $to." 23:59:59"])  
                         ->orderBy('order_refund.created', 'ASC')
                         ->get();
         //print_r($datas);                    
@@ -135,7 +135,7 @@ class RefundController extends Controller
 
      public function refundhistory(){
 
-        $to = date("Y-m-d H:i:s");
+        $to = date("Y-m-d");
         $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
 
@@ -145,7 +145,7 @@ class RefundController extends Controller
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', '<>', 'PENDING')
-                        ->whereBetween('order_refund.created', [$from, $to])  
+                        ->whereBetween('order_refund.created', [$from, $to." 23:59:59"])  
                         ->orderBy('order_refund.created', 'DESC')
                         ->get();
         //print_r($datas);                    
