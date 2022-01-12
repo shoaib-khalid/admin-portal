@@ -89,9 +89,13 @@ class RefundController extends Controller
 
         //update refund record
         try{    
+            //save file to public folder
+            $request->proof->store('refund', 'public');
+
             //dd($request->refund_id);
             $refund = Refund::find($request->refund_id);
             $refund->remarks = $request->remarks;
+            $refund->proof = $request->proof->hashName();            
             $refund->refundStatus = "COMPLETED";
             $refund->updated = date("Y-m-d H:i:s");
             $refund->refunded = date("Y-m-d H:i:s");
@@ -106,8 +110,10 @@ class RefundController extends Controller
                         ->join('store as store', 'order.storeId', '=', 'store.id')
                         ->where('refundStatus', 'PENDING')
                         ->orderBy('order_refund.created', 'ASC')
-                        ->get();       
-        return view('components.pendingrefund', compact('datas'));
+                        ->get();    
+        $date = new DateTime('90 days ago');
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');    
+        return view('components.pendingrefund', compact('datas', 'datechosen'));
     }
 
     public function export_pendingrefund(Request $req) 
@@ -140,7 +146,7 @@ class RefundController extends Controller
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
-        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded')
+        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded', 'proof')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
@@ -168,7 +174,7 @@ class RefundController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
+         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'proof')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')

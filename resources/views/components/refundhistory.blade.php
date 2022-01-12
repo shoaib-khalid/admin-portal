@@ -207,4 +207,31 @@
         
     });
     
+      $('#RefundHistoryDetailsModal').on('show.bs.modal', function(e) {
+        var created = $(e.relatedTarget).data('created');      
+        var refundId = $(e.relatedTarget).data('refundid');      
+        var invoiceId = $(e.relatedTarget).data('invoiceid'); 
+        var storeName = $(e.relatedTarget).data('storename'); 
+        var customerName = $(e.relatedTarget).data('customername'); 
+        var refundType = $(e.relatedTarget).data('refundtype'); 
+        var refundAmount = $(e.relatedTarget).data('refundamount'); 
+        var paymentChannel = $(e.relatedTarget).data('paymentchannel'); 
+        var refundStatus = $(e.relatedTarget).data('refundstatus'); 
+        var remarks = $(e.relatedTarget).data('remarks'); 
+        var proof = $(e.relatedTarget).data('proof'); 
+        console.log("proof:"+proof);
+        $('#created2').val(created);  
+        $('#refund_id2').val(refundId);
+        $('#invoice_id2').val(invoiceId);
+        $('#storename2').val(storeName);
+        $('#customer_name2').val(customerName);
+        $('#refund_type2').val(refundType);
+        $('#refund_amount2').val(refundAmount);
+        $('#payment_channel2').val(paymentChannel);
+        $('#refund_status2').val(refundStatus);
+        $('#remarks2').val(remarks);
+        $("#proofimage").attr("src",proof);
+   });
+
+
 </script>

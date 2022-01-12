@@ -26,5 +26,6 @@ class Refund extends Model
                             'remarks', 
                             'created', 
                             'updated',
+                            'proof',
                         ];
 }

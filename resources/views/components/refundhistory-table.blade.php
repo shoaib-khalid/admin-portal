@@ -40,7 +40,7 @@
 
         <div class="table-responsive">
 
-            <table id="table-4" class="table table-striped">
+            <table id="table-4"  class="table table-md table-hover table-borderless">
                 <thead>
                     <tr class="text-center">
                         <th>Date created</th>
@@ -52,13 +52,25 @@
                         <th>Payment Channel</th>
                         <th>Refund Status</th>
                         <th>Done Date</th>
-                        <th>Remarks</th>
+                        <th>Remarks</th>                        
                     </tr>
                 </thead>      
                 <tbody>
 
                     @foreach ($datas as $data)
-                        <tr class="text-center">
+                        <tr class="text-center" data-toggle="modal" data-target="#RefundHistoryDetailsModal"
+                                    data-created="{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}"
+                                    data-refundid="{{ $data['id'] }}"
+                                    data-invoiceid="{{ $data['invoiceId'] }}"
+                                    data-storename="{{ $data['storeName'] }}"
+                                    data-customername="{{ $data['customerName'] }}"
+                                    data-refundtype="{{ $data['refundType'] }}"
+                                    data-refundamount="{{ $data['refundAmount'] }}"
+                                    data-paymentchannel="{{ $data['paymentChannel'] }}"
+                                    data-refundstatus="{{ $data['refundStatus'] }}"
+                                    data-remarks="{{ $data['remarks'] }}"
+                                    data-proof="{{ asset('storage/refund').'/'.$data['proof'] }}"
+                                    >
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
                             <td>{{ $data['invoiceId'] }}</td>
                             <td>{{ $data['storeName'] }}</td>
@@ -68,7 +80,7 @@
                             <td>{{ $data['paymentChannel'] }}</td>
                             <td>{{ $data['refundStatus'] }}</td>
                             <td>{{ $data['refunded'] }}</td>
-                            <td>{{ $data['remarks'] }}</td>
+                            <td>{{ $data['remarks'] }}</td>                            
                         </tr>
                     @endforeach
 
@@ -104,7 +116,6 @@
         </div>
     </div>
 </div>
-
 
 
 
