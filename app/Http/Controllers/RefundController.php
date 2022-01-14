@@ -20,6 +20,11 @@ use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Mail;
+ 
+use App\Mail\NotifyMail;
+use App\Mail\EmailContent;
 
 class RefundController extends Controller
 {
@@ -99,7 +104,57 @@ class RefundController extends Controller
             $refund->refundStatus = "COMPLETED";
             $refund->updated = date("Y-m-d H:i:s");
             $refund->refunded = date("Y-m-d H:i:s");
-            $res = $refund->save();            
+            $res = $refund->save(); 
+
+            //get customer email from order
+            $orderData = Refund::select('order_refund.id','order_refund.created','order_refund.orderId',                
+                'store.name AS storeName', 'store.address AS storeAddress', 'customer.name AS customerName', 'customer.email AS customerEmail', 'store_asset.logoUrl AS storeLogo', 
+                'refundType','refundAmount','refundStatus','remarks', 
+                'order.total', 'order.subTotal', 'order.appliedDiscount','order.total','order.invoiceId',
+                'order.storeServiceCharges', 'order.deliveryCharges', 'order.deliveryDiscount',
+                'shipment.address AS shipmentAddress', 'shipment.city AS shipmentCity',
+                'payment.paymentChannel','payment.createdDate AS paymentDate'
+                )
+                        ->join('order as order', 'order_refund.orderId', '=', 'order.id')
+                        ->join('customer as customer', 'order.customerId', '=', 'customer.id')
+                        ->join('store as store', 'order.storeId', '=', 'store.id')
+                        ->join('store_asset as store_asset', 'store.id', '=', 'store_asset.storeId')
+                        ->join('order_shipment_detail as shipment', 'order.id', '=', 'shipment.orderId')
+                        ->join('payment_orders as payment', 'order.id', '=', 'payment.clientTransactionId')
+                        ->where('order_refund.id', $request->refund_id)
+                        ->get();
+            //dd($orderData);          
+            $orderId = $orderData[0]['orderId'];
+
+            //get order item from order
+            $orderItems = DB::connection('mysql2')->table('order_item')
+                        ->select('order_item.id AS orderItemId','productId', 'productPrice', 'price', 'quantity', 'name', 'productVariant')
+                        ->join('product as product', 'order_item.productId', '=', 'product.id')
+                        ->where('orderId', $orderId)
+                        ->get();
+            foreach ($orderItems as $item) {                
+                $orderSubItems = DB::connection('mysql2')->table('order_subitem')
+                                 ->select('name')
+                                ->join('product as product', 'order_subitem.productId', '=', 'product.id')
+                                ->where('orderItemId', $item->orderItemId)
+                                ->get();
+                $item->subItems = $orderSubItems;
+            }
+
+            //if (count($item->subItems)>0) { echo "got subitem"; } else { echo "no subitem"; }
+            //dd($item->subItems);
+
+            $invoiceNo = $orderData[0]['invoiceId'];
+            $customerEmail = $orderData[0]['customerEmail'];
+            
+            $emailContent = new EmailContent();
+            $emailContent->orderDetails = $orderData[0];
+            $emailContent->orderId = $request->refund_id;
+            $emailContent->attachmentFile =  storage_path('app')."/public/refund/".$request->proof->hashName();
+            $emailContent->orderItems = $orderItems;
+
+            Mail::to($customerEmail)->send(new NotifyMail($emailContent));  
+
         }catch(QueryException $ex){ 
             return $ex->getMessage(); 
         }
