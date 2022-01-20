@@ -156,7 +156,7 @@
             </div>
             <div class="modal-body">
 
-                <form action="update_refund" method="post" enctype="multipart/form-data" >
+                <form action="update_refund" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
                     {{@csrf_field()}}
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -219,7 +219,7 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <button type="submit" class="btn btn-success float-left">Refund Completed</button>  
+                        <button id="btnComplete" type="submit" class="btn btn-success float-left" onClick="this.form.submit(); this.disabled=true;">Refund Completed</button>  
                     </div>
                     <div class="form-group col-md-6">
                         <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>

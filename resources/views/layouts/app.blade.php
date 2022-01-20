@@ -47,6 +47,7 @@
 
         <!-- Scripts -->
         <script defer src="{{ asset('vendor/alpine.js') }}"></script>
+
     </head>
     <body class="antialiased">
         <div id="app">
@@ -115,6 +116,8 @@
         {{-- <script src="{{ asset('assets/js/scripts.js') }}"></script>
         <script src="{{ asset('assets/js/custom.js') }}"></script> --}}
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+
         <!-- Page Specific JS File -->
         <script src="{{ asset('assets/js/page/forms-advanced-forms.js') }}"></script>
 
@@ -124,5 +127,22 @@
         @isset($script)
             {{ $script }}
         @endisset
+
+        <!--
+        <div id="loadingscreen" class="se-pre-con"></div>
+
+        <script type="text/javascript">
+         //paste this code under the head tag or in a separate js file.
+        // Wait for window load
+        $(window).load(function() {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut('slow', function(){
+                $(".log").text('Fade Out Transition Complete');
+            });
+        });
+
+
+        </script>
+        !-->
     </body>
 </html>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Daily Details Sales</h1>
+        <h1>Daily Details Sales 1</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item">Daile Detailed Sales</div>
@@ -11,7 +11,10 @@
     </div>
 </x-app-layout>
 
+
 <script>
+
+   
 
     $(document).ready(function () {
     
