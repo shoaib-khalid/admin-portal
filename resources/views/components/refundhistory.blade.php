@@ -218,7 +218,8 @@
         var paymentChannel = $(e.relatedTarget).data('paymentchannel'); 
         var refundStatus = $(e.relatedTarget).data('refundstatus'); 
         var remarks = $(e.relatedTarget).data('remarks'); 
-        var proof = $(e.relatedTarget).data('proof'); 
+        var prooftype = $(e.relatedTarget).data('prooftype'); 
+        var prooffile = $(e.relatedTarget).data('prooffile'); 
         console.log("proof:"+proof);
         $('#created2').val(created);  
         $('#refund_id2').val(refundId);
@@ -230,7 +231,7 @@
         $('#payment_channel2').val(paymentChannel);
         $('#refund_status2').val(refundStatus);
         $('#remarks2').val(remarks);
-        $("#proofimage").attr("src",proof);
+        $("#prooffile").attr("src","data:"+prooftype+";base64,"+prooffile);
    });
 
 

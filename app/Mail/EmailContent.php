@@ -13,4 +13,7 @@ class EmailContent
     public $attachmentFile;
     public $orderDetails;
     public $orderItems;
+    public $attachmentData;
+    public $attachmentMimeType;
+    public $attachmentFileName;
 }

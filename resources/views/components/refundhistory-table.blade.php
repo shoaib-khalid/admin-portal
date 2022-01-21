@@ -69,7 +69,8 @@
                                     data-paymentchannel="{{ $data['paymentChannel'] }}"
                                     data-refundstatus="{{ $data['refundStatus'] }}"
                                     data-remarks="{{ $data['remarks'] }}"
-                                    data-proof="{{ asset('storage/refund').'/'.$data['proof'] }}"
+                                    data-prooffile="{{ $data['prooffile'] }}"
+                                    data-prooftype="{{ $data['prooftype'] }}"
                                     >
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
                             <td>{{ $data['invoiceId'] }}</td>

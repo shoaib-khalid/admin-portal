@@ -36,6 +36,8 @@ class NotifyMail extends Mailable
                 ->subject('Your refund has been completed')
                 ->view('emails.notificationMail')
                 ->with('emailContent', $this->emailContent)
-                ->attach($this->emailContent->attachmentFile);
+                ->attachData($this->emailContent->attachmentData, $this->emailContent->attachmentFileName, [
+                    'mime' => $this->emailContent->attachmentMimeType]
+                );
     }
 }

@@ -304,7 +304,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label class="text-primary">Refund Proof</label>
-                        <img id="proofimage" src="" alt="" title="" style="height: 600px !important;">
+                        <img id="prooffile" src="">
                     </div>
                 </div>
 

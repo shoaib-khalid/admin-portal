@@ -95,15 +95,36 @@ class RefundController extends Controller
         //update refund record
         try{    
             //save file to public folder
-            $request->proof->store('refund', 'public');
+            
+            $mime_type = mime_content_type($request->proof->path());
+            
+            $image_file_name = $request->proof->hashName();
+            $image_name = $request->proof->path();
+            if ($mime_type=="image/jpeg" || $mime_type=="image/jpg") {
+                $image = imagecreatefromjpeg($image_name); 
+                $imgResized = imagescale($image , 700, -1);
+                ob_start(); // Let's start output buffering.
+                imagejpeg($imgResized); //This will normally output the image, but because of ob_start(), it won't.
+                $contents = ob_get_contents(); //Instead, output above is saved to $contents
+                ob_end_clean(); //End the output buffer.
+                $image64 = base64_encode($contents);
+            } else {
+                $image = imagecreatefrompng($image_name); 
+                $imgResized = imagescale($image , 700, -1);
+                ob_start(); // Let's start output buffering.
+                imagepng($imgResized); //This will normally output the image, but because of ob_start(), it won't.
+                $contents = ob_get_contents(); //Instead, output above is saved to $contents
+                ob_end_clean(); //End the output buffer.
+                $image64 = base64_encode($contents);
+            }            
 
-            //dd($request->refund_id);
             $refund = Refund::find($request->refund_id);
             $refund->remarks = $request->remarks;
-            $refund->proof = $request->proof->hashName();            
             $refund->refundStatus = "COMPLETED";
             $refund->updated = date("Y-m-d H:i:s");
             $refund->refunded = date("Y-m-d H:i:s");
+            $refund->prooffile = $image64;
+            $refund->prooftype = $mime_type;
             $res = $refund->save(); 
 
             //get customer email from order
@@ -150,7 +171,9 @@ class RefundController extends Controller
             $emailContent = new EmailContent();
             $emailContent->orderDetails = $orderData[0];
             $emailContent->orderId = $request->refund_id;
-            $emailContent->attachmentFile =  storage_path('app')."/public/refund/".$request->proof->hashName();
+            $emailContent->attachmentData = $contents;
+            $emailContent->attachmentMimeType = $mime_type;
+            $emailContent->attachmentFileName = $image_file_name;
             $emailContent->orderItems = $orderItems;
 
             Mail::to($customerEmail)->send(new NotifyMail($emailContent));  
@@ -201,7 +224,7 @@ class RefundController extends Controller
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
-        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded', 'proof')
+        $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'refunded', 'proof', 'prooffile')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')
@@ -229,7 +252,7 @@ class RefundController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'proof')
+         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks', 'proof', 'prooffile')
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
                         ->join('store as store', 'order.storeId', '=', 'store.id')

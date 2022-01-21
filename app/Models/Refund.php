@@ -25,7 +25,8 @@ class Refund extends Model
                             'refundAmount', 
                             'remarks', 
                             'created', 
-                            'updated',
-                            'proof',
+                            'updated',                            
+                            'prooffile',
+                            'prooftype'
                         ];
 }
