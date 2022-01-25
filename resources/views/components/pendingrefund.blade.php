@@ -10,7 +10,7 @@
         <x-pendingrefund-table :datas="$datas" :datechosen="$datechosen"></x-pendingrefund-table>
     </div>
 </x-app-layout>
-
+<?php print_r(gd_info()); ?>
 <script>
 
     $(document).ready(function () {

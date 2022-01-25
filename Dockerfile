@@ -13,10 +13,22 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN apt-get update && apt-get install -y libmcrypt-dev mariadb-client libpng-dev libjpeg-dev libfreetype6-dev zlib1g-dev libjpeg62 pkg-config  \
-	libzip-dev zip \
-	&& docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \ 
-    && docker-php-ext-install pdo_mysql gd zip
+RUN apt-get update && apt-get install -y \
+libmcrypt-dev \
+mariadb-client \
+libpng-dev \
+libjpeg-dev \
+libfreetype6-dev \
+zlib1g-dev \
+libzip-dev \
+libgd-dev \
+zip
+
+RUN docker-php-ext-install pdo pdo_mysql zip
+	
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+RUN docker-php-ext-install gd
 	
 # enable apache2 rewrite module
 RUN a2enmod rewrite
