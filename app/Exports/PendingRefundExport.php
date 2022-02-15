@@ -21,6 +21,15 @@ class PendingRefundExport implements FromCollection, ShouldAutoSize, WithHeading
             $this->to = $to;
     }
 
+    function convertRefundType($type) {
+        if ($type=="ITEM_REVISED")
+            return "PARTIAL REFUND";
+        elseif ($type=="ITEM_CANCELLED")
+            return "PARTIAL REFUND";
+        else
+            return $type;
+    }
+
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -47,7 +56,7 @@ class PendingRefundExport implements FromCollection, ShouldAutoSize, WithHeading
                     $data['invoiceId'], 
                     $data['storeName'],
                     $data['customerName'], 
-                    $data['refundType'], 
+                    $this->convertRefundType($data['refundType']), 
                     $data['refundAmount'], 
                     $data['paymentChannel'], 
                     $data['refundStatus'], 

@@ -2,6 +2,15 @@
     // var_dump($datas);
     // dd($datas);
 @endphp
+<?php function convertRefundType($type) {
+    if ($type=="ITEM_REVISED")
+        return "PARTIAL REFUND";
+    elseif ($type=="ITEM_CANCELLED")
+        return "PARTIAL REFUND";
+    else
+        return $type;
+}
+?>
 <div class="card section">
     <div class="card-header">
         <h4>Refund History</h4>
@@ -64,7 +73,7 @@
                                     data-invoiceid="{{ $data['invoiceId'] }}"
                                     data-storename="{{ $data['storeName'] }}"
                                     data-customername="{{ $data['customerName'] }}"
-                                    data-refundtype="{{ $data['refundType'] }}"
+                                    data-refundtype="{{ convertRefundType($data['refundType']) }}"
                                     data-refundamount="{{ $data['refundAmount'] }}"
                                     data-paymentchannel="{{ $data['paymentChannel'] }}"
                                     data-refundstatus="{{ $data['refundStatus'] }}"
@@ -75,8 +84,8 @@
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
                             <td>{{ $data['invoiceId'] }}</td>
                             <td>{{ $data['storeName'] }}</td>
-                            <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['refundType'] }}</td>
+                            <td>{{ $data['customerName'] }}</td>                            
+                            <td>{{ convertRefundType($data['refundType']) }}</td>
                             <td>{{ $data['refundAmount'] }}</td>
                             <td>{{ $data['paymentChannel'] }}</td>
                             <td>{{ $data['refundStatus'] }}</td>
