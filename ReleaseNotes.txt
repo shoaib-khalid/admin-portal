@@ -1,0 +1,6 @@
+Version 1.6.0
+------------------------
+Date:15-Feb-2022
+
+Add new field 'remarks' in settlement page
+Read settlement data directly from db instead of query report-service

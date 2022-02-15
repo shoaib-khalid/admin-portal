@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RefundController;
+use App\Http\Controllers\SettlementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +42,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/settlement', [UserController::class, "settlement"])->name('settlement');
     Route::post('/filter_settlement', [UserController::class, "filter_settlement"])->name('filter_settlement');
     Route::post('/export_settlement', [UserController::class, "export_settlement"])->name('export_settlement');
+
+    Route::get('/settlement2', [SettlementController::class, "settlement2"])->name('settlement2');
+    Route::post('/filter_settlement2', [SettlementController::class, "filter_settlement2"])->name('filter_settlement2');
+    Route::post('/export_settlement2', [SettlementController::class, "export_settlement2"])->name('export_settlement2');
+    Route::post('/update_settlement2', [SettlementController::class, "update_settlement2"])->name('update_settlement2');
 
     Route::get('/test_api', [UserController::class, "test_api"]);
     Route::get('/user', [ UserController::class, "index_view" ])->name('user');

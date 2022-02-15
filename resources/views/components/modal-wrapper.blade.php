@@ -316,3 +316,96 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="SettlementDetailsModal">
+    <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Settlement Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <form action="update_settlement2" method="post" enctype="multipart/form-data" onload="document.getElementById('btnSComplete').disabled=false;" >
+                    {{@csrf_field()}}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Payout Date</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="spayoutdate">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Store Name</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sstorename">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Start Date</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sstartdate">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Cut-Off Date</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="scutoffdate">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Gross Amount</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sgrossamount">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Service Charge</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sservicecharge">
+                    </div>
+                </div>
+                    
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Delivery Charge</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sdeliverycharge">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Commission</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="scommission">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Nett Amount</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="snettamount">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Settlement Id</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sid" name="sid">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="text-primary">Remarks</label>
+                        <input type="text" class="form-control font-weight-bold" id="sremarks" name="sremarks">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <button id="btnSComplete" type="submit" class="btn btn-success float-left" onClick="this.form.submit(); this.disabled=true;">Update Details</button>  
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>
+                    </div>  
+                </div>
+                
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
