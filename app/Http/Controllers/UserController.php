@@ -379,8 +379,8 @@ class UserController extends Controller
 
     public function merchant(){
 
-        $to = date("Y-m-d");
-        $date = new DateTime('365 days ago');
+        $to = date("Y-m-d")." 23:59:59";
+        $date = new DateTime('30 days ago');
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
@@ -485,7 +485,7 @@ class UserController extends Controller
         $end_date = $dateRange[1];
 
         $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
+        $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
 
         // Reservation::whereBetween('reservation_from', [$from, $to])->get();
         $datas = Client::whereBetween('created', [$start_date, $end_date])

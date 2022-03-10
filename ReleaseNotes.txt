@@ -1,8 +1,15 @@
+Version 1.6.2
+------------------------
+Date:10-March-2022
+
+Bug fix for merchant date filtering
+
+
 Version 1.6.1
 ------------------------
 Date:15-Feb-2022
 
-Map refun type ITEM_REVISED -> PARTIAL REFUND
+Map refund type ITEM_REVISED -> PARTIAL REFUND
 
 
 Version 1.6.0
