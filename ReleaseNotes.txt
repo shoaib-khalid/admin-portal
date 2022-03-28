@@ -1,3 +1,15 @@
+Version 1.7.0
+------------------------
+Date:28-March-2022
+
+1. Bug fix for daily sales report : 
+	Add discount column
+2. New Report : Customer Activity Log
+3. New Report : Customer Site Map
+4. New Report : Customer Summary
+5. New Report : Abandon Cart
+
+
 Version 1.6.2
 ------------------------
 Date:10-March-2022

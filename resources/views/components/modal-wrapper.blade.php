@@ -409,3 +409,90 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="ActivityDetailsModal">
+    <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Activity Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <form  enctype="multipart/form-data" >
+                    {{@csrf_field()}}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Timestamp</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acttimestamp">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Store Name</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actstorename" name="refund_id">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Customer Name</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actcustomername">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Session Id</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actsessionId">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Page Visited</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actpagevisited">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">IP</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actip">
+                    </div>
+                </div>
+                    
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Device</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actdevice">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">OS</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actos">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Browser</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actbrowser" name="actbrowser">
+                    </div>
+                     <div class="form-group col-md-6">
+                        <label class="text-primary">Error Type</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acterrorType" name="acterrortype">
+                    </div>
+                </div>
+
+
+                <div class="form-row">                   
+                    <div class="form-group col-md-12">
+                        <label class="text-primary">Error Message</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acterrorType" name="acterroroccur">
+                    </div>
+                </div>
+
+               
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>

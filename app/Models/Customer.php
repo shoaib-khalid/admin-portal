@@ -11,13 +11,13 @@ class Customer extends Model
 
     protected $connection = 'mysql2';
 
-    protected $table = 'order';
+    protected $table = 'customer';
 
     protected $casts = ['id' => 'string'];
 
     protected $fillable = ['id', 
-                            'invoiceId', 
-                            'customerId', 
-                            'completionStatus', 
+                            'name', 
+                            'username', 
+                            'created', 
                         ];
 }

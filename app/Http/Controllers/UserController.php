@@ -182,6 +182,8 @@ class UserController extends Controller
             // }
 
             // return $sales_arr;
+        } else {
+            $days = null;
         }
 
         // return $days;
@@ -245,7 +247,7 @@ class UserController extends Controller
             $datas = $request['data'];
 
         }
-
+        //dd($datas);
 
         // $newArray = array();
         

@@ -66,6 +66,22 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('refundhistory') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('refundhistory') }}"><i class="fas fa-store"></i><span>Refund History</span></a>
             </li>
+
+            <li class="menu-header">Analytic</li>
+
+            <li class="{{ Request::routeIs('useractivitylog') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('useractivitylog') }}"><i class="fas fa-store"></i><span>Customer Activity Log</span></a>
+            </li>
+            <li class="{{ Request::routeIs('usersitemap') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('usersitemap') }}"><i class="fas fa-store"></i><span>Customer Site Map</span></a>
+            </li>
+            <li class="{{ Request::routeIs('useractivitysummary') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-store"></i><span>Customer Summary</span></a>
+            </li>
+            <li class="{{ Request::routeIs('userabandoncart') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('userabandoncart') }}"><i class="fas fa-store"></i><span>Abandon Cart</span></a>
+            </li>
+           
             
         </ul>
     </aside>

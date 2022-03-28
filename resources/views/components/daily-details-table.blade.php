@@ -46,8 +46,10 @@
                     <th>Store Name</th>
                     <th>Customer Name</th>
                     <th>Sub Total</th>
+                    <th>Applied Discount</th>
                     <th>Service Charge</th>
                     <th>Delivery Charge</th>
+                    <th>Delivery Discount</th>
                     <th>Commision</th>
                     <th>Total</th>
                     <th>Order Status</th>
@@ -78,10 +80,16 @@
                                         {{ number_format($item['subTotal'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
+                                        {{ number_format($item['orderDiscount'], 2, '.', ',') ?? '0.00' }}
+                                    </td>
+                                    <td>
                                         {{ number_format($item['serviceCharge'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
                                         {{ number_format($item['deliveryCharge'], 2, '.', ',') ?? '0.00' }}
+                                    </td>
+                                    <td>
+                                        {{ number_format($item['deliveryDiscount'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
                                         {{ number_format($item['commission'], 2, '.', ',') ?? '0.00' }}

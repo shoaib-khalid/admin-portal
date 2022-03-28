@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\SettlementController;
+use App\Http\Controllers\ActivityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,22 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/refundhistory', [RefundController::class, "refundhistory"])->name('refundhistory');
     Route::post('/filter_refundhistory', [RefundController::class, "filter_refundhistory"])->name('filter_refundhistory');
     Route::post('/export_refundhistory', [RefundController::class, "export_refundhistory"])->name('export_refundhistory');
+
+    Route::get('/useractivitylog', [ActivityController::class, "useractivitylog"])->name('useractivitylog');
+    Route::post('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
+    Route::post('/export_useractivitylog', [ActivityController::class, "export_useractivitylog"])->name('export_refundhistory');
+
+    Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap');
+    Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
+    Route::post('/export_usersitemap', [ActivityController::class, "export_usersitemap"])->name('export_usersitemap');
+
+    Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
+    Route::post('/filter_useractivitysummary', [ActivityController::class, "filter_useractivitysummary"])->name('filter_useractivitysummary');
+    Route::post('/export_useractivitysummary', [ActivityController::class, "export_useractivitysummary"])->name('export_useractivitysummary');
+
+    Route::get('/userabandoncart', [ActivityController::class, "userabandoncart"])->name('userabandoncart');
+    Route::post('/filter_userabandoncart', [ActivityController::class, "filter_userabandoncart"])->name('filter_userabandoncart');
+    Route::post('/export_userabandoncart', [ActivityController::class, "export_userabandoncart"])->name('export_userabandoncart');
 });
 
 
