@@ -67,21 +67,12 @@ class SettlementController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-         $datas = Refund::select('order_refund.id','order_refund.created','orderId','invoiceId', 'store.name AS storeName', 'customer.name AS customerName', 'refundType','refundAmount','paymentChannel','refundStatus','remarks')
-                        ->join('order as order', 'order_refund.orderId', '=', 'order.id')
-                        ->join('customer as customer', 'order.customerId', '=', 'customer.id')
-                        ->join('store as store', 'order.storeId', '=', 'store.id')
-                        ->where('refundStatus', 'PENDING')
-                        ->whereBetween('order_refund.created', [$start_date, $end_date." 23:59:59"])                        
-                        ->orderBy('order_refund.created', 'ASC')
+        $datas = Settlement::whereBetween('settlementDate', [$start_date, $end_date." 23:59:59"])  
+                        ->orderBy('settlementDate', 'DESC')
                         ->get();
-        
-        //print_r($datas);                    
 
-        // return $datas;
-        // die();
         $datechosen = $req->date_chosen4;                
-        return view('components.pendingrefund', compact('datas', 'datechosen'));
+        return view('components.settlement2', compact('datas', 'datechosen'));
 
     }
 

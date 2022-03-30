@@ -1,3 +1,9 @@
+Version 1.7.1
+------------------------
+Date:30-March-2022
+Bug fix settlement report 
+
+
 Version 1.7.0
 ------------------------
 Date:28-March-2022
