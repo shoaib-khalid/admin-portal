@@ -1,3 +1,9 @@
+Version 1.7.2
+------------------------
+Date:30-March-2022
+Bug fix for all activity report
+
+
 Version 1.7.1
 ------------------------
 Date:30-March-2022

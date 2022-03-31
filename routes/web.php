@@ -81,6 +81,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_useractivitysummary', [ActivityController::class, "filter_useractivitysummary"])->name('filter_useractivitysummary');
     Route::post('/export_useractivitysummary', [ActivityController::class, "export_useractivitysummary"])->name('export_useractivitysummary');
 
+    Route::get('/userabandoncartsummary', [ActivityController::class, "userabandoncartsummary"])->name('userabandoncartsummary');
+    Route::post('/filter_userabandoncartsummary', [ActivityController::class, "filter_userabandoncartsummary"])->name('filter_userabandoncartsummary');
+    Route::post('/export_userabandoncartsummary', [ActivityController::class, "export_userabandoncartsummary"])->name('export_userabandoncartsummary');
+
     Route::get('/userabandoncart', [ActivityController::class, "userabandoncart"])->name('userabandoncart');
     Route::post('/filter_userabandoncart', [ActivityController::class, "filter_userabandoncart"])->name('filter_userabandoncart');
     Route::post('/export_userabandoncart', [ActivityController::class, "export_userabandoncart"])->name('export_userabandoncart');

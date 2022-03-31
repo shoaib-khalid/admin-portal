@@ -4,7 +4,7 @@
 @endphp
 <div class="card section">
     <div class="card-header">
-        <h4>Customer Activity</h4>
+        <h4>Customer Abandon Cart</h4>
     </div>
     <div class="card-body">
 
@@ -13,37 +13,17 @@
         <div class="row">
             <div class="col-12">
                 
-                <form action="filter_useractivitylog" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="filter_userabandoncartsummary" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-2">Date</div>
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
-                        </div>
-                        <div class="col-2">Store</div>
+                        </div> 
                         <div class="col-4">
-                        <input type="text" name="storename_chosen" id="storename_chosen" class="form-control" value="{{$storename}}">
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">Customer</div>
-                        <div class="col-4">
-                        <input type="text" name="customer_chosen" id="customer_chosen" class="form-control" value="{{$customername}}">
-                        </div>
-                        <div class="col-2">Device</div>
-                        <div class="col-4">
-                        <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="{{$device}}">
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">Browser</div>
-                        <div class="col-4">
-                        <input type="text" name="browser_chosen" id="browser_chosen" class="form-control" value="{{$browser}}">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                        </div>
-                    </div>
+                         <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        </div>                       
+                    </div>                   
                 </form>
             </div>
             <div class="col-1">
@@ -54,7 +34,7 @@
 
         <div class="row">
             <div class="col">
-                <form action="export_useractivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="export_userabandoncart" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         
                             <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
@@ -69,33 +49,31 @@
 
             <table id="table-4" class="table table-striped">        
                 <thead>
-                    <tr class="text-center">
-                        <th>Timestamp</th>
+                    <tr class="text-center">                        
                         <th>Store</th>
-                        <th>Customer</th>
-                        <th>Session ID</th>
-                        <th>Page Visited</th>
-                        <th>IP</th>
-                        <th>Device</th>
-                        <th>OS</th>
-                        <th>Browser</th>
-                        <th>Error</th>    
+                        <th>Total</th>                        
+                        <th></th>
                     </tr>
                 </thead>      
                 <tbody>
 
                     @foreach ($datas as $data)
-                        <tr class="text-center">
-                            <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>
-                            <td>{{ $data['storeName'] }}</td>
-                            <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['sessionId'] }}</td>
-                            <td>{{ $data['pageVisited'] }}</td>
-                            <td>{{ $data['ip'] }}</td>
-                            <td>{{ $data['device'] }}</td>
-                            <td>{{ $data['os'] }}</td>
-                            <td>{{ $data['browser'] }}</td>                            
-                            <td>{{ $data['errorType'] }}</td>                            
+                        <tr class="text-center">                            
+                            <td>{{ $data->name }}</td>
+                            <td>
+                                {{ $data->total }}                                
+                            </td>  
+                            <td>
+                                  <form action="filter_userabandoncart" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                                    {{@csrf_field()}}
+                                     <input type="hidden" name="storeId" value="{{ $data->storeId }}">
+                                     <input type="hidden" name="date_chosen4" value="{{ $datechosen }}">
+                                     <input type="hidden" name="storename" value="{{ $data->name }}">
+                                     <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-file"></i> <span>View Cart</span>
+                                    </button>
+                                </form>
+                            </button>
+                            </td>                 
                         </tr>
                     @endforeach
 

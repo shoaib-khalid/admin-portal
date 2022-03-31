@@ -1,25 +1,58 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Customer Summary</h1>        
+        <h1>Customer Abandon Cart</h1>        
     </x-slot>
     <div>
-        <x-useractivitysummary-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser" :groupstore="$groupstore" :groupbrowser="$groupbrowser" :groupdevice="$groupdevice" :groupos="$groupos" :grouppage="$grouppage"></x-useractivitysummary-table>
+        <x-userabandoncartsummary-table :datas="$datas" :datechosen="$datechosen" :storename="$storename"></x-userabandoncartsummary-table>
     </div>
 </x-app-layout>
 <script>
 
     $(document).ready(function () {
     
-        // $("#table-4").dataTable({
-        // "columnDefs": [
-        //     { "sortable": false, "targets": [2,3] }
-        // ]
-        // });
-
         var datas = {!! json_encode($datas) !!};
 
         // console.log('datas: ', datas)
 
+        function formatTable(rowData, obj) { 
+
+            // alert(JSON.stringify(obj))
+
+            // return false;
+            var childTable;
+
+            childTable = '<tr class="bg-secondary">' +
+                    '<th class="font-weight-bold">Product Id</th>' +
+                    '<th class="font-weight-bold">Product Name</th>' +
+                    '<th class="font-weight-bold">Quantity</th>' +
+                '</tr>';
+
+            if(obj){
+
+                store_obj = obj.item_list
+
+                // alert(store_obj.length)
+
+                store_obj.forEach(element => {
+
+                    childTable += '<tr class="bg-light">' +
+                        '<td class="">'+element.productId+'</td>' +
+                        '<td class="">'+element.name+'</td>' +
+                        '<td class="">'+element.quantity+'</td>' +                       
+                    '</tr>';
+
+                });
+
+            }else{
+                // alert('toasa')
+                childTable += '<tr class="bg-light">' +
+                                '<td colspan="10" class="text-danger font-weight-bold">No Data Available</td>' +
+                            '</tr>';
+            }
+
+            //alert(childTable);
+            return childTable;
+        }
         
   
   var table = $('#table-4').DataTable({
@@ -37,21 +70,26 @@
     //     'defaultContent': ''
     //   },
       null,
+      null,
+      null,
+      null,
+      null,
+      null,     
     ],
     "aaSorting": [],
     'columnDefs': [
 
-        { "sortable": false, "targets": [0] },
+        { "sortable": false, "targets": [0,2,3] },
       {
         'targets': [0],
         'width': 'auto',
       },
       {
-        'targets': [],
+        'targets': [1,2],
         'className' : 'dt-left',
       },
       {
-        'targets' : [0],
+        'targets' : [3,4,5],
         'className' : 'dt-right',
         'width': '100px',
       },
@@ -60,17 +98,17 @@
 
 
   // Add event listener for opening and closing details
-  $('#table-4 tbody').on('click', '.view_store', function () {
+  $('#table-4 tbody').on('click', '.view_details', function () {
 
-    var clientId = $(this).attr("clientId");
+    var rowId = $(this).attr("rowId");
     var tr = $(this).closest('tr');
     var row = table.row(tr);
 
-    // alert('clientId: ' + clientId)
+    // alert('rowId: ' + rowId)
 
     // return false
 
-    var newObj = datas.find(x => x.id === clientId)
+    var newObj = datas.find(x => x.id === rowId)
 
     // alert(JSON.stringify(newObj))
 
@@ -86,35 +124,11 @@
       else
     {
       // Open this row
+      //alert('open row: ' + row.data())
       row.child(formatTable(row.data(), newObj)).show();
       tr.addClass('shown');
     }
   });
-
-
-   $('#RefundDetailsModal').on('show.bs.modal', function(e) {
-        var created = $(e.relatedTarget).data('created');      
-        var refundId = $(e.relatedTarget).data('refundid');      
-        var invoiceId = $(e.relatedTarget).data('invoiceid'); 
-        var storeName = $(e.relatedTarget).data('storename'); 
-        var customerName = $(e.relatedTarget).data('customername'); 
-        var refundType = $(e.relatedTarget).data('refundtype'); 
-        var refundAmount = $(e.relatedTarget).data('refundamount'); 
-        var paymentChannel = $(e.relatedTarget).data('paymentchannel'); 
-        var refundStatus = $(e.relatedTarget).data('refundstatus'); 
-        var remarks = $(e.relatedTarget).data('remarks'); 
-        console.log("storeName:"+storeName);
-        $('#created').val(created);  
-        $('#refund_id').val(refundId);
-        $('#invoice_id').val(invoiceId);
-        $('#storename').val(storeName);
-        $('#customer_name').val(customerName);
-        $('#refund_type').val(refundType);
-        $('#refund_amount').val(refundAmount);
-        $('#payment_channel').val(paymentChannel);
-        $('#refund_status').val(refundStatus);
-        $('#remarks').val(remarks);
-   });
 
 
     $('.daterange-btn4').daterangepicker({

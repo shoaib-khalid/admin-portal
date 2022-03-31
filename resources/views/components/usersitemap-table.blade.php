@@ -95,7 +95,13 @@
                             <td>{{ $data['firstPage'] }}</td>
                             <td>{{ $data['lastPage'] }}</td>
                             <td>{{ $data['itemAdded'] }}</td>
-                            <td>{{ $data['orderCreated'] }}</td>
+                            <td>
+                            <?php if ($data['orderCreated']=="YES") { ?>
+                            <a href="#" class="btn btn-primary view_order" sessionId="{{ $data['sessionId'] }}">
+                            {{ $data['orderCreated'] }}
+                            </a>
+                            <?php } ?>
+                            </td>
                             <td>{{ $data['orderStatus'] }}</td>
                             <td>
                                 <a href="#" class="btn btn-primary view_store" clientId="{{ $data['sessionId'] }}">

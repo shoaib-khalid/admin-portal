@@ -48,6 +48,10 @@
                     <div class="input-group mb-3">
                         <div class="col-2">Group By</div>
                         <div class="col-2">
+                        <input type="checkbox" name="groupstore" id="groupstore" value="groupstore" <?php if ($groupstore<>"") echo "checked"; ?>>
+                        Store
+                        </div>
+                        <div class="col-2">
                         <input type="checkbox" name="groupbrowser" id="groupbrowser" value="groupbrowser" <?php if ($groupbrowser<>"") echo "checked"; ?>>
                         Browser
                         </div>
@@ -93,6 +97,9 @@
             <table id="table-4" class="table table-striped">        
                 <thead>
                     <tr class="text-center">
+                        <?php if ($groupstore<>"") { ?>
+                        <th>Store</th>
+                        <?php } ?>
                         <?php if ($groupdevice<>"") { ?>
                         <th>Device</th>
                         <?php } ?>
@@ -111,6 +118,9 @@
                 <tbody>                    
                     @foreach ($datas as $data)
                         <tr class="text-center">
+                            <?php if ($groupstore<>"") { ?>
+                            <td>{{ $data->storeName }}</td>
+                            <?php } ?>
                             <?php if ($groupdevice<>"") { ?>
                             <td>{{ $data->deviceModel }}</td>
                             <?php } ?>

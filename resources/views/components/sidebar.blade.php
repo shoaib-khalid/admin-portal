@@ -78,8 +78,8 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('useractivitysummary') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-store"></i><span>Customer Summary</span></a>
             </li>
-            <li class="{{ Request::routeIs('userabandoncart') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('userabandoncart') }}"><i class="fas fa-store"></i><span>Abandon Cart</span></a>
+            <li class="{{ Request::routeIs('userabandoncartsummary') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('userabandoncartsummary') }}"><i class="fas fa-store"></i><span>Abandon Cart</span></a>
             </li>
            
             

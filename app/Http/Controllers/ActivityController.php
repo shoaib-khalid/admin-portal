@@ -133,17 +133,18 @@ class ActivityController extends Controller
         $query = UserActivity::whereBetween('created', [$start_date, $end_date." 23:59:59"]);
 
         if ($req->storename_chosen<>"") {
-            $search_store_info = Store::where('name', '=',  $req->storename_chosen )->get();            
+            $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
+            $search_storeId_list = array();        
             if (count($search_store_info) > 0) {
-               $search_storeId = $search_store_info[0]['id']; 
-            }  else {
-                $search_storeId = "NOT FOUND";
-            }
-            $query->where('storeId', $search_storeId);
+               foreach ($search_store_info as $storefound) {
+                    array_push($search_storeId_list, $storefound['id']);
+               }
+            }  
+            $query->whereIn('storeId', $search_storeId_list);
             //dd($query);
         }
         if ($req->customer_chosen<>"") {
-            $search_customer_info = Customer::where('name', $req->customer_chosen)->get();
+            $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
             if (count($search_customer_info) > 0) {
                $search_customerId = $search_customer_info[0]['id']; 
             } else {
@@ -160,6 +161,7 @@ class ActivityController extends Controller
         }
           
         $query->orderBy('created', 'DESC');
+        //dd($query);
         $datas = $query->get();
 
         $newArray = array();
@@ -413,11 +415,40 @@ class ActivityController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         //query group by sessionId
-        $datas = UserActivity::select('sessionId')->distinct()
-                        ->whereBetween('created', [$start_date, $end_date." 23:59:59"])  
-                        ->orderBy('created', 'DESC')
-                        ->get();
-        //dd($datas);
+        $query = UserActivity::select('sessionId')->distinct()
+                ->whereBetween('created', [$start_date, $end_date." 23:59:59"]);
+
+        if ($req->storename_chosen<>"") {
+            $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
+            $search_storeId_list = array();        
+            if (count($search_store_info) > 0) {
+               foreach ($search_store_info as $storefound) {
+                    array_push($search_storeId_list, $storefound['id']);
+               }
+            }  
+            $query->whereIn('storeId', $search_storeId_list);
+            //dd($query);
+        }
+
+        if ($req->customer_chosen<>"") {
+            $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
+            if (count($search_customer_info) > 0) {
+               $search_customerId = $search_customer_info[0]['id']; 
+            } else {
+                $search_customerId = "NOT FOUND";
+            }
+            $query->where('customerId', $search_customerId);
+            //dd($query);
+        }
+        if ($req->device_chosen<>"") {
+            $query->where('deviceModel', $req->device_chosen);
+        }
+        if ($req->browser_chosen<>"") {
+            $query->where('browserType', $req->browser_chosen);
+        }
+
+        $query->orderBy('created', 'DESC');
+        $datas = $query->get();
 
         $newArray = array();
         $storeList = array();
@@ -456,14 +487,27 @@ class ActivityController extends Controller
             }
 
             //check if any order created & get status
-            $sql="SELECT completionStatus FROM `order` WHERE cartId='".$data['sessionId']."'";
+            $sql="SELECT completionStatus, A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
+            ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."'";
             $rsorder = DB::connection('mysql2')->select($sql);
             if (count($rsorder)>0) {
                 $orderCreated="YES";
                 $orderStatus=$rsorder[0]->completionStatus;
+                $orderId = $rsorder[0]->id;
+                $orderDetails  = [
+                        'orderId' => $rsorder[0]->id,
+                        'invoiceNo' => $rsorder[0]->invoiceId,
+                        'created' => $rsorder[0]->created,
+                        'storeName' => $rsorder[0]->storeName,
+                        'customerName' => $rsorder[0]->customerName,
+                        'status' => $rsorder[0]->completionStatus 
+                    ];
             } else {
                 $orderCreated="NO";
                 $orderStatus="";
+                $orderId = "";
+                $orderDetails  = null;
+
             }
 
             $storeName = '';
@@ -530,7 +574,9 @@ class ActivityController extends Controller
                 'itemAdded' => $itemAdded,
                 'orderCreated' => $orderCreated,
                 'orderStatus' => $orderStatus,
-                'activity_list' => $activityList
+                'orderId' => $orderId,
+                'activity_list' => $activityList,
+                'order_details' => $orderDetails
             ];
 
             
@@ -545,10 +591,10 @@ class ActivityController extends Controller
         $datas = $newArray;
 
         $datechosen = $req->date_chosen4;   
-        $storename = '';   
-        $customername = '';
-        $device = '';  
-        $browser = ''; 
+        $storename = $req->storename_chosen;
+        $customername = $req->customer_chosen;
+        $device = $req->device_chosen;
+        $browser = $req->browser_chosen;
 
         return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser'));
 
@@ -568,8 +614,9 @@ class ActivityController extends Controller
         $groupdevice=null;
         $groupos=null;
         $grouppage=null;
+        $groupstore=null;
 
-        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupbrowser','groupdevice','groupos','grouppage'));        
+        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage'));        
     }
    
 
@@ -587,7 +634,14 @@ class ActivityController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         $groupList="COUNT(*) AS total"; 
-        $groupBy="";       
+        $groupBy=""; 
+        if ($req->groupstore<>"") {
+            $groupList .= " , storeId";
+            if ($groupBy=="")
+                $groupBy .= " storeId";
+            else
+                $groupBy .= " , storeId";
+        }      
         if ($req->groupbrowser<>"") {
             $groupList .= " , browserType";
             if ($groupBy=="")
@@ -618,128 +672,138 @@ class ActivityController extends Controller
         }
 
         //query group by sessionId
-        $sql="SELECT ".$groupList." FROM customer_activities WHERE created BETWEEN '".$start_date."' AND '".$end_date."' GROUP BY ".$groupBy;
-        $datas = DB::connection('mysql3')->select($sql);
+        $sql="SELECT ".$groupList." FROM customer_activities WHERE created BETWEEN '".$start_date."' AND '".$end_date."'";
         //dd($datas);
+        
+        if ($req->storename_chosen<>"") {
+            $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
+            $search_storeId_list = array();  
+            $commaList="";      
+            if (count($search_store_info) > 0) {
+               foreach ($search_store_info as $storefound) {
+                    if ($commaList=="") 
+                        $commaList = "'".$storefound['id']."'";
+                    else
+                        $commaList .= ",'".$storefound['id']."'";                    
+               }
+            }  
+            $sql .= " AND storeId IN (".$commaList.")";
+        }
 
-        $datechosen = $req->date_chosen4;  
-        $storename=null;
-        $customername=null;
-        $device=null;
-        $browser=null;
-        $groupbrowser=$req->groupbrowser;
-        $groupdevice=$req->groupdevice;
-        $groupos=$req->groupos;
-        $grouppage=$req->grouppage;
+        if ($req->customer_chosen<>"") {
+            $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
+            if (count($search_customer_info) > 0) {
+               $search_customerId = $search_customer_info[0]['id']; 
+            } else {
+                $search_customerId = "NOT FOUND";
+            }
+            $sql .= " AND customerId = ".$search_customerId;
+            //dd($query);
+        }
+        if ($req->device_chosen<>"") {
+            $sql .= " AND deviceModel = ".$req->device_chosen;            
+        }
+        if ($req->browser_chosen<>"") {
+            $sql .= " AND browserType = ".$req->browser_chosen;            
+        }
 
-        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupbrowser','groupdevice','groupos','grouppage'));
+        $sql .= " GROUP BY ".$groupBy;
+       // dd($sql);
+        $datas = DB::connection('mysql3')->select($sql);
 
-    }
-
-
-    public function userabandoncart(){
-
-            $to = date("Y-m-d");
-            $date = new DateTime('30 days ago');
-            $from = $date->format("Y-m-d");
-
-            //query group by sessionId
-            $datas = Cart::select('id','customerId','storeId','created','updated','isOpen')
-                            ->whereBetween('created', [$from, $to." 23:59:59"])  
-                            ->where('isOpen',1)
-                            ->orderBy('created', 'DESC')
-                            ->get();
-            //dd($datas);
-
-            $newArray = array();
-            $storeList = array();
-            $customerList = array();
-
-            foreach ($datas as $data) {
-
+        if ($req->groupstore<>"") {
+            $storeList=array();
+            $newArray = array();        
+            foreach ($datas as $data) {    
                 $storeName = '';
-                if (! array_key_exists($data['storeId'], $storeList)) {
-                    $store_info = Store::where('id', $data['storeId'])
+                if (! array_key_exists($data->storeId, $storeList)) {
+                    $store_info = Store::where('id', $data->storeId)
                                         ->get();
                     if (count($store_info) > 0) {
-                        $storeList[$data['storeId']] = $store_info[0]['name']; 
-                        $storeName = $storeList[$data['storeId']];
+                        $storeList[$data->storeId] = $store_info[0]['name']; 
+                        $storeName = $storeList[$data->storeId];
                     }    
 
                 } else {
-                    $storeName = $storeList[$data['storeId']];
+                    $storeName = $storeList[$data->storeId];
                 }
-                 
-
-                $customerName = '';
-                if (! array_key_exists($data['customerId'], $customerList)) {            
-                    $customer_info = Customer::where('id', $data['customerId'])
-                                        ->get();
-                    if (count($customer_info) > 0) {
-                        $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                        $customerName = $customerList[$data['customerId']];
-                    }  
-                    
-                } else {
-                    $customerName = $customerList[$data['customerId']];
-                }
-                 
-                //check if any item in cart
-                $sql="SELECT productId, quantity, name FROM cart_item A INNER JOIN product B ON A.productId=B.id WHERE cartId='".$data['id']."'";
-                $rsitem = DB::connection('mysql2')->select($sql);
-                if (count($rsitem)>0) {
-                    $itemAdded="YES";
-                } else {
-                    $itemAdded="NO";
-                }
-
-                $item_array = array();
-                if (count($rsitem) > 0) {
-                    foreach ($rsitem as $item) {
-
-                        $item_details = [
-                            'productId' => $item->productId,
-                            'quantity' => $item->quantity,
-                            'name' => $item->name                       
-                        ];
-        
-                        array_push( 
-                            $item_array,
-                            $item_details
-                        );
-                       
-                    }
-                }
-
-                $object = [
-                    'id' => $data['id'],
-                    'created' => $data['created'],
-                    'updated' => $data['updated'],
-                    'isOpen' => $data['isOpen'],
-                    'storeName' => $storeName,
-                    'customerName' => $customerName,
-                    'itemAdded' => $itemAdded,
-                    'item_list' => $item_array
-                ];
+                
+                $data->storeName =  $storeName;
+                $object = $data;
 
                 array_push( 
                     $newArray,
                     $object
                 );
 
-            }
-           
+            }           
 
             $datas = $newArray;
+        }
+
+        $groupstore=$req->groupstore;
+        $groupbrowser=$req->groupbrowser;
+        $groupdevice=$req->groupdevice;
+        $groupos=$req->groupos;
+        $grouppage=$req->grouppage;
+
+        $datechosen = $req->date_chosen4;                
+        $storename = $req->storename_chosen;
+        $customername = $req->customer_chosen;
+        $device = $req->device_chosen;
+        $browser = $req->browser_chosen;
+
+        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage'));
+
+    }
+
+    public function userabandoncartsummary(){
+
+            $to = date("Y-m-d")." 23:59:59";
+            $date = new DateTime('30 days ago');
+            $from = $date->format("Y-m-d");
+
+            $sql="SELECT COUNT(DISTINCT(cartId)) AS total, storeId, name
+                    FROM cart_item A INNER JOIN cart B ON A.cartId=B.id
+                    INNER JOIN store C ON B.storeId=C.id
+                WHERE B.created BETWEEN '".$from."' AND '".$to."'
+                    GROUP BY storeId";
+            //dd($sql);
+            $datas = DB::connection('mysql2')->select($sql);
 
             $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
             $storename = '';   
-            $customername = '';
-            $device = '';  
-            $browser = ''; 
+            
+            return view('components.userabandoncartsummary', compact('datas','datechosen','storename'));
+    }
 
-            return view('components.userabandoncart', compact('datas','datechosen','storename','customername'));
-        }
+    public function filter_userabandoncartsummary(Request $req){
+
+            $date = new DateTime('7 days ago');
+
+            $data = $req->input();
+
+            $dateRange = explode( '-', $req->date_chosen4 );
+            $start_date = $dateRange[0];
+            $end_date = $dateRange[1];
+
+            $start_date = date("Y-m-d", strtotime($start_date));
+            $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
+
+            $sql="SELECT COUNT(DISTINCT(cartId)) AS total, storeId, name 
+                    FROM cart_item A INNER JOIN cart B ON A.cartId=B.id
+                    INNER JOIN store C ON B.storeId=C.id
+                WHERE B.created BETWEEN '".$start_date."' AND '".$end_date."'
+                    GROUP BY storeId";
+            //dd($sql);
+            $datas = DB::connection('mysql2')->select($sql);
+
+            $datechosen = $req->date_chosen4;    
+            $storename = '';   
+            
+            return view('components.userabandoncartsummary', compact('datas','datechosen','storename'));
+    }
+    
 
 
         public function filter_userabandoncart(Request $req){
@@ -757,6 +821,7 @@ class ActivityController extends Controller
             $datas = Cart::select('id','customerId','storeId','created','updated','isOpen')
                             ->whereBetween('created', [$start_date, $end_date." 23:59:59"])  
                             ->where('isOpen',1)
+                            ->where('storeId', $req->storeId)
                             ->orderBy('created', 'DESC')
                             ->get();
             //dd($datas);
@@ -832,10 +897,14 @@ class ActivityController extends Controller
                     'item_list' => $item_array
                 ];
 
-                array_push( 
-                    $newArray,
-                    $object
-                );
+                if ($itemAdded=="YES") {
+
+                    array_push( 
+                        $newArray,
+                        $object
+                    );
+
+                }
 
             }
            
@@ -843,7 +912,7 @@ class ActivityController extends Controller
             $datas = $newArray;
 
             $datechosen = $req->date_chosen4;   
-            $storename = '';   
+            $storename = $req->storename;;   
             $customername = '';
             $device = '';  
             $browser = ''; 
