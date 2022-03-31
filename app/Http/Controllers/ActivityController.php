@@ -305,14 +305,27 @@ class ActivityController extends Controller
             }
 
             //check if any order created & get status
-            $sql="SELECT completionStatus FROM `order` WHERE cartId='".$data['sessionId']."'";
+            $sql="SELECT completionStatus, A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
+            ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."'";
             $rsorder = DB::connection('mysql2')->select($sql);
             if (count($rsorder)>0) {
                 $orderCreated="YES";
                 $orderStatus=$rsorder[0]->completionStatus;
+                $orderId = $rsorder[0]->id;
+                $orderDetails  = [
+                        'orderId' => $rsorder[0]->id,
+                        'invoiceNo' => $rsorder[0]->invoiceId,
+                        'created' => $rsorder[0]->created,
+                        'storeName' => $rsorder[0]->storeName,
+                        'customerName' => $rsorder[0]->customerName,
+                        'status' => $rsorder[0]->completionStatus 
+                    ];
             } else {
                 $orderCreated="NO";
                 $orderStatus="";
+                $orderId = "";
+                $orderDetails  = null;
+
             }
 
             $storeName = '';
@@ -379,7 +392,8 @@ class ActivityController extends Controller
                 'itemAdded' => $itemAdded,
                 'orderCreated' => $orderCreated,
                 'orderStatus' => $orderStatus,
-                'activity_list' => $activityList
+                'activity_list' => $activityList,
+                'order_details' => $orderDetails
             ];
 
             
