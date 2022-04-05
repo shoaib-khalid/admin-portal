@@ -68,28 +68,26 @@
     //     'orderable': false,
     //     'data': null,
     //     'defaultContent': ''
-    //   },
+    //   },     
+      
       null,
-      null,
-      null,
-      null,
-      null,
-      null,     
+      null,   
+      null,  
     ],
     "aaSorting": [],
     'columnDefs': [
 
-        { "sortable": false, "targets": [0,2,3] },
+        { "sortable": false, "targets": [0,1] },
       {
         'targets': [0],
         'width': 'auto',
       },
       {
-        'targets': [1,2],
+        'targets': [0],
         'className' : 'dt-left',
       },
       {
-        'targets' : [3,4,5],
+        'targets' : [1],
         'className' : 'dt-right',
         'width': '100px',
       },

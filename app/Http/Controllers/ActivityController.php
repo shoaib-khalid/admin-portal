@@ -776,6 +776,9 @@ class ActivityController extends Controller
             $to = date("Y-m-d")." 23:59:59";
             $date = new DateTime('30 days ago');
             $from = $date->format("Y-m-d");
+            $datas = array();
+            $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
+            $storename = ''; 
 
             $sql="SELECT COUNT(DISTINCT(cartId)) AS total, storeId, name
                     FROM cart_item A INNER JOIN cart B ON A.cartId=B.id
@@ -783,10 +786,7 @@ class ActivityController extends Controller
                 WHERE B.created BETWEEN '".$from."' AND '".$to."'
                     GROUP BY storeId";
             //dd($sql);
-            $datas = DB::connection('mysql2')->select($sql);
-
-            $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
-            $storename = '';   
+            $datas = DB::connection('mysql2')->select($sql); 
             
             return view('components.userabandoncartsummary', compact('datas','datechosen','storename'));
     }

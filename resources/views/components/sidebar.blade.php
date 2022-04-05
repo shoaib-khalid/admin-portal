@@ -60,27 +60,37 @@ $navigation_links = array_to_object($links);
             <li class="menu-header">Refund</li>
 
             <li class="{{ Request::routeIs('pendingrefund') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('pendingrefund') }}"><i class="fas fa-store"></i><span>Pending Refund</span></a>
+                <a class="nav-link" href="{{ route('pendingrefund') }}"><i class="fas fa-credit-card"></i><span>Pending Refund</span></a>
             </li>
 
             <li class="{{ Request::routeIs('refundhistory') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('refundhistory') }}"><i class="fas fa-store"></i><span>Refund History</span></a>
+                <a class="nav-link" href="{{ route('refundhistory') }}"><i class="fas fa-check-square"></i><span>Refund History</span></a>
             </li>
 
             <li class="menu-header">Analytic</li>
 
             <li class="{{ Request::routeIs('useractivitylog') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('useractivitylog') }}"><i class="fas fa-store"></i><span>Customer Activity Log</span></a>
+                <a class="nav-link" href="{{ route('useractivitylog') }}"><i class="fas fa-users"></i><span>Customer Activity Log</span></a>
             </li>
             <li class="{{ Request::routeIs('usersitemap') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('usersitemap') }}"><i class="fas fa-store"></i><span>Customer Site Map</span></a>
+                <a class="nav-link" href="{{ route('usersitemap') }}"><i class="fas fa-sitemap"></i><span>Customer Site Map</span></a>
             </li>
             <li class="{{ Request::routeIs('useractivitysummary') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-store"></i><span>Customer Summary</span></a>
+                <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-calculator"></i><span>Customer Summary</span></a>
             </li>
             <li class="{{ Request::routeIs('userabandoncartsummary') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('userabandoncartsummary') }}"><i class="fas fa-store"></i><span>Abandon Cart</span></a>
+                <a class="nav-link" href="{{ route('userabandoncartsummary') }}"><i class="fas fa-cart-arrow-down"></i><span>Abandon Cart</span></a>
             </li>
+
+            <li class="menu-header">Voucher</li>
+
+            <li class="{{ Request::routeIs('voucheradd') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('voucheradd') }}"><i class="fas fa-percent"></i><span>Create New Voucher</span></a>
+            </li>
+            <li class="{{ Request::routeIs('voucherlist') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('voucherlist') }}"><i class="fas fa-gift"></i><span>Available Voucher</span></a>
+            </li>
+
            
             
         </ul>

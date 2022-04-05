@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\SettlementController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,6 +89,13 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/userabandoncart', [ActivityController::class, "userabandoncart"])->name('userabandoncart');
     Route::post('/filter_userabandoncart', [ActivityController::class, "filter_userabandoncart"])->name('filter_userabandoncart');
     Route::post('/export_userabandoncart', [ActivityController::class, "export_userabandoncart"])->name('export_userabandoncart');
+
+    Route::get('/voucheradd', [VoucherController::class, "voucheradd"])->name('voucheradd');
+    Route::post('/post_voucheradd', [VoucherController::class, "post_voucheradd"])->name('post_voucheradd');
+    Route::get('/voucherlist', [VoucherController::class, "voucherlist"])->name('voucherlist');
+    Route::post('/filter_voucherlist', [VoucherController::class, "filter_voucherlist"])->name('filter_voucherlist');
+    Route::post('/voucheredit', [VoucherController::class, "voucheredit"])->name('voucheredit');
+    Route::post('/post_voucheredit', [VoucherController::class, "post_voucheredit"])->name('post_voucheredit');
 });
 
 
