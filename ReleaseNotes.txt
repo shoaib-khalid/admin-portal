@@ -1,3 +1,9 @@
+Version 1.8.1
+------------------------
+Date:06-April-2022
+Bug fix for voucher management
+
+
 Version 1.8.0
 ------------------------
 Date:05-April-2022

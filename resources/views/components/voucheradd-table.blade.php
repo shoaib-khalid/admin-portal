@@ -25,7 +25,19 @@
                         <input type="radio" id="store" name="voucherType" value="STORE">
                             <label for="store">Store</label>
                         </div>                      
-                    </div>    
+                    </div>  
+                     <div class="input-group mb-3">
+                        <div class="col-3">Select Store</div>
+                        <div class="col-7">
+                        <select name="selectStore" id="selectStore" disabled="true">   
+                            <option></option>                         
+                            @foreach ($storelist as $store)
+                            <option value="{{$store->id}}">{{$store->name}}</option>                            
+                            @endforeach
+                        </select>
+                        </div>
+                       
+                    </div>  
                     <div class="input-group mb-3">
                         <div class="col-3">Start & End Date</div>
                         <div class="col-7">

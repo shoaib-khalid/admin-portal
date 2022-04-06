@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\Voucher;
+use App\Models\Store;
 use Carbon\Carbon;
 use DateTime;
 
@@ -28,7 +29,10 @@ class VoucherController extends Controller
 
 
     public function voucheradd(){
-         return view('components.voucheradd');
+        $storelist = Store::orderBy('name', 'ASC')
+                        ->get();
+        //dd($storelist);
+        return view('components.voucheradd',compact('storelist'));
     }
 
     public function post_voucheradd(Request $request){
@@ -51,8 +55,15 @@ class VoucherController extends Controller
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
         $voucher->totalRedeem=0;
+
+        if ($voucher->voucherType=="STORE") {
+            $voucher->storeId = $request->selectStore;
+        }
         $voucher->save();
-        return view('components.voucheradd');
+
+         $storelist = Store::orderBy('name', 'ASC')
+                        ->get();
+        return view('components.voucheradd',compact('storelist'));
     }
 
 
@@ -62,7 +73,9 @@ class VoucherController extends Controller
         $from = $date->format("Y-m-d");
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
 
-        $datas = Voucher::orderBy('created_at', 'DESC')
+        $datas = Voucher::select('voucher.*','store.name AS storeName')
+                        ->leftJoin('store as store', 'storeId', '=', 'store.id')
+                        ->orderBy('created_at', 'DESC')
                         ->get();
         
         $codechosen='';
@@ -81,7 +94,9 @@ class VoucherController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $query = Voucher::whereBetween('created_at', [$start_date, $end_date." 23:59:59"])  ;
+        $query = Voucher::select('voucher.*','store.name AS storeName')
+                        ->leftJoin('store as store', 'storeId', '=', 'store.id')
+                        ->whereBetween('created_at', [$start_date, $end_date." 23:59:59"]);
 
         if ($req->code_chosen<>"") {
             $query->where('voucherCode', $req->code_chosen);
@@ -107,7 +122,11 @@ class VoucherController extends Controller
                         ->get();
         //dd($datas);
         $voucher = $datas[0];
-        return view('components.voucheredit', compact('voucher'));
+
+         $storelist = Store::orderBy('name', 'ASC')
+                        ->get();
+
+        return view('components.voucheredit', compact('voucher', 'storelist'));
     }
 
     public function post_voucheredit(Request $request){        
@@ -128,9 +147,19 @@ class VoucherController extends Controller
         $voucher->voucherCode = $request->voucherCode;
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
+
+        if ($voucher->voucherType=="STORE") {
+            $voucher->storeId = $request->selectStore;
+        } else {
+            $voucher->storeId = null;
+        }
+
         $voucher->save();
         //dd($voucher)
-        return view('components.voucheredit', compact('voucher'));
+
+         $storelist = Store::orderBy('name', 'ASC')
+                        ->get();
+        return view('components.voucheredit', compact('voucher','storelist'));
     }
 
 

@@ -81,7 +81,7 @@
                             <td>{{ $data['startDate'] }}</td>
                             <td>{{ $data['endDate'] }}</td>
                             <td>{{ $data['voucherType'] }}</td>
-                            <td>{{ $data['storeId'] }}</td>
+                            <td>{{ $data['storeName'] }}</td>
                             <td>{{ $data['discountType'] }}</td>
                             <td>{{ $data['discountValue'] }} {{ $data['calculationType'] }}</td>     
                             <td>{{ $data['maxDiscountAmount'] }}</td>                       

@@ -3,7 +3,7 @@
         <h1>Create New Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucheradd-table></x-voucheradd-table>
+        <x-voucheradd-table :storelist="$storelist"></x-voucheradd-table>
     </div>
 </x-app-layout>
 <script>
@@ -18,7 +18,24 @@
             endDate: moment().startOf('hour').add(32, 'hour'),            
         });
        
-        
+    $("#store").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", false);
+       } 
+     });
+
+     $("#deliverin").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", true);
+       } 
+     }); 
+
+     $("#easydukan").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", true);
+       } 
+     });
+
     });
     
 </script>

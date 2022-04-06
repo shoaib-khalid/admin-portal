@@ -3,7 +3,7 @@
         <h1>Edit Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucheredit-table :voucher="$voucher"></x-voucheredit-table>
+        <x-voucheredit-table :voucher="$voucher" :storelist="$storelist"></x-voucheredit-table>
     </div>
 </x-app-layout>
 <script>
@@ -19,6 +19,25 @@
             $('#date_range').val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'))            
         });
        
+        
+    $("#store").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", false);
+       } 
+     });
+
+     $("#deliverin").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", true);
+       } 
+     }); 
+
+     $("#easydukan").click(function() {
+       if ($(this).is(":checked")) {
+          $("#selectStore").prop("disabled", true);
+       } 
+     });
+
         
     });
     
