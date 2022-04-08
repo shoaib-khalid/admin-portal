@@ -69,7 +69,7 @@ class VoucherController extends Controller
 
      public function voucherlist(){
         $to = date("Y-m-d");
-        $date = new DateTime('1 days ago');
+        $date = new DateTime('1 months ago');
         $from = $date->format("Y-m-d");
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
 
@@ -99,7 +99,7 @@ class VoucherController extends Controller
                         ->whereBetween('created_at', [$start_date, $end_date." 23:59:59"]);
 
         if ($req->code_chosen<>"") {
-            $query->where('voucherCode', $req->code_chosen);
+            $query->where('voucherCode', 'like', '%'.$req->code_chosen.'%');
         }
 
         $query->orderBy('created_at', 'DESC');

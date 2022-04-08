@@ -1,3 +1,9 @@
+Version 1.8.2
+------------------------
+Date:08-April-2022
+Bug fix for voucher search function
+
+
 Version 1.8.1
 ------------------------
 Date:06-April-2022
