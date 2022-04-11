@@ -4,7 +4,7 @@
 @endphp
 <div class="card section">
     <div class="card-header">
-        <h4>Edit Voucher</h4>
+        <h4>Delete Voucher</h4>
     </div>
     <div class="card-body">
 
@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-12">
                 
-                <form action="post_voucheredit" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="post_voucherdelete" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher For</div>
@@ -102,21 +102,27 @@
                         <input type="text" name="totalQuantity" id="totalQuantity" class="form-control" value="{{ $voucher->totalQuantity }}">
                         </div>                     
                     </div>
-                     <div class="input-group mb-3">
+                    <div class="input-group mb-3">
                         <div class="col-3">Status</div>
                         <div class="col-7">
                         <select name="status">
                             <option <?php if ($voucher->status=="ACTIVE") echo "selected"; ?>>ACTIVE</option>
                             <option <?php if ($voucher->status=="INACTIVE") echo "selected"; ?>>INACTIVE</option>
-                            <option <?php if ($voucher->status=="DELETED") echo "selected"; ?>>DELETED</option>                            
+                            <option <?php if ($voucher->status=="DELETED") echo "selected"; ?>>DELETED</option>
                         </select>
                         </div>
                        
                     </div>
+                    <div class="input-group mb-3">
+                        <div class="col-3">Delete Reason</div>
+                        <div class="col-7">
+                        <textarea name="reason" id="reason" class="form-control" required>{{$voucher->deleteReason}}</textarea>
+                        </div>                          
+                    </div>
                      <div class="input-group mb-3">
                          <div class="col-4">
                         <input type="hidden" name="voucherId" value="{{ $voucher->id }}">
-                           <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> <span>Update Voucher</span>
+                           <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-remove"></i> <span>Delete Voucher</span>
                             </button>
                         </div>                                    
                     </div>

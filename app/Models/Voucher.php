@@ -28,6 +28,7 @@ class Voucher extends Model
                             'maxDiscountAmount',
                             'voucherCode',
                             'totalQuantity',
-                            'totalRedeem'
+                            'totalRedeem',
+                            'deleteReason'                            
                         ];
 }

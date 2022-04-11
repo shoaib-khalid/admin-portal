@@ -76,6 +76,8 @@ class VoucherController extends Controller
         $datas = Voucher::select('voucher.*','store.name AS storeName')
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')
                         ->orderBy('created_at', 'DESC')
+                        ->where('status','ACTIVE')
+                        ->whereRaw("endDate < '".date("Y-m-d H:i:s")."'")
                         ->get();
         
         $codechosen='';
@@ -154,12 +156,52 @@ class VoucherController extends Controller
             $voucher->storeId = null;
         }
 
+        $voucher->updated_at = date("Y-m-d H:i:s");
+        $voucher->updated_by = "DELETED";
         $voucher->save();
         //dd($voucher)
 
          $storelist = Store::orderBy('name', 'ASC')
                         ->get();
         return view('components.voucheredit', compact('voucher','storelist'));
+    }
+
+      public function voucherdelete(Request $req){        
+        $datas = Voucher::where('id', $req->voucherId)                        
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+        //dd($datas);
+        $voucher = $datas[0];
+
+         $storelist = Store::orderBy('name', 'ASC')
+                        ->get();
+
+        return view('components.voucherdelete', compact('voucher', 'storelist'));
+    }
+
+    public function post_voucherdelete(Request $request){   
+        $user = auth()->user();
+        $voucher = Voucher::find($request->voucherId);
+        $voucher->status = "DELETED";
+        $voucher->updated_at = date("Y-m-d H:i:s");
+        $voucher->updated_by = $user->email;
+        $voucher->deleteReason = $request->reason;
+        $voucher->save();
+        //dd($voucher)
+
+        $to = date("Y-m-d");
+        $date = new DateTime('1 months ago');
+        $from = $date->format("Y-m-d");
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
+
+        $datas = Voucher::select('voucher.*','store.name AS storeName')
+                        ->leftJoin('store as store', 'storeId', '=', 'store.id')
+                        ->where('status','ACTIVE')
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+        
+        $codechosen='';
+        return view('components.voucherlist', compact('datas','datechosen','codechosen'));        
     }
 
 

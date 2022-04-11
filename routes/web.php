@@ -96,6 +96,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_voucherlist', [VoucherController::class, "filter_voucherlist"])->name('filter_voucherlist');
     Route::post('/voucheredit', [VoucherController::class, "voucheredit"])->name('voucheredit');
     Route::post('/post_voucheredit', [VoucherController::class, "post_voucheredit"])->name('post_voucheredit');
+    Route::post('/voucherdelete', [VoucherController::class, "voucherdelete"])->name('voucherdelete');
+    Route::post('/post_voucherdelete', [VoucherController::class, "post_voucherdelete"])->name('post_voucherdelete');
 });
 
 
