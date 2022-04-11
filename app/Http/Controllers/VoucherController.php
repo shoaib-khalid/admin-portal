@@ -77,7 +77,7 @@ class VoucherController extends Controller
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')
                         ->orderBy('created_at', 'DESC')
                         ->where('status','ACTIVE')
-                        ->whereRaw("endDate < '".date("Y-m-d H:i:s")."'")
+                        ->whereRaw("endDate > '".date("Y-m-d H:i:s")."'")
                         ->get();
         
         $codechosen='';
