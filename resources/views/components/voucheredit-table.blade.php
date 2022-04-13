@@ -18,14 +18,27 @@
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher For</div>
                         <div class="col-7">
-                        <input type="radio" id="deliverin" name="voucherType" value="DELIVERIN" <?php if ($voucher->voucherType=="DELIVERIN") echo "checked"; ?>>
-                            <label for="deliverin">Deliverin</label>&nbsp;&nbsp;
-                        <input type="radio" id="easydukan" name="voucherType" value="EASYDUKAN" <?php if ($voucher->voucherType=="EASYDUKAN") echo "checked"; ?>>
-                            <label for="easydukan">Easydukan</label>&nbsp;&nbsp;
+                         <input type="radio" id="deliverin" name="voucherType" value="PLATFORM" <?php if ($voucher->voucherType=="PLATFORM") echo "checked"; ?>>
+                            <label for="deliverin">PLATFORM</label>&nbsp;&nbsp;
                         <input type="radio" id="store" name="voucherType" value="STORE" <?php if ($voucher->voucherType=="STORE") echo "checked"; ?>>
                             <label for="store">Store</label>
                         </div>                      
-                    </div>   
+                    </div>  
+                  <div class="input-group mb-3">
+                        <div class="col-3">Vertical Code</div>
+                        <div class="col-3">
+                        <select name="selectVertical" id="selectVertical">   
+                            <option></option>                         
+                            @foreach ($verticalList as $vertical)
+                            <option value="{{$vertical->code}}" <?php if ($voucher->verticalCode==$vertical->code) echo "selected"; ?>>{{$vertical->code}}</option>                            
+                            @endforeach
+                        </select>
+                        </div>
+                         <div class="col-3">Currency Label</div>
+                        <div class="col-3">
+                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="{{$voucher->currencyLabel}}">
+                        </div>                          
+                    </div> 
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
@@ -112,6 +125,14 @@
                         </select>
                         </div>
                        
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-3">Terms and Conditions</div>
+                        <div class="col-7">
+                        <textarea name="terms" id="terms" class="form-control" value="" style="height:100px !important"><?php foreach ($termsList as $term) { 
+                                echo $term."\n";
+                            } ?></textarea>
+                        </div>                          
                     </div>
                      <div class="input-group mb-3">
                          <div class="col-4">

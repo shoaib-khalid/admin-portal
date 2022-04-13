@@ -18,14 +18,27 @@
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher For</div>
                         <div class="col-7">
-                        <input type="radio" id="deliverin" name="voucherType" value="DELIVERIN">
-                            <label for="deliverin">Deliverin</label>&nbsp;&nbsp;
-                        <input type="radio" id="easydukan" name="voucherType" value="EASYDUKAN">
-                            <label for="easydukan">Easydukan</label>&nbsp;&nbsp;
+                        <input type="radio" id="deliverin" name="voucherType" value="PLATFORM">
+                            <label for="deliverin">PLATFORM</label>&nbsp;&nbsp;
                         <input type="radio" id="store" name="voucherType" value="STORE">
                             <label for="store">Store</label>
                         </div>                      
-                    </div>  
+                    </div> 
+                    <div class="input-group mb-3">
+                        <div class="col-3">Vertical Code</div>
+                        <div class="col-3">
+                        <select name="selectVertical" id="selectVertical">   
+                            <option></option>                         
+                            @foreach ($verticalList as $vertical)
+                            <option value="{{$vertical->code}}">{{$vertical->code}}</option>                            
+                            @endforeach
+                        </select>
+                        </div>
+                         <div class="col-3">Currency Label</div>
+                        <div class="col-3">
+                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="">
+                        </div>                          
+                    </div> 
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
@@ -101,6 +114,12 @@
                         <div class="col-3">
                         <input type="text" name="totalQuantity" id="totalQuantity" class="form-control" value="">
                         </div>                     
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-3">Terms and Conditions</div>
+                        <div class="col-7">
+                        <textarea name="terms" id="terms" class="form-control" value="" style="height:100px !important"></textarea>
+                        </div>                          
                     </div>
                      <div class="input-group mb-3">
                          <div class="col-4">

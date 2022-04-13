@@ -3,7 +3,7 @@
         <h1>Create New Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucheradd-table :storelist="$storelist"></x-voucheradd-table>
+        <x-voucheradd-table :storelist="$storelist" :verticalList="$verticalList"></x-voucheradd-table>
     </div>
 </x-app-layout>
 <script>

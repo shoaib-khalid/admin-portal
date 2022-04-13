@@ -29,6 +29,8 @@ class Voucher extends Model
                             'voucherCode',
                             'totalQuantity',
                             'totalRedeem',
-                            'deleteReason'                            
+                            'deleteReason',
+                            'currencyLabel',
+                            'verticalCode'                            
                         ];
 }

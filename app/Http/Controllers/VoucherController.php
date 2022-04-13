@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\Voucher;
+use App\Models\VoucherTerms;
 use App\Models\Store;
 use Carbon\Carbon;
 use DateTime;
@@ -11,6 +12,7 @@ use DateTime;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Mail;
  
 use App\Mail\NotifyMail;
@@ -29,10 +31,14 @@ class VoucherController extends Controller
 
 
     public function voucheradd(){
+        $sql="SELECT code FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+
         $storelist = Store::orderBy('name', 'ASC')
                         ->get();
+
         //dd($storelist);
-        return view('components.voucheradd',compact('storelist'));
+        return view('components.voucheradd',compact('storelist','verticalList'));
     }
 
     public function post_voucheradd(Request $request){
@@ -42,7 +48,8 @@ class VoucherController extends Controller
         $end_date = $temp[1];
 
         $voucher = new Voucher();
-        $voucher->id = DB::raw('uuid()');
+        $voucherId = Str::uuid();
+        $voucher->id = $voucherId;
         $voucher->voucherType = $request->voucherType;
         $voucher->name = $request->name;
         $voucher->status = "ACTIVE"; 
@@ -55,15 +62,29 @@ class VoucherController extends Controller
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
         $voucher->totalRedeem=0;
+        $voucher->verticalCode = $request->selectVertical;
+        $voucher->currencyLabel = $request->currencyLabel;
 
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
         }
         $voucher->save();
 
-         $storelist = Store::orderBy('name', 'ASC')
+        $termList = explode(PHP_EOL, $request->terms);
+        foreach ($termList as $term) {
+            $vterms = new VoucherTerms();
+            $vterms->id = Str::uuid();
+            $vterms->voucherId = $voucherId;
+            $vterms->terms = $term;
+            $vterms->save();
+        }
+
+        $storelist = Store::orderBy('name', 'ASC')
                         ->get();
-        return view('components.voucheradd',compact('storelist'));
+        $sql="SELECT code FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+
+        return view('components.voucheradd',compact('storelist','verticalList'));
     }
 
 
@@ -125,10 +146,21 @@ class VoucherController extends Controller
         //dd($datas);
         $voucher = $datas[0];
 
-         $storelist = Store::orderBy('name', 'ASC')
+        $storelist = Store::orderBy('name', 'ASC')
                         ->get();
 
-        return view('components.voucheredit', compact('voucher', 'storelist'));
+        $sql="SELECT code FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+
+        $tList = VoucherTerms::where('voucherId', $req->voucherId)                        
+                        ->get();
+        $i=0;
+        foreach ($tList as $term) {
+            $termsList[$i] = $term->terms;
+            $i++;
+        }
+
+        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList'));
     }
 
     public function post_voucheredit(Request $request){        
@@ -149,6 +181,8 @@ class VoucherController extends Controller
         $voucher->voucherCode = $request->voucherCode;
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
+        $voucher->verticalCode = $request->selectVertical;
+        $voucher->currencyLabel = $request->currencyLabel;
 
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
@@ -161,9 +195,32 @@ class VoucherController extends Controller
         $voucher->save();
         //dd($voucher)
 
-         $storelist = Store::orderBy('name', 'ASC')
+        DB::connection('mysql2')->delete("DELETE FROM voucher_terms WHERE voucherId='".$voucher->id."'");
+
+        $termList = explode(PHP_EOL, $request->terms);
+        foreach ($termList as $term) {
+            $vterms = new VoucherTerms();
+            $vterms->id = Str::uuid();
+            $vterms->voucherId = $voucher->id;
+            $vterms->terms = $term;
+            $vterms->save();
+        }
+
+        $storelist = Store::orderBy('name', 'ASC')
                         ->get();
-        return view('components.voucheredit', compact('voucher','storelist'));
+        
+        $sql="SELECT code FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+
+        $tList = VoucherTerms::where('voucherId', $request->voucherId)                        
+                        ->get();
+        $i=0;
+        foreach ($tList as $term) {
+            $termsList[$i] = $term->terms;
+            $i++;
+        }
+
+        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList'));
     }
 
       public function voucherdelete(Request $req){        
