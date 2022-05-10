@@ -137,7 +137,7 @@
                      <div class="input-group mb-3">
                         <div class="col-3">New User Voucher</div>
                         <div class="col-3">
-                        <input type="radio" id="isnew" name="isNewUserVoucher" value="1" <?php if ($voucher->isNewUserVoucher=="0") echo "checked"; ?>>
+                        <input type="radio" id="isnew" name="isNewUserVoucher" value="1" <?php if ($voucher->isNewUserVoucher=="1") echo "checked"; ?>>
                             <label for="isnew">Yes</label>&nbsp;&nbsp;
                         <input type="radio" id="notnew" name="isNewUserVoucher" value="0" <?php if ($voucher->isNewUserVoucher=="0") echo "checked"; ?>>
                             <label for="notnew">No</label>&nbsp;&nbsp;                        
