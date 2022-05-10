@@ -42,6 +42,24 @@ class VoucherController extends Controller
     }
 
     public function post_voucheradd(Request $request){
+
+        $validated = $request->validate([
+            'voucherType' => 'required',
+            'selectVertical' => 'required',
+            'currencyLabel'=> 'required',
+            'name' => 'required',
+            'discountType' => 'required',
+            'discountValue' => 'required',
+            'calculationType' => 'required',
+            'voucherCode' => 'required',
+            'totalQuantity' => 'required',
+            'maxDiscountAmount' => 'required',
+            'isNewUserVoucher' => 'required',
+            'checkTotalRedeem' => 'required',
+            'minimumSpend' => 'required',
+            'allowDoubleDiscount' => 'required'
+        ]);
+
         $dt = $request->date_range;
         $temp = explode(" - ", $dt);
         $start_date = $temp[0];
@@ -64,6 +82,10 @@ class VoucherController extends Controller
         $voucher->totalRedeem=0;
         $voucher->verticalCode = $request->selectVertical;
         $voucher->currencyLabel = $request->currencyLabel;
+        $voucher->isNewUserVoucher = $request->isNewUserVoucher;
+        $voucher->checkTotalRedeem = $request->checkTotalRedeem;
+        $voucher->minimumSpend = $request->minimumSpend;
+        $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
 
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
@@ -183,7 +205,11 @@ class VoucherController extends Controller
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
         $voucher->verticalCode = $request->selectVertical;
         $voucher->currencyLabel = $request->currencyLabel;
-
+        $voucher->isNewUserVoucher = $request->isNewUserVoucher;
+        $voucher->checkTotalRedeem = $request->checkTotalRedeem;
+        $voucher->minimumSpend = $request->minimumSpend;
+        $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
+        
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
         } else {

@@ -10,6 +10,16 @@
 
        <div class="form-group">
 
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <div class="row">
             <div class="col-12">
                 
@@ -17,32 +27,29 @@
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher For</div>
-                        <div class="col-7">
+                        <div class="col-3" class="form-control">
                         <input type="radio" id="deliverin" name="voucherType" value="PLATFORM">
                             <label for="deliverin">PLATFORM</label>&nbsp;&nbsp;
                         <input type="radio" id="store" name="voucherType" value="STORE">
                             <label for="store">Store</label>
-                        </div>                      
-                    </div> 
-                    <div class="input-group mb-3">
+                        </div>
+
                         <div class="col-3">Vertical Code</div>
                         <div class="col-3">
-                        <select name="selectVertical" id="selectVertical">   
+                        <select name="selectVertical" id="selectVertical" class="form-control" >   
                             <option></option>                         
                             @foreach ($verticalList as $vertical)
                             <option value="{{$vertical->code}}">{{$vertical->code}}</option>                            
                             @endforeach
                         </select>
-                        </div>
-                         <div class="col-3">Currency Label</div>
-                        <div class="col-3">
-                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="">
-                        </div>                          
+                        </div>                      
                     </div> 
+
+                    
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
-                        <select name="selectStore" id="selectStore" disabled="true">   
+                        <select name="selectStore" id="selectStore" disabled="true" class="form-control">   
                             <option></option>                         
                             @foreach ($storelist as $store)
                             <option value="{{$store->id}}">{{$store->name}}</option>                            
@@ -50,7 +57,16 @@
                         </select>
                         </div>
                        
-                    </div>  
+                    </div> 
+
+                    <div class="input-group mb-3">
+                        
+                         <div class="col-3">Currency Label</div>
+                        <div class="col-3">
+                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="">
+                        </div>                          
+                    </div> 
+
                     <div class="input-group mb-3">
                         <div class="col-3">Start & End Date</div>
                         <div class="col-7">
@@ -63,22 +79,16 @@
                         <input type="text" name="name" id="name" class="form-control" value="">
                         </div>                       
                     </div>
-                     <div class="input-group mb-3">
-                        <div class="col-3">Special Voucher Condition</div>
-                        <div class="col-7">
-                        <select>
-                            <option>None</option>
-                            <option>First Order transaction discount</option>
-                            <option>Second Order transaction discount</option>
-                            <option>Third Order transaction discount</option>
-                        </select>
-                        </div>
-                       
-                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-3">Minimum Spend</div>
+                        <div class="col-3">
+                        <input type="text" name="minimumSpend" id="minimumSpend" class="form-control" value="">
+                        </div>  
+                    </div>                    
                     <div class="input-group mb-3">
                         <div class="col-3">Discount On</div>
-                        <div class="col-7">
-                        <input type="radio" id="totalsales" name="discountType" value="TOTALSALES">
+                        <div class="col-7" >
+                        <input type="radio" id="totalsales" name="discountType" value="TOTALSALES" >
                             <label for="totalsales">Total Sales</label>&nbsp;&nbsp;
                         <input type="radio" id="shipping" name="discountType" value="SHIPPING">
                             <label for="shipping">Shipping</label>&nbsp;&nbsp;                        
@@ -105,6 +115,7 @@
                         <input type="text" name="maxDiscountAmount" id="maxDiscountAmount" class="form-control" value="">
                         </div>                     
                     </div>
+                    
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher Code</div>
                         <div class="col-3">
@@ -114,6 +125,46 @@
                         <div class="col-3">
                         <input type="text" name="totalQuantity" id="totalQuantity" class="form-control" value="">
                         </div>                     
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="col-3">Allow Double Discount?</div>
+                        <div class="col-3">
+                        <input type="radio" id="allowdouble" name="allowDoubleDiscount" value="1">
+                            <label for="allowdouble">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notallowdouble" name="allowDoubleDiscount" value="0">
+                            <label for="notallowdouble">No</label>&nbsp;&nbsp;                        
+                        </div>  
+
+                        <div class="col-3">Limit redeem quantity</div>
+                        <div class="col-3">
+                        <input type="radio" id="checkredeem" name="checkTotalRedeem" value="1">
+                            <label for="checkredeem">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notcheckredeem" name="checkTotalRedeem" value="0">
+                            <label for="notcheckredeem">No</label>&nbsp;&nbsp;                        
+                        </div>                     
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        <div class="col-3">New User Voucher</div>
+                        <div class="col-3">
+                        <input type="radio" id="isnew" name="isNewUserVoucher" value="1">
+                            <label for="isnew">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notnew" name="isNewUserVoucher" value="0">
+                            <label for="notnew">No</label>&nbsp;&nbsp;                        
+                        </div>                    
+                    </div>
+                     <div class="input-group mb-3">
+                        <div class="col-3">Special Voucher Condition</div>
+                        <div class="col-7">
+                        <select class="form-control">
+                            <option>None</option>
+                            <option>First Order transaction discount</option>
+                            <option>Second Order transaction discount</option>
+                            <option>Third Order transaction discount</option>
+                        </select>
+                        </div>
+                       
                     </div>
                     <div class="input-group mb-3">
                         <div class="col-3">Terms and Conditions</div>

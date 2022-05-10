@@ -17,32 +17,28 @@
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher For</div>
-                        <div class="col-7">
+                        <div class="col-3">
                          <input type="radio" id="deliverin" name="voucherType" value="PLATFORM" <?php if ($voucher->voucherType=="PLATFORM") echo "checked"; ?>>
                             <label for="deliverin">PLATFORM</label>&nbsp;&nbsp;
                         <input type="radio" id="store" name="voucherType" value="STORE" <?php if ($voucher->voucherType=="STORE") echo "checked"; ?>>
                             <label for="store">Store</label>
-                        </div>                      
-                    </div>  
-                  <div class="input-group mb-3">
-                        <div class="col-3">Vertical Code</div>
+                        </div>     
+
+                         <div class="col-3">Vertical Code</div>
                         <div class="col-3">
-                        <select name="selectVertical" id="selectVertical">   
+                        <select name="selectVertical" id="selectVertical" class="form-control" >   
                             <option></option>                         
                             @foreach ($verticalList as $vertical)
                             <option value="{{$vertical->code}}" <?php if ($voucher->verticalCode==$vertical->code) echo "selected"; ?>>{{$vertical->code}}</option>                            
                             @endforeach
                         </select>
-                        </div>
-                         <div class="col-3">Currency Label</div>
-                        <div class="col-3">
-                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="{{$voucher->currencyLabel}}">
-                        </div>                          
-                    </div> 
+                        </div>                
+                    </div>  
+
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
-                        <select name="selectStore" id="selectStore" <?php if ($voucher->voucherType!="STORE") { ?> disabled="true" <?php } ?>>
+                        <select name="selectStore" id="selectStore" <?php if ($voucher->voucherType!="STORE") { ?> disabled="true" <?php } ?> class="form-control" >
                             <option></option>                            
                             @foreach ($storelist as $store)
                             <option value="{{$store->id}}" <?php if ($voucher->storeId==$store->id) echo "selected"; ?>>{{$store->name}}</option>                            
@@ -51,6 +47,15 @@
                         </div>
                        
                     </div>  
+
+                  <div class="input-group mb-3">
+                        
+                         <div class="col-3">Currency Label</div>
+                        <div class="col-3">
+                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="{{$voucher->currencyLabel}}">
+                        </div>                          
+                    </div> 
+                    
                     <div class="input-group mb-3">
                         <div class="col-3">Start & End Date</div>
                         <div class="col-7">
@@ -64,17 +69,12 @@
                         </div>                       
                     </div>
                      <div class="input-group mb-3">
-                        <div class="col-3">Special Voucher Condition</div>
-                        <div class="col-7">
-                        <select>
-                            <option>None</option>
-                            <option>First Order transaction discount</option>
-                            <option>Second Order transaction discount</option>
-                            <option>Third Order transaction discount</option>
-                        </select>
-                        </div>
-                       
-                    </div>
+                        <div class="col-3">Minimum Spend</div>
+                        <div class="col-3">
+                        <input type="text" name="minimumSpend" id="minimumSpend" class="form-control" value="{{ $voucher->minimumSpend }}">
+                        </div>  
+                    </div> 
+                     
                     <div class="input-group mb-3">
                         <div class="col-3">Discount On</div>
                         <div class="col-7">
@@ -115,13 +115,54 @@
                         <input type="text" name="totalQuantity" id="totalQuantity" class="form-control" value="{{ $voucher->totalQuantity }}">
                         </div>                     
                     </div>
+
+                    <div class="input-group mb-3">
+                        <div class="col-3">Allow Double Discount?</div>
+                        <div class="col-3">
+                        <input type="radio" id="allowdouble" name="allowDoubleDiscount" value="1" <?php if ($voucher->allowDoubleDiscount=="1") echo "checked"; ?>>
+                            <label for="allowdouble">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notallowdouble" name="allowDoubleDiscount" value="0" <?php if ($voucher->allowDoubleDiscount=="0") echo "checked"; ?>>
+                            <label for="notallowdouble">No</label>&nbsp;&nbsp;                        
+                        </div>  
+
+                        <div class="col-3">Limit redeem quantity</div>
+                        <div class="col-3">
+                        <input type="radio" id="checkredeem" name="checkTotalRedeem" value="1" <?php if ($voucher->checkTotalRedeem=="1") echo "checked"; ?>>
+                            <label for="checkredeem">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notcheckredeem" name="checkTotalRedeem" value="0" <?php if ($voucher->checkTotalRedeem=="0") echo "checked"; ?>>
+                            <label for="notcheckredeem">No</label>&nbsp;&nbsp;                        
+                        </div>                     
+                    </div>
+
+                     <div class="input-group mb-3">
+                        <div class="col-3">New User Voucher</div>
+                        <div class="col-3">
+                        <input type="radio" id="isnew" name="isNewUserVoucher" value="1" <?php if ($voucher->isNewUserVoucher=="0") echo "checked"; ?>>
+                            <label for="isnew">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notnew" name="isNewUserVoucher" value="0" <?php if ($voucher->isNewUserVoucher=="0") echo "checked"; ?>>
+                            <label for="notnew">No</label>&nbsp;&nbsp;                        
+                        </div>                    
+                    </div>
+
                      <div class="input-group mb-3">
                         <div class="col-3">Status</div>
                         <div class="col-7">
-                        <select name="status">
+                        <select name="status" class="form-control">
                             <option <?php if ($voucher->status=="ACTIVE") echo "selected"; ?>>ACTIVE</option>
                             <option <?php if ($voucher->status=="INACTIVE") echo "selected"; ?>>INACTIVE</option>
                             <option <?php if ($voucher->status=="DELETED") echo "selected"; ?>>DELETED</option>                            
+                        </select>
+                        </div>
+                       
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-3">Special Voucher Condition</div>
+                        <div class="col-7">
+                        <select class="form-control">
+                            <option>None</option>
+                            <option>First Order transaction discount</option>
+                            <option>Second Order transaction discount</option>
+                            <option>Third Order transaction discount</option>
                         </select>
                         </div>
                        
