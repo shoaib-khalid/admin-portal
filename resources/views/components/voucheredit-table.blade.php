@@ -23,16 +23,28 @@
                         <input type="radio" id="store" name="voucherType" value="STORE" <?php if ($voucher->voucherType=="STORE") echo "checked"; ?>>
                             <label for="store">Store</label>
                         </div>     
+               
+                    </div> 
 
-                         <div class="col-3">Vertical Code</div>
-                        <div class="col-3">
-                        <select name="selectVertical" id="selectVertical" class="form-control" >   
-                            <option></option>                         
+                     <div class="input-group mb-3">                        
+
+                        <div class="col-3">Vertical Code</div>
+                        <div class="col-7">
+                            <?php 
+                            foreach ($verticalList as $vertical) {
+                                $checked[$vertical->code] = "";
+                            }
+                            foreach ($voucherVerticalList as $verticalCode) {
+                                $checked[$verticalCode] = "checked";    
+                            }     
+                            //dd($checked);                       
+                            ?>
                             @foreach ($verticalList as $vertical)
-                            <option value="{{$vertical->code}}" <?php if ($voucher->verticalCode==$vertical->code) echo "selected"; ?>>{{$vertical->code}}</option>                            
+                            <input type="checkbox" value="{{$vertical->code}}" name="verticalList[]"{{$checked[$vertical->code]}}> 
+                            <label for="verticalList[]">{{$vertical->code}}</label>&nbsp;&nbsp;&nbsp;                       
                             @endforeach
-                        </select>
-                        </div>                
+                        
+                        </div>                      
                     </div>  
 
                      <div class="input-group mb-3">

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\Voucher;
 use App\Models\VoucherTerms;
+use App\Models\VoucherVertical;
 use App\Models\Store;
 use Carbon\Carbon;
 use DateTime;
@@ -42,10 +43,10 @@ class VoucherController extends Controller
     }
 
     public function post_voucheradd(Request $request){
-
+        //dd($request);
         $validated = $request->validate([
             'voucherType' => 'required',
-            'selectVertical' => 'required',
+            'verticalList' => 'required',
             'currencyLabel'=> 'required',
             'name' => 'required',
             'discountType' => 'required',
@@ -79,8 +80,7 @@ class VoucherController extends Controller
         $voucher->voucherCode = $request->voucherCode;
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
-        $voucher->totalRedeem=0;
-        $voucher->verticalCode = $request->selectVertical;
+        $voucher->totalRedeem=0;        
         $voucher->currencyLabel = $request->currencyLabel;
         $voucher->isNewUserVoucher = $request->isNewUserVoucher;
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
@@ -91,6 +91,14 @@ class VoucherController extends Controller
             $voucher->storeId = $request->selectStore;
         }
         $voucher->save();
+
+        foreach ($request->verticalList as $verticalCode) {
+            $vcode = new VoucherVertical();
+            $vcode->id = Str::uuid();
+            $vcode->voucherId = $voucherId;
+            $vcode->verticalCode = $verticalCode;
+            $vcode->save();
+        }
 
         $termList = explode(PHP_EOL, $request->terms);
         foreach ($termList as $term) {
@@ -182,7 +190,15 @@ class VoucherController extends Controller
             $i++;
         }
 
-        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList'));
+        $vList = VoucherVertical::where('voucherId', $req->voucherId)                        
+                        ->get();
+        $i=0;
+        foreach ($vList as $vertical) {
+            $voucherVerticalList[$i] = $vertical->verticalCode;
+            $i++;
+        }
+
+        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList','voucherVerticalList'));
     }
 
     public function post_voucheredit(Request $request){        
@@ -203,7 +219,6 @@ class VoucherController extends Controller
         $voucher->voucherCode = $request->voucherCode;
         $voucher->totalQuantity = $request->totalQuantity;
         $voucher->maxDiscountAmount = $request->maxDiscountAmount;
-        $voucher->verticalCode = $request->selectVertical;
         $voucher->currencyLabel = $request->currencyLabel;
         $voucher->isNewUserVoucher = $request->isNewUserVoucher;
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
@@ -217,7 +232,7 @@ class VoucherController extends Controller
         }
 
         $voucher->updated_at = date("Y-m-d H:i:s");
-        $voucher->updated_by = "DELETED";
+        $voucher->updated_by = auth()->user()->email;
         $voucher->save();
         //dd($voucher)
 
@@ -230,6 +245,16 @@ class VoucherController extends Controller
             $vterms->voucherId = $voucher->id;
             $vterms->terms = $term;
             $vterms->save();
+        }
+
+        DB::connection('mysql2')->delete("DELETE FROM voucher_vertical WHERE voucherId='".$voucher->id."'");
+
+        foreach ($request->verticalList as $verticalCode) {
+            $vcode = new VoucherVertical();
+            $vcode->id = Str::uuid();
+            $vcode->voucherId = $voucher->id;
+            $vcode->verticalCode = $verticalCode;
+            $vcode->save();
         }
 
         $storelist = Store::orderBy('name', 'ASC')
@@ -246,7 +271,15 @@ class VoucherController extends Controller
             $i++;
         }
 
-        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList'));
+        $vList = VoucherVertical::where('voucherId', $request->voucherId)                        
+                        ->get();
+        $i=0;
+        foreach ($vList as $vertical) {
+            $voucherVerticalList[$i] = $vertical->verticalCode;
+            $i++;
+        }
+
+        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList','voucherVerticalList'));
     }
 
       public function voucherdelete(Request $req){        

@@ -34,16 +34,22 @@
                             <label for="store">Store</label>
                         </div>
 
+                                         
+                    </div> 
+
+                     <div class="input-group mb-3">                        
+
                         <div class="col-3">Vertical Code</div>
-                        <div class="col-3">
-                        <select name="selectVertical" id="selectVertical" class="form-control" >   
-                            <option></option>                         
+                        <div class="col-7">
+                                                
                             @foreach ($verticalList as $vertical)
-                            <option value="{{$vertical->code}}">{{$vertical->code}}</option>                            
+                            <input type="checkbox" value="{{$vertical->code}}" name="verticalList[]"> 
+                            <label for="verticalList[]">{{$vertical->code}}</label>&nbsp;&nbsp;&nbsp;                       
                             @endforeach
-                        </select>
+                        
                         </div>                      
                     </div> 
+
 
                     
                      <div class="input-group mb-3">

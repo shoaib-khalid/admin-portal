@@ -1,3 +1,9 @@
+Version 1.8.6
+------------------------
+Date:11-May-2022
+Support multiple verticalCode for voucher
+
+
 Version 1.8.5
 ------------------------
 Date:10-May-2022
