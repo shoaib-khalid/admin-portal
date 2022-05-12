@@ -5,6 +5,7 @@ use App\Http\Controllers\RefundController;
 use App\Http\Controllers\SettlementController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\PromotextController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -98,6 +99,12 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/post_voucheredit', [VoucherController::class, "post_voucheredit"])->name('post_voucheredit');
     Route::post('/voucherdelete', [VoucherController::class, "voucherdelete"])->name('voucherdelete');
     Route::post('/post_voucherdelete', [VoucherController::class, "post_voucherdelete"])->name('post_voucherdelete');
+
+    Route::get('/promotext', [PromotextController::class, "index"])->name('promotext');
+    Route::post('/add_promotext', [PromotextController::class, "add_promotext"])->name('add_promotext');
+    Route::post('/edit_promotext', [PromotextController::class, "edit_promotext"])->name('edit_promotext');
+    Route::post('/delete_promotext', [PromotextController::class, "delete_promotext"])->name('delete_promotext');
+    Route::post('/post_editpromotext', [PromotextController::class, "post_editpromotext"])->name('post_editpromotext');
 });
 
 

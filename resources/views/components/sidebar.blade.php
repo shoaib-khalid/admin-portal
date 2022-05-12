@@ -91,7 +91,11 @@ $navigation_links = array_to_object($links);
                 <a class="nav-link" href="{{ route('voucherlist') }}"><i class="fas fa-gift"></i><span>Available Voucher</span></a>
             </li>
 
-           
+           <li class="menu-header">Sys Config</li>
+
+            <li class="{{ Request::routeIs('promotext') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('promotext') }}"><i class="fas fa-bullhorn"></i><span>Promo Text</span></a>
+            </li>
             
         </ul>
     </aside>

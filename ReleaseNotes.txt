@@ -1,3 +1,9 @@
+Version 1.8.7
+------------------------
+Date:12-May-2022
+CRUD for promo text
+
+
 Version 1.8.6
 ------------------------
 Date:11-May-2022
