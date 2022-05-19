@@ -23,7 +23,7 @@ class Promotext extends Model
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'eventId', 'displayText'];
+    protected $fillable = ['id', 'eventId', 'displayText', 'verticalCode'];
 
 
 

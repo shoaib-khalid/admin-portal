@@ -16,7 +16,18 @@
                 <?php if ($promodata!=null) { ?>
                     <?php //dd($promodata) ?>
                     <form action="post_editpromotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}}  
+                        {{@csrf_field()}} 
+                        <div class="input-group mb-3">  
+                            <div class="col-3">Select Vertical</div>
+                            <div class="col-7">
+                            <select name="selectVertical" id="selectVertical" class="form-control">   
+                                <option></option>                         
+                                @foreach ($verticallist as $vertical)
+                                <option value="{{$event}}" <?php if ($promodata->vertivalCode==$vertical) echo "selected"; ?>>{{$vertical}}</option>                            
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>  
                         <div class="input-group mb-3">  
                             <div class="col-3">Select Event</div>
                             <div class="col-7">
@@ -43,6 +54,17 @@
                 <?php } else { ?>
                         <form action="add_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>                                        
                         {{@csrf_field()}}  
+                        <div class="input-group mb-3">  
+                            <div class="col-3">Select Vertical</div>
+                            <div class="col-7">
+                            <select name="selectVertical" id="selectVertical" class="form-control">   
+                                <option></option>                         
+                                @foreach ($verticallist as $vertical)
+                                <option value="{{$event}}" <?php if ($promodata->vertivalCode==$vertical) echo "selected"; ?>>{{$vertical}}</option>                            
+                                @endforeach
+                            </select>
+                            </div>
+                        </div>  
                         <div class="input-group mb-3">  
                             <div class="col-3">Select Event</div>
                             <div class="col-7">

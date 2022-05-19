@@ -65,6 +65,10 @@
                          <div class="col-3">Currency Label</div>
                         <div class="col-3">
                         <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="{{$voucher->currencyLabel}}">
+                         <input type="radio" id="rm" name="currencyLabel" value="RM" <?php if ($voucher->currencyLabel=="RM") echo "checked"; ?>>
+                            <label for="rm">RM</label>&nbsp;&nbsp;
+                        <input type="radio" id="rs" name="currencyLabel" value="Rs." <?php if ($voucher->currencyLabel=="Rs.") echo "checked"; ?>>
+                            <label for="rs">Rs.</label>
                         </div>                          
                     </div> 
                     

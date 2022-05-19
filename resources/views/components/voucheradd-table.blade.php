@@ -69,7 +69,10 @@
                         
                          <div class="col-3">Currency Label</div>
                         <div class="col-3">
-                        <input type="text" name="currencyLabel" id="currencyLabel" class="form-control" value="">
+                        <input type="radio" id="rm" name="currencyLabel" value="RM">
+                            <label for="rm">RM</label>&nbsp;&nbsp;
+                        <input type="radio" id="rs" name="currencyLabel" value="Rs.">
+                            <label for="rs">Rs.</label>
                         </div>                          
                     </div> 
 
