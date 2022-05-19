@@ -60,7 +60,7 @@
                             <select name="selectVertical" id="selectVertical" class="form-control">   
                                 <option></option>                         
                                 @foreach ($verticallist as $vertical)
-                                <option value="{{$vertical}}" <?php if ($promodata->verticalCode==$vertical) echo "selected"; ?>>{{$vertical}}</option>                            
+                                <option value="{{$vertical}}" <?php if ($promodata->verticalCode==$vertical->code) echo "selected"; ?>>{{$vertical->code}}</option>                            
                                 @endforeach
                             </select>
                             </div>
