@@ -58,7 +58,11 @@ class PromotextController extends Controller
         $promodata = $promolist[0];
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
-        return view('components.promotext', compact('datas','eventlist','promodata'));
+
+         $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+
+        return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
      public function delete_promotext(Request $request){
