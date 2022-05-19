@@ -3,7 +3,7 @@
         <h1>Promo Text</h1>        
     </x-slot>
     <div>
-        <x-promotext-table :datas="$datas" :eventlist="$eventlist" :promodata="$promodata"></x-promotext-table>
+        <x-promotext-table :datas="$datas" :eventlist="$eventlist" :promodata="$promodata" :verticallist="$verticallist"></x-promotext-table>
     </div>
 </x-app-layout>
 <script>
