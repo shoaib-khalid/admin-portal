@@ -103,6 +103,7 @@
             <table id="table-4" class="table table-striped">        
                 <thead>
                     <tr class="text-center">
+                        <th>Vertical Code</th>
                         <th>Event Id</th>
                         <th>DisplayText</th>     
                         <th></th>                  
@@ -112,6 +113,7 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center">
+                            <td>{{ $data['verticalCode'] }}</td>
                             <td>{{ $data['eventId'] }}</td>
                             <td>{{ $data['displayText'] }}</td>
                             <td>
