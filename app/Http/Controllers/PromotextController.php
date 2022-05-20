@@ -45,6 +45,7 @@ class PromotextController extends Controller
         $promo = new Promotext();
         $promo->eventId = $request->selectEvent;
         $promo->displayText = $request->displayText;
+        $promo->verticalCode = $request->selectVertical;
         $promo->save();
 
         $datas = Promotext::get();
@@ -86,6 +87,7 @@ class PromotextController extends Controller
         $promo = $promolist[0];
         $promo->eventId = $request->selectEvent;
         $promo->displayText = $request->displayText;
+        $promo->verticalCode = $request->selectVertical;
         $promo->save();
         
         $datas = Promotext::get();
@@ -94,7 +96,7 @@ class PromotextController extends Controller
 
         $sql="SELECT code FROM region_vertical";
         $verticallist = DB::connection('mysql2')->select($sql);
-        
+
         return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
