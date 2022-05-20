@@ -50,7 +50,11 @@ class PromotextController extends Controller
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
-        return view('components.promotext', compact('datas','eventlist','promodata'));
+
+        $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+
+        return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
     public function edit_promotext(Request $request){
@@ -59,7 +63,7 @@ class PromotextController extends Controller
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
 
-         $sql="SELECT code FROM region_vertical";
+        $sql="SELECT code FROM region_vertical";
         $verticallist = DB::connection('mysql2')->select($sql);
 
         return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
@@ -70,7 +74,11 @@ class PromotextController extends Controller
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
-        return view('components.promotext', compact('datas','eventlist','promodata'));
+
+        $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+
+        return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
     public function post_editpromotext(Request $request){
@@ -83,7 +91,11 @@ class PromotextController extends Controller
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
-        return view('components.promotext', compact('datas','eventlist','promodata'));
+
+        $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+        
+        return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
 
