@@ -71,7 +71,7 @@ class PromotextController extends Controller
     }
 
      public function delete_promotext(Request $request){
-        DB::connection('mysql2')->delete("DELETE FROM promo_text WHERE eventId='".$request->id."'");
+        DB::connection('mysql2')->delete("DELETE FROM promo_text WHERE id='".$request->id."'");
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
