@@ -20,7 +20,7 @@
                         <div class="col-3">
                          <input type="radio" id="deliverin" name="voucherType" value="PLATFORM" <?php if ($voucher->voucherType=="PLATFORM") echo "checked"; ?>>
                             <label for="deliverin">PLATFORM</label>&nbsp;&nbsp;
-                        <input type="radio" id="store" name="voucherType" value="STORE" <?php if ($voucher->voucherType=="STORE") echo "checked"; ?>>
+                        <input type="radio" id="store" name="voucherType" value="STORE" <?php if ($voucher->voucherType=="STORE") echo "checked"; ?> >
                             <label for="store">Store</label>
                         </div>     
                
@@ -193,7 +193,7 @@
                      <div class="input-group mb-3">
                          <div class="col-4">
                         <input type="hidden" name="voucherId" value="{{ $voucher->id }}">
-                           <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> <span>Update Voucher</span>
+                           <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>><i class="fas fa-save"></i> <span>Update Voucher</span>
                             </button>
                         </div>                                    
                     </div>

@@ -17,6 +17,7 @@
                     <?php //dd($promodata) ?>
                     <form action="post_editpromotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}} 
+                        <input type="hidden" name="id" value="{{ $promodata->id }}">
                         <div class="input-group mb-3">  
                             <div class="col-3">Select Vertical</div>
                             <div class="col-7">
@@ -119,13 +120,13 @@
                             <td>
                                 <form action="edit_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
-                                     <input type="hidden" name="eventId" value="{{ $data['eventId'] }}">
+                                     <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
                                     </button>
                                 </form>
                                 <form action="delete_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
-                                     <input type="hidden" name="eventId" value="{{ $data['eventId'] }}">
+                                     <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close"></i> 
                                     </button>
                                 </form>

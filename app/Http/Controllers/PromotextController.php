@@ -59,7 +59,7 @@ class PromotextController extends Controller
     }
 
     public function edit_promotext(Request $request){
-        $promolist = Promotext::where('eventId',$request->eventId)->get();
+        $promolist = Promotext::where('id',$request->id)->get();
         $promodata = $promolist[0];
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
@@ -71,7 +71,7 @@ class PromotextController extends Controller
     }
 
      public function delete_promotext(Request $request){
-        DB::connection('mysql2')->delete("DELETE FROM promo_text WHERE eventId='".$request->eventId."'");
+        DB::connection('mysql2')->delete("DELETE FROM promo_text WHERE eventId='".$request->id."'");
         $datas = Promotext::get();
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
@@ -83,7 +83,7 @@ class PromotextController extends Controller
     }
 
     public function post_editpromotext(Request $request){
-        $promolist = Promotext::where('eventId',$request->selectEvent)->get();
+        $promolist = Promotext::where('id',$request->id)->get();
         $promo = $promolist[0];
         $promo->eventId = $request->selectEvent;
         $promo->displayText = $request->displayText;

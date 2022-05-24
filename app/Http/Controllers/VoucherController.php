@@ -185,6 +185,7 @@ class VoucherController extends Controller
         $tList = VoucherTerms::where('voucherId', $req->voucherId)                        
                         ->get();
         $i=0;
+        $termsList=array();
         foreach ($tList as $term) {
             $termsList[$i] = $term->terms;
             $i++;
@@ -193,6 +194,7 @@ class VoucherController extends Controller
         $vList = VoucherVertical::where('voucherId', $req->voucherId)                        
                         ->get();
         $i=0;
+        $voucherVerticalList=array();
         foreach ($vList as $vertical) {
             $voucherVerticalList[$i] = $vertical->verticalCode;
             $i++;
