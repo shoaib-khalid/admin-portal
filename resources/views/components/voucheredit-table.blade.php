@@ -191,6 +191,12 @@
                         </div>                          
                     </div>
                      <div class="input-group mb-3">
+                        <div class="col-3">Update Reason</div>
+                        <div class="col-7">
+                        <textarea name="reason" id="reason" class="form-control" required>{{$voucher->editReason}}</textarea>
+                        </div>                          
+                    </div>
+                     <div class="input-group mb-3">
                          <div class="col-4">
                         <input type="hidden" name="voucherId" value="{{ $voucher->id }}">
                            <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>><i class="fas fa-save"></i> <span>Update Voucher</span>

@@ -226,7 +226,8 @@ class VoucherController extends Controller
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
         $voucher->minimumSpend = $request->minimumSpend;
         $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
-        
+        $voucher->editReason = $request->reason;
+
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
         } else {

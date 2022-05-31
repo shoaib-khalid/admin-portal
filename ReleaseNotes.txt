@@ -1,3 +1,11 @@
+Version 1.9.0
+------------------------
+Date:31-May-2022
+Add new field : editReason to save reason during updating voucher
+##DB Changes:
+ALTER TABLE voucher ADD editReason VARCHAR(200);
+
+
 Version 1.8.9
 ------------------------
 Date:24-May-2022
