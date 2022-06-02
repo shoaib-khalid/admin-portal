@@ -80,13 +80,13 @@
                     <div class="input-group mb-3">
                         <div class="col-3">Voucher Name</div>
                         <div class="col-7">
-                        <input type="text" name="name" id="name" class="form-control" value="{{ $voucher->name }}">
+                        <input type="text" name="name" id="name" class="form-control" value="{{ $voucher->name }}" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
                         </div>                       
                     </div>
                      <div class="input-group mb-3">
                         <div class="col-3">Minimum Spend</div>
                         <div class="col-3">
-                        <input type="text" name="minimumSpend" id="minimumSpend" class="form-control" value="{{ $voucher->minimumSpend }}">
+                        <input type="text" name="minimumSpend" id="minimumSpend" class="form-control" value="{{ $voucher->minimumSpend }}" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
                         </div>  
                     </div> 
                      

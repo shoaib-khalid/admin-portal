@@ -34,7 +34,7 @@ class FeaturedProductController extends Controller
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->get();        
+                    ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
         return view('components.featuredproduct', compact('datas','searchresult'));
     }
@@ -45,7 +45,7 @@ class FeaturedProductController extends Controller
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->get();
+                    ->orderBy('sequence', 'ASC')->get();        
 
         $sql="SELECT A.*, B.name as storeName, C.name as category
                     FROM product A 
@@ -68,7 +68,7 @@ class FeaturedProductController extends Controller
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->get();
+                    -->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
 
         return view('components.featuredproduct', compact('datas','searchresult'));
@@ -84,7 +84,7 @@ class FeaturedProductController extends Controller
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->get();
+                    ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
 
         return view('components.featuredproduct',compact('datas','searchresult'));
@@ -96,7 +96,7 @@ class FeaturedProductController extends Controller
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->get();
+                    ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
         return view('components.featuredproduct', compact('datas','searchresult'));
         

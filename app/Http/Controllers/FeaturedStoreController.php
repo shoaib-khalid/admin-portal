@@ -31,7 +31,7 @@ class FeaturedStoreController extends Controller
     public function index(){
         
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
-                    ->join('store as store', 'storeId', '=', 'store.id')->get();
+                    ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $currentdata=null;
 
         $sql="SELECT code FROM region_vertical";
@@ -52,7 +52,8 @@ class FeaturedStoreController extends Controller
         $f->sequence = $request->sequence;
         $f->save();
 
-        $datas = FeaturedStore::get();
+        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
+                    ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $currentdata=null;
 
         $sql="SELECT code FROM region_vertical";
@@ -65,8 +66,8 @@ class FeaturedStoreController extends Controller
      public function delete_featuredstore(Request $request){
         DB::connection('mysql2')->delete("DELETE FROM store_display_config WHERE id='".$request->id."'");
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
-                    ->join('store as store', 'storeId', '=', 'store.id')->get();
-
+                    ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
+        
         $currentdata=null;
 
         $sql="SELECT code FROM region_vertical";
@@ -84,8 +85,8 @@ class FeaturedStoreController extends Controller
         
         $currentdata=null;
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
-                    ->join('store as store', 'storeId', '=', 'store.id')->get();
-
+                    ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
+        
         $sql="SELECT code FROM region_vertical";
         $verticallist = DB::connection('mysql2')->select($sql);
 
