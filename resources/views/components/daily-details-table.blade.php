@@ -50,6 +50,7 @@
                     <th>Service Charge</th>
                     <th>Delivery Charge</th>
                     <th>Delivery Discount</th>
+                    <th>Voucher Discount</th>
                     <th>Commision</th>
                     <th>Total</th>
                     <th>Order Status</th>
@@ -90,6 +91,9 @@
                                     </td>
                                     <td>
                                         {{ number_format($item['deliveryDiscount'], 2, '.', ',') ?? '0.00' }}
+                                    </td>
+                                    <td>
+                                        {{ number_format($item['storeVoucherDiscount'], 2, '.', ',') ?? '0.00' }}
                                     </td>
                                     <td>
                                         {{ number_format($item['commission'], 2, '.', ',') ?? '0.00' }}

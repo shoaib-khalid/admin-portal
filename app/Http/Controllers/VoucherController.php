@@ -210,28 +210,44 @@ class VoucherController extends Controller
         $start_date = $temp[0];
         $end_date = $temp[1];
 
-        $voucher->voucherType = $request->voucherType;
-        $voucher->name = $request->name;
-        $voucher->status = $request->status; 
-        $voucher->startDate = $start_date;
-        $voucher->endDate = $end_date;
-        $voucher->discountType = $request->discountType;
-        $voucher->calculationType = $request->calculationType;
-        $voucher->discountValue = $request->discountValue;
-        $voucher->voucherCode = $request->voucherCode;
-        $voucher->totalQuantity = $request->totalQuantity;
-        $voucher->maxDiscountAmount = $request->maxDiscountAmount;
-        $voucher->currencyLabel = $request->currencyLabel;
-        $voucher->isNewUserVoucher = $request->isNewUserVoucher;
-        $voucher->checkTotalRedeem = $request->checkTotalRedeem;
-        $voucher->minimumSpend = $request->minimumSpend;
-        $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
-        $voucher->editReason = $request->reason;
+        if ($voucher->totalRedeem==0) {
+            $voucher->voucherType = $request->voucherType;
+            $voucher->name = $request->name;
+            $voucher->status = $request->status; 
+            $voucher->startDate = $start_date;
+            $voucher->endDate = $end_date;
+            $voucher->discountType = $request->discountType;
+            $voucher->calculationType = $request->calculationType;
+            $voucher->discountValue = $request->discountValue;
+            $voucher->voucherCode = $request->voucherCode;
+            $voucher->totalQuantity = $request->totalQuantity;
+            $voucher->maxDiscountAmount = $request->maxDiscountAmount;
+            $voucher->currencyLabel = $request->currencyLabel;
+            $voucher->isNewUserVoucher = $request->isNewUserVoucher;
+            $voucher->checkTotalRedeem = $request->checkTotalRedeem;
+            $voucher->minimumSpend = $request->minimumSpend;
+            $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
+            $voucher->editReason = $request->reason;
 
-        if ($voucher->voucherType=="STORE") {
-            $voucher->storeId = $request->selectStore;
+            if ($voucher->voucherType=="STORE") {
+                $voucher->storeId = $request->selectStore;
+            } else {
+                $voucher->storeId = null;
+            }
+
+            DB::connection('mysql2')->delete("DELETE FROM voucher_vertical WHERE voucherId='".$voucher->id."'");
+
+            foreach ($request->verticalList as $verticalCode) {
+                $vcode = new VoucherVertical();
+                $vcode->id = Str::uuid();
+                $vcode->voucherId = $voucher->id;
+                $vcode->verticalCode = $verticalCode;
+                $vcode->save();
+            }
         } else {
-            $voucher->storeId = null;
+            $voucher->startDate = $start_date;
+            $voucher->endDate = $end_date;
+            $voucher->editReason = $request->reason;
         }
 
         $voucher->updated_at = date("Y-m-d H:i:s");
@@ -250,15 +266,7 @@ class VoucherController extends Controller
             $vterms->save();
         }
 
-        DB::connection('mysql2')->delete("DELETE FROM voucher_vertical WHERE voucherId='".$voucher->id."'");
-
-        foreach ($request->verticalList as $verticalCode) {
-            $vcode = new VoucherVertical();
-            $vcode->id = Str::uuid();
-            $vcode->voucherId = $voucher->id;
-            $vcode->verticalCode = $verticalCode;
-            $vcode->save();
-        }
+        
 
         $storelist = Store::orderBy('name', 'ASC')
                         ->get();

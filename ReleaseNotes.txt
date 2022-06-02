@@ -1,3 +1,13 @@
+Version 1.9.1
+------------------------
+Date:2-June-2022
+Add new function to manage Featured Store & Featured Product
+##DB Changes:
+ALTER TABLE product_feature_config ADD created_at DATETIME;
+ALTER TABLE product_feature_config ADD updated_at DATETIME;
+ALTER TABLE store_display_config ADD created_at DATETIME;
+ALTER TABLE product_feature_config ADD updated_at DATETIME;
+
 Version 1.9.0
 ------------------------
 Date:31-May-2022

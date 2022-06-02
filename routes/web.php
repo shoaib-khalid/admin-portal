@@ -6,6 +6,8 @@ use App\Http\Controllers\SettlementController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\PromotextController;
+use App\Http\Controllers\FeaturedStoreController;
+use App\Http\Controllers\FeaturedProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -105,6 +107,20 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/edit_promotext', [PromotextController::class, "edit_promotext"])->name('edit_promotext');
     Route::post('/delete_promotext', [PromotextController::class, "delete_promotext"])->name('delete_promotext');
     Route::post('/post_editpromotext', [PromotextController::class, "post_editpromotext"])->name('post_editpromotext');
+
+    Route::get('/featuredstore', [FeaturedStoreController::class, "index"])->name('featuredstore');
+    Route::post('/searchStore', [FeaturedStoreController::class, "searchStore"])->name('searchStore');
+    Route::post('/add_featuredstore', [FeaturedStoreController::class, "add_featuredstore"])->name('add_featuredstore');
+    Route::post('/edit_featuredstore', [FeaturedStoreController::class, "edit_featuredstore"])->name('edit_featuredstore');
+    Route::post('/delete_featuredstore', [FeaturedStoreController::class, "delete_featuredstore"])->name('delete_featuredstore');
+    Route::post('/post_editfeaturedstore', [FeaturedStoreController::class, "post_editfeaturedstore"])->name('post_editfeaturedstore');
+
+    Route::get('/featuredproduct', [FeaturedProductController::class, "index"])->name('featuredproduct');    
+    Route::post('/filter_product', [FeaturedProductController::class, "filter_product"])->name('filter_product');
+    Route::post('/add_featuredproduct', [FeaturedProductController::class, "add_featuredproduct"])->name('add_featuredproduct');
+    Route::post('/edit_featuredproduct', [FeaturedProductController::class, "edit_featuredproduct"])->name('edit_featuredproduct');
+    Route::post('/delete_featuredproduct', [FeaturedProductController::class, "delete_featuredproduct"])->name('delete_featuredproduct');
+    Route::post('/post_featuredproduct', [FeaturedProductController::class, "post_editfeaturedproduct"])->name('post_editfeaturedproduct');
 });
 
 

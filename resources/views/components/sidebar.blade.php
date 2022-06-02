@@ -96,6 +96,12 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('promotext') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('promotext') }}"><i class="fas fa-bullhorn"></i><span>Promo Text</span></a>
             </li>
+            <li class="{{ Request::routeIs('featuredstore') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('featuredstore') }}"><i class="fas fa-bullhorn"></i><span>Featured Store</span></a>
+            </li>
+            <li class="{{ Request::routeIs('featuredproduct') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('featuredproduct') }}"><i class="fas fa-bullhorn"></i><span>Featured Product</span></a>
+            </li>
             
         </ul>
     </aside>
