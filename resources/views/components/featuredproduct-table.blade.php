@@ -17,8 +17,11 @@
                 
                 <form action="filter_product" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
+                     <div class="input-group mb-3">
+                        <input type="text" name="store_name" id="store_name" class="form-control"  value="{{$storename}}" placeholder="Store name">                      
+                    </div>
                     <div class="input-group mb-3">
-                        <input type="text" name="product_name" id="product_name" class="form-control" value="" placeholder="Product name">
+                        <input type="text" name="product_name" id="product_name" class="form-control"  value="{{$productname}}" placeholder="Product name">
                         <div class="input-group-append">
                             <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
@@ -47,18 +50,16 @@
                         <tr class="text-center">
                              <form action="add_featuredproduct" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
-
                             <td style="padding: 0">{{ $data->name }}</td>
                             <td style="padding: 0">{{ $data->category }}</td>
                             <td style="padding: 0">{{ $data->storeName }}</td>
-                            <td style="padding: 0"> <input type="text" name="sequence" value="" class="form-control"></td>
+                            <td style="padding: 0"> <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control"></td>
                             <td style="padding: 0">
-                               
-                                    
+                                     <?php if ($data->sequence=="") { ?>                              
                                      <input type="hidden" name="id" value="{{ $data->id }}">
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to add this product?')"><i class="fas fa-plus"></i> 
                                     </button>
-                              
+                                    <?php } ?>
                                
                             </td> 
 

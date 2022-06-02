@@ -32,12 +32,10 @@ class FeaturedStoreController extends Controller
         
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
-        $currentdata=null;
+        $storename = "";
+        $searchresult=array();
 
-        $sql="SELECT code FROM region_vertical";
-        $verticallist = DB::connection('mysql2')->select($sql);
-
-        return view('components.featuredstore', compact('datas','currentdata','verticallist'));
+        return view('components.featuredstore', compact('datas','storename','searchresult'));
     }
 
     public function searchStore(Request $request) {    
@@ -46,20 +44,38 @@ class FeaturedStoreController extends Controller
       return response()->json(array('storeList'=> $storeList), 200);
    }
 
+    public function filter_store(Request $req){
+        
+        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
+                    ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
+        $storename = $req->store_name;
+        
+        $sql="SELECT A.*, B.sequence
+                    FROM store A          
+                    LEFT JOIN store_display_config B ON B.storeId=A.id               
+                    WHERE A.id IS NOT NULL ";
+        if ($req->store_name<>"") {
+            $sql .= "AND A.name like '%".$req->store_name."%'";    
+        }
+       
+        $searchresult = DB::connection('mysql2')->select($sql);
+       
+        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
+
+    }
+
     public function add_featuredstore(Request $request){
         $f = new FeaturedStore();
-        $f->storeId = $request->selectStore;
+        $f->storeId = $request->id;
         $f->sequence = $request->sequence;
         $f->save();
 
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
-        $currentdata=null;
+        $storename=null;
+        $searchresult=array();
 
-        $sql="SELECT code FROM region_vertical";
-        $verticallist = DB::connection('mysql2')->select($sql);
-
-        return view('components.featuredstore', compact('datas','currentdata','verticallist'));
+        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
     }
 
 
@@ -67,13 +83,10 @@ class FeaturedStoreController extends Controller
         DB::connection('mysql2')->delete("DELETE FROM store_display_config WHERE id='".$request->id."'");
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
-        
-        $currentdata=null;
-
-        $sql="SELECT code FROM region_vertical";
-        $verticallist = DB::connection('mysql2')->select($sql);
-
-        return view('components.featuredstore', compact('datas','currentdata','verticallist'));
+        $storename=null;
+        $searchresult=array();
+           
+        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
         
     }
 
@@ -83,14 +96,12 @@ class FeaturedStoreController extends Controller
         $data->sequence = $request->sequence;
         $data->save();
         
-        $currentdata=null;
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
+        $storename=null;
+        $searchresult=array();
         
-        $sql="SELECT code FROM region_vertical";
-        $verticallist = DB::connection('mysql2')->select($sql);
-
-        return view('components.featuredstore',compact('datas','currentdata','verticallist'));
+        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
     }
 
 

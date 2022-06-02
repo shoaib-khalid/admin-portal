@@ -41,75 +41,60 @@
     <div class="card-body">
 
        <div class="form-group">
+
         <div class="row">
-            <div class="col-12">
+            <div class="col">
                 
-                <?php if ($currentdata!=null) { ?>
-                    <?php //dd($promodata) ?>
-                    <form action="post_editfeaturedstore" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}} 
-                        <input type="hidden" name="id" value="{{ $currentdata->id }}">
-                       <div class="input-group mb-3">  
-                            <div class="col-3">Store</div>
-                            <div class="col-7">
-                            {{$currentdata->storeName}}
-                            </div>
-                        </div> 
-                        <div class="input-group mb-3">  
-                            <div class="col-3">Sequence</div>
-                            <div class="col-7">
-                             <input type="text" name="sequence" id="sequence" class="form-control" value="{{$currentdata->sequence}}">
-                            </div>
-                        </div>                                  
-                        <div class="input-group mb-3">                        
-                            <div class="col-2">
-                                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
-                            </div>
+                <form action="filter_store" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    {{@csrf_field()}}                   
+                    <div class="input-group mb-3">
+                        <input type="text" name="store_name" id="store_name" class="form-control"  value="{{$storename}}" placeholder="Store name">  
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
-                    </form>
-                <?php } else { ?>
-                        <form action="add_featuredstore" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>                                        
-                        {{@csrf_field()}}  
-                        <div class="input-group mb-3">  
-                            <div class="col-3">Select Vertical</div>
-                            <div class="col-7">
-                            <select name="selectVertical" id="selectVertical" class="form-control" onchange="searchStore()">   
-                                <option></option>                         
-                                @foreach ($verticallist as $vertical)
-                                <option value="{{$vertical->code}}">{{$vertical->code}}</option>                            
-                                @endforeach
-                            </select>
-                            </div>
-                        </div>   
-                        <div class="input-group mb-3">  
-                            <div class="col-3">Select Store</div>
-                            <div class="col-7">
-                                  <select name="selectStore" id="selectStore" class="form-control">   
-                                    
-                                </select>
-                            </div> 
-                        </div>                        
-                        <div class="input-group mb-3">  
-                            <div class="col-3">Sequence</div>
-                            <div class="col-3">
-                            <input type="text" name="sequence" id="sequence" class="form-control" value="">
-                            </div>
-                        </div>                                
-                        <div class="input-group mb-3">                        
-                            <div class="col-2">                                
-                                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Add</span></button>
-                            </div>
-                        </div>
-                    </form>
-                <?php } ?>
+                    </div>
+                </form>
             </div>
-            <div class="col-1">
-                
-            </div>
-            
+          
         </div>
 
-    
+
+        <div class="table-responsive">
+
+            <table id="table-4" class="table table-striped" style="font-size:11px !important">        
+                <thead>
+                    <tr class="text-center">
+                        <th style="width: 30%;">Store Name</th>
+                        <th style="width: 30%;">City</th>
+                        <th style="width: 5%;">Sequence</th>    
+                        <th style="width: 5%;"></th>                       
+                    </tr>
+                </thead>      
+                <tbody>
+
+                    @foreach ($searchresult as $data)
+                        <tr class="text-center">
+                             <form action="add_featuredstore" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                                    {{@csrf_field()}}
+                            <td style="padding: 0">{{ $data->name }}</td>
+                            <td style="padding: 0">{{ $data->city }}</td>
+                           <td style="padding: 0"> <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control"></td>
+                            <td style="padding: 0">
+                                     <?php if ($data->sequence=="") { ?>                              
+                                     <input type="hidden" name="id" value="{{ $data->id }}">
+                                     <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to add this store?')"><i class="fas fa-plus"></i> 
+                                    </button>
+                                    <?php } ?>
+                               
+                            </td> 
+
+                            </form>                          
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+
 
         <div class="table-responsive">
 

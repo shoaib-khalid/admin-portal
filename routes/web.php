@@ -109,7 +109,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/post_editpromotext', [PromotextController::class, "post_editpromotext"])->name('post_editpromotext');
 
     Route::get('/featuredstore', [FeaturedStoreController::class, "index"])->name('featuredstore');
-    Route::post('/searchStore', [FeaturedStoreController::class, "searchStore"])->name('searchStore');
+    Route::post('/filter_store', [FeaturedStoreController::class, "filter_store"])->name('filter_store');
     Route::post('/add_featuredstore', [FeaturedStoreController::class, "add_featuredstore"])->name('add_featuredstore');
     Route::post('/edit_featuredstore', [FeaturedStoreController::class, "edit_featuredstore"])->name('edit_featuredstore');
     Route::post('/delete_featuredstore', [FeaturedStoreController::class, "delete_featuredstore"])->name('delete_featuredstore');

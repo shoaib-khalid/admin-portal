@@ -3,7 +3,7 @@
         <h1>Featured Store</h1>        
     </x-slot>
     <div>
-        <x-featuredstore-table :datas="$datas" :currentdata="$currentdata" :verticallist="$verticallist"></x-featuredstore-table>
+        <x-featuredstore-table :datas="$datas" :storename="$storename" :searchresult="$searchresult"></x-featuredstore-table>
     </div>
 </x-app-layout>
 <script>

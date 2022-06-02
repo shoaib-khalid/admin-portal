@@ -36,7 +36,10 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
-        return view('components.featuredproduct', compact('datas','searchresult'));
+        $product_name = "";
+        $store_name = "";
+
+        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name'));
     }
 
     public function filter_product(Request $req){
@@ -47,14 +50,24 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->orderBy('sequence', 'ASC')->get();        
 
-        $sql="SELECT A.*, B.name as storeName, C.name as category
+        $sql="SELECT A.*, B.name as storeName, C.name as category, D.sequence
                     FROM product A 
                         INNER JOIN store B ON A.storeId=B.id 
                         INNER JOIN store_category C ON A.categoryId=C.id
-                    WHERE A.name like '%".$req->product_name."%'";
+                        LEFT JOIN product_feature_config D ON D.productId=A.id
+                    WHERE A.id IS NOT NULL ";
+        if ($req->store_name<>"") {
+            $sql .= "AND B.name like '%".$req->store_name."%'";    
+        }
+        if ($req->product_name<>"") {
+            $sql .= "AND A.name like '%".$req->product_name."%'";    
+        }
+        
         $searchresult = DB::connection('mysql2')->select($sql);
-       
-        return view('components.featuredproduct', compact('datas','searchresult'));
+        $product_name = $req->product_name;
+        $store_name = $req->store_name;
+
+        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name'));
 
     }
 
@@ -70,8 +83,10 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
+        $product_name = null;
+        $store_name = null;
 
-        return view('components.featuredproduct', compact('datas','searchresult'));
+        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name'));
     }
 
     public function edit_featuredproduct(Request $request){
@@ -86,8 +101,10 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
+        $product_name = null;
+        $store_name = null;
 
-        return view('components.featuredproduct',compact('datas','searchresult'));
+        return view('components.featuredproduct',compact('datas','searchresult','product_name', 'store_name'));
     }
 
      public function delete_featuredproduct(Request $request){
@@ -98,7 +115,10 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->orderBy('sequence', 'ASC')->get();        
         $searchresult=array();
-        return view('components.featuredproduct', compact('datas','searchresult'));
+        $product_name = null;
+        $store_name = null;
+
+        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name'));
         
     }
 
