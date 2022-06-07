@@ -35,7 +35,11 @@ class FeaturedStoreController extends Controller
         $storename = "";
         $searchresult=array();
 
-        return view('components.featuredstore', compact('datas','storename','searchresult'));
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+        $categoryselected="";
+
+        return view('components.featuredstore', compact('datas','storename','searchresult', 'categorylist','categoryselected'));
     }
 
     public function searchStore(Request $request) {    
@@ -48,19 +52,28 @@ class FeaturedStoreController extends Controller
         
         $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
-        $storename = $req->store_name;
-        
-        $sql="SELECT A.*, B.sequence
-                    FROM store A          
-                    LEFT JOIN store_display_config B ON B.storeId=A.id               
+        $storename = $req->store_name;       
+
+        $sql="SELECT DISTINCT(B.id), B.name as storeName, C.name as category, D.sequence
+                    FROM product A 
+                        INNER JOIN store B ON A.storeId=B.id 
+                        INNER JOIN store_category C ON A.categoryId=C.id
+                        LEFT JOIN store_display_config D ON D.storeId=A.id
                     WHERE A.id IS NOT NULL ";
         if ($req->store_name<>"") {
-            $sql .= "AND A.name like '%".$req->store_name."%'";    
+            $sql .= "AND B.name like '%".$req->store_name."%'";    
         }
-       
+        if ($req->selectCategory<>"") {
+            $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
+        }
+        echo $sql;
         $searchresult = DB::connection('mysql2')->select($sql);
-       
-        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
+        
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+        $categoryselected = $req->selectCategory;
+
+        return view('components.featuredstore', compact('datas','searchresult', 'storename', 'categorylist','categoryselected'));
 
     }
 
@@ -75,7 +88,11 @@ class FeaturedStoreController extends Controller
         $storename=null;
         $searchresult=array();
 
-        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+        $categoryselected="";
+
+        return view('components.featuredstore', compact('datas','searchresult', 'storename', 'categorylist','categoryselected'));
     }
 
 
@@ -85,8 +102,12 @@ class FeaturedStoreController extends Controller
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $storename=null;
         $searchresult=array();
-           
-        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
+        
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+        $categoryselected="";
+
+        return view('components.featuredstore', compact('datas','searchresult', 'storename','categorylist','categoryselected'));
         
     }
 
@@ -101,7 +122,11 @@ class FeaturedStoreController extends Controller
         $storename=null;
         $searchresult=array();
         
-        return view('components.featuredstore', compact('datas','searchresult', 'storename'));
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+        $categoryselected="";
+
+        return view('components.featuredstore', compact('datas','searchresult', 'storename','categorylist','categoryselected'));
     }
 
 

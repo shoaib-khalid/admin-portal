@@ -46,7 +46,15 @@
             <div class="col">
                 
                 <form action="filter_store" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                    {{@csrf_field()}}                   
+                    {{@csrf_field()}}   
+                    <div class="input-group mb-3">
+                        <select name="selectCategory" id="selectCategory" class="form-control">   
+                            <option>Select Parent Category</option>                         
+                            @foreach ($categorylist as $category)
+                            <option value="{{$category->id}}" <?php if ($categoryselected==$category->id) echo "selected"; ?>>{{$category->name}} - {{$category->verticalCode}}</option>                            
+                            @endforeach
+                        </select>                
+                    </div>                
                     <div class="input-group mb-3">
                         <input type="text" name="store_name" id="store_name" class="form-control"  value="{{$storename}}" placeholder="Store name">  
                         <div class="input-group-append">
