@@ -84,7 +84,7 @@
                         <tr class="text-center">
                              <form action="add_featuredstore" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
-                            <td style="padding: 0">{{ $data->name }}</td>
+                            <td style="padding: 0">{{ $data->storeName }}</td>
                             <td style="padding: 0">{{ $data->city }}</td>
                            <td style="padding: 0"> <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control"></td>
                             <td style="padding: 0">

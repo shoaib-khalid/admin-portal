@@ -54,7 +54,7 @@ class FeaturedStoreController extends Controller
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $storename = $req->store_name;       
 
-        $sql="SELECT DISTINCT(B.id), B.name as storeName, C.name as category, D.sequence
+        $sql="SELECT DISTINCT(B.id), B.name as storeName, B.city, C.name as category, D.sequence
                     FROM product A 
                         INNER JOIN store B ON A.storeId=B.id 
                         INNER JOIN store_category C ON A.categoryId=C.id
