@@ -6,7 +6,7 @@ Add new function to manage Featured Store & Featured Product
 ALTER TABLE product_feature_config ADD created_at DATETIME;
 ALTER TABLE product_feature_config ADD updated_at DATETIME;
 ALTER TABLE store_display_config ADD created_at DATETIME;
-ALTER TABLE product_feature_config ADD updated_at DATETIME;
+ALTER TABLE store_display_config ADD updated_at DATETIME;
 
 Version 1.9.0
 ------------------------

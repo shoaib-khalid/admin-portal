@@ -3,7 +3,7 @@
         <h1>Featured Product</h1>        
     </x-slot>
     <div>
-        <x-featuredproduct-table :datas="$datas" :searchresult="$searchresult" :storename="$store_name" :productname="$product_name"></x-featuredproduct-table>
+        <x-featuredproduct-table :datas="$datas" :searchresult="$searchresult" :storename="$store_name" :productname="$product_name" :categorylist="$categorylist" :categoryselected="$categoryselected"></x-featuredproduct-table>
     </div>
 </x-app-layout>
 <script>

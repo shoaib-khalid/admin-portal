@@ -30,31 +30,42 @@ class FeaturedProductController extends Controller
 
     public function index(){
         
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category')
+        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->orderBy('sequence', 'ASC')->get();        
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
+                    ->orderBy('sequence', 'ASC')->get();     
+
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+
         $searchresult=array();
         $product_name = "";
         $store_name = "";
+        $categoryselected="";
 
-        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name'));
+        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name','categorylist','categoryselected'));
     }
 
     public function filter_product(Request $req){
 
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category')
+        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->orderBy('sequence', 'ASC')->get();        
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
+                    ->orderBy('sequence', 'ASC')->get();            
 
-        $sql="SELECT A.*, B.name as storeName, C.name as category, D.sequence
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
+        $categorylist = DB::connection('mysql2')->select($sql);
+
+        $sql="SELECT A.*, B.name as storeName, C.name as category, D.sequence, E.name AS parentcategory
                     FROM product A 
                         INNER JOIN store B ON A.storeId=B.id 
                         INNER JOIN store_category C ON A.categoryId=C.id
                         LEFT JOIN product_feature_config D ON D.productId=A.id
+                        LEFT JOIN store_category E ON C.parentCategoryId=E.id
                     WHERE A.id IS NOT NULL ";
         if ($req->store_name<>"") {
             $sql .= "AND B.name like '%".$req->store_name."%'";    
@@ -62,12 +73,16 @@ class FeaturedProductController extends Controller
         if ($req->product_name<>"") {
             $sql .= "AND A.name like '%".$req->product_name."%'";    
         }
+        if ($req->selectCategory<>"") {
+            $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
+        }
         
         $searchresult = DB::connection('mysql2')->select($sql);
         $product_name = $req->product_name;
         $store_name = $req->store_name;
+        $categoryselected= $req->selectCategory;
 
-        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name'));
+        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name', 'categorylist','categoryselected'));
 
     }
 

@@ -12,45 +12,58 @@
 
        <div class="form-group">
 
-        <div class="row">
-            <div class="col">
-                
-                <form action="filter_product" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+        <form action="filter_product" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
-                     <div class="input-group mb-3">
-                        <input type="text" name="store_name" id="store_name" class="form-control"  value="{{$storename}}" placeholder="Store name">                      
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="text" name="product_name" id="product_name" class="form-control"  value="{{$productname}}" placeholder="Product name">
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-          
-        </div>
+            
 
+            <div class="row">
+                <div class="col">
+                    
+                         <div class="input-group mb-3">
+                            <select name="selectCategory" id="selectCategory" class="form-control">   
+                                <option>Select Parent Category</option>                         
+                                @foreach ($categorylist as $category)
+                                <option value="{{$category->id}}" <?php if ($categoryselected==$category->id) echo "selected"; ?>>{{$category->name}} - {{$category->verticalCode}}</option>                            
+                                @endforeach
+                            </select>                
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" name="store_name" id="store_name" class="form-control"  value="{{$storename}}" placeholder="Store name">                      
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" name="product_name" id="product_name" class="form-control"  value="{{$productname}}" placeholder="Product name">
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                            </div>
+                        </div>
+                   
+                </div>
+              
+            </div>
+
+         </form>
 
         <div class="table-responsive">
 
             <table id="table-4" class="table table-striped" style="font-size:11px !important">        
                 <thead>
                     <tr class="text-center">
-                        <th style="width: 30%;">Product Name</th>
-                        <th style="width: 30%;">Category</th>
-                        <th style="width: 30%;">Store</th>     
-                        <th style="width: 5%;">Sequence</th>    
-                        <th style="width: 5%;"></th>                       
+                        <th style="width: 20%;">Product Name</th>
+                        <th style="width: 20%;">Parent Category</th>
+                        <th style="width: 20%;">Category</th>
+                        <th style="width: 20%;">Store</th>     
+                        <th style="width: 10%;">Sequence</th>    
+                        <th style="width: 10%;"></th>                       
                     </tr>
                 </thead>      
                 <tbody>
 
-                    @foreach ($searchresult as $data)
+                    @foreach ($searchresult as $data)                    
                         <tr class="text-center">
                              <form action="add_featuredproduct" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                             <td style="padding: 0">{{ $data->name }}</td>
+                            <td style="padding: 0">{{ $data->parentcategory }}</td>
                             <td style="padding: 0">{{ $data->category }}</td>
                             <td style="padding: 0">{{ $data->storeName }}</td>
                             <td style="padding: 0"> <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control"></td>
