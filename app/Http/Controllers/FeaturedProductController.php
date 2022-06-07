@@ -76,7 +76,7 @@ class FeaturedProductController extends Controller
         if ($req->selectCategory<>"") {
             $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
         }
-        
+        //echo $sql;
         $searchresult = DB::connection('mysql2')->select($sql);
         $product_name = $req->product_name;
         $store_name = $req->store_name;

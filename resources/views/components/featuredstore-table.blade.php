@@ -49,7 +49,7 @@
                     {{@csrf_field()}}   
                     <div class="input-group mb-3">
                         <select name="selectCategory" id="selectCategory" class="form-control">   
-                            <option>Select Parent Category</option>                         
+                            <option value="">Select Parent Category</option>                         
                             @foreach ($categorylist as $category)
                             <option value="{{$category->id}}" <?php if ($categoryselected==$category->id) echo "selected"; ?>>{{$category->name}} - {{$category->verticalCode}}</option>                            
                             @endforeach
