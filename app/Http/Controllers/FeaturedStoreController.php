@@ -66,7 +66,7 @@ class FeaturedStoreController extends Controller
         if ($req->selectCategory<>"") {
             $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
         }
-        echo $sql;
+        //echo $sql;
         $searchresult = DB::connection('mysql2')->select($sql);
         
         $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
