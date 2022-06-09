@@ -8,6 +8,9 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\PromotextController;
 use App\Http\Controllers\FeaturedStoreController;
 use App\Http\Controllers\FeaturedProductController;
+use App\Http\Controllers\FeaturedLocationController;
+use App\Http\Controllers\CityRegionController;
+use App\Http\Controllers\FeaturedCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -121,6 +124,27 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/edit_featuredproduct', [FeaturedProductController::class, "edit_featuredproduct"])->name('edit_featuredproduct');
     Route::post('/delete_featuredproduct', [FeaturedProductController::class, "delete_featuredproduct"])->name('delete_featuredproduct');
     Route::post('/post_featuredproduct', [FeaturedProductController::class, "post_editfeaturedproduct"])->name('post_editfeaturedproduct');
+
+    Route::get('/featuredlocation', [FeaturedLocationController::class, "index"])->name('featuredlocation');    
+    Route::post('/filter_location', [FeaturedLocationController::class, "filter_location"])->name('filter_location');
+    Route::post('/edit_featuredlocation', [FeaturedLocationController::class, "edit_featuredlocation"])->name('edit_featuredlocation');
+
+    Route::get('/cityregion', [CityRegionController::class, "index"])->name('cityregion');            
+    Route::post('/filterCity', [CityRegionController::class, "filterCity"])->name('filterCity');
+    Route::post('/searchCity', [CityRegionController::class, "searchCity"])->name('searchCity');
+    Route::post('/filter_cityregion', [CityRegionController::class, "filter_cityregion"])->name('filter_cityregion');
+    Route::post('/add_cityregion', [CityRegionController::class, "add_cityregion"])->name('add_cityregion');
+    Route::post('/delete_cityregion', [CityRegionController::class, "delete_cityregion"])->name('delete_cityregion');
+    
+
+    Route::get('/featuredcategory', [FeaturedCategoryController::class, "index"])->name('featuredcategory');   
+     
+    Route::post('/searchCityCategory', [FeaturedCategoryController::class, "searchCityCategory"])->name('searchCityCategory');        
+    Route::post('/filter_featuredcategory', [FeaturedCategoryController::class, "filter_featuredcategoryn"])->name('filter_featuredcategory');
+    Route::post('/add_featuredcategory', [FeaturedCategoryController::class, "add_featuredcategory"])->name('add_featuredcategory');
+    Route::post('/edit_featuredcategory', [FeaturedCategoryController::class, "edit_featuredcategory"])->name('edit_featuredcategory');
+    Route::post('/delete_featuredcategory', [FeaturedCategoryController::class, "delete_featuredcategory"])->name('delete_featuredcategory');    
+    
 });
 
 
