@@ -7,6 +7,10 @@ Featured location
 City Neighbour Region
 Featured Category
 
+##DB Changes:
+ALTER TABLE location_config ADD created_at DATETIME;
+ALTER TABLE location_config ADD updated_at DATETIME;
+
 
 Version 1.9.2
 ------------------------

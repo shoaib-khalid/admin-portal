@@ -123,7 +123,7 @@ class FeaturedCategoryController extends Controller
            
             DB::connection('mysql2')->update("UPDATE store_category SET displaySequence=".$request->sequence." WHERE id='".$request->id."'");
 
-            $datas = StoreCategory::select('*', 'displaySequence as sequence')
+            $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw('verticalCode IS NOT NULL')
                 ->orderBy('verticalCode', 'ASC')
                 ->orderBy('displaySequence', 'ASC')
