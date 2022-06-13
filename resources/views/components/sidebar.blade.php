@@ -102,14 +102,19 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('featuredproduct') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('featuredproduct') }}"><i class="fas fa-bullhorn"></i><span>Featured Product</span></a>
             </li>
+             <li class="{{ Request::routeIs('featuredcategory') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('featuredcategory') }}"><i class="fas fa-bullhorn"></i><span>Featured Category</span></a>
+            </li>
             <li class="{{ Request::routeIs('featuredlocation') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('featuredlocation') }}"><i class="fas fa-bullhorn"></i><span>Featured Location</span></a>
             </li>
+
             <li class="{{ Request::routeIs('cityregion') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('cityregion') }}"><i class="fas fa-bullhorn"></i><span>City Region</span></a>
             </li>
-            <li class="{{ Request::routeIs('featuredcategory') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('featuredcategory') }}"><i class="fas fa-bullhorn"></i><span>Featured Category</span></a>
+           
+             <li class="{{ Request::routeIs('marketbanner') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('marketbanner') }}"><i class="fas fa-bullhorn"></i><span>Marketplace Banner</span></a>
             </li>
             
         </ul>

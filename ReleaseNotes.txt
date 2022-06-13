@@ -1,3 +1,15 @@
+Version 1.9.4
+------------------------
+Date:13-June-2022
+
+New menu:
+Marketplace Banner
+
+New env properties:
+MARKETPLACE_BANNER_PATH=/home/docker/Software/assets/product-assets
+MARKETPLACE_BANNER_BASEURL=https://symplified.it/store-assets
+
+
 Version 1.9.3
 ------------------------
 Date:9-June-2022

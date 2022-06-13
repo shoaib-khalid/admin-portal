@@ -11,6 +11,7 @@ use App\Http\Controllers\FeaturedProductController;
 use App\Http\Controllers\FeaturedLocationController;
 use App\Http\Controllers\CityRegionController;
 use App\Http\Controllers\FeaturedCategoryController;
+use App\Http\Controllers\MarketBannerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -143,8 +144,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_featuredcategory', [FeaturedCategoryController::class, "filter_featuredcategoryn"])->name('filter_featuredcategory');
     Route::post('/add_featuredcategory', [FeaturedCategoryController::class, "add_featuredcategory"])->name('add_featuredcategory');
     Route::post('/edit_featuredcategory', [FeaturedCategoryController::class, "edit_featuredcategory"])->name('edit_featuredcategory');
-    Route::post('/delete_featuredcategory', [FeaturedCategoryController::class, "delete_featuredcategory"])->name('delete_featuredcategory');    
-    
+    Route::post('/delete_featuredcategory', [FeaturedCategoryController::class, "delete_featuredcategory"])->name('delete_featuredcategory');  
+
+    Route::get('/marketbanner', [MarketBannerController::class, "index"])->name('marketbanner');    
+    Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');  
+    Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner');  
 });
 
 
