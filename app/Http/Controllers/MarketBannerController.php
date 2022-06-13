@@ -42,9 +42,10 @@ class MarketBannerController extends Controller
         //Move Uploaded File
         $newfilename = date("YmdHis");
         $destinationPath = env('MARKETPLACE_BANNER_PATH', 'refund');
+        echo " path:".$destinationPath;
         $file->move($destinationPath,$newfilename);
         $url = env('MARKETPLACE_BANNER_BASEURL', 'refund')."/".$newfilename;
-
+        echo " url:".$url;
         $banner = new MarketBanner();
         $banner->regionCountryId = $request->selectCountry;
         $banner->bannerUrl = $url;
