@@ -35,4 +35,9 @@ return [
         'token' => env('TOKEN_REPORT_SERVICE'),
     ],
 
+    'banner_svc' => [
+        'url' => env('MARKETPLACE_BANNER_BASEURL'),
+        'path' => env('MARKETPLACE_BANNER_PATH'),
+    ],
+
 ];

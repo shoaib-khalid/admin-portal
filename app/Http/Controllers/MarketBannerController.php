@@ -19,12 +19,12 @@ use App\Mail\EmailContent;
 class MarketBannerController extends Controller
 {
 
-    protected $url;
-    protected $token;
+    protected $baseurl;
+    protected $basepath;
 
     function __construct() {
-            $this->url = config('services.report_svc.url');
-            $this->token = config('services.report_svc.token');
+            $this->baseurl = config('services.banner_svc.url');
+            $this->basepath = config('services.banner_svc.path');
     }
 
 
@@ -41,10 +41,10 @@ class MarketBannerController extends Controller
         $file = $request->file('selectFile');
         //Move Uploaded File
         $newfilename = date("YmdHis");
-        $destinationPath = env('MARKETPLACE_BANNER_PATH', 'refund');
+        $destinationPath = $this->basepath;
         echo " path:".$destinationPath;
         $file->move($destinationPath,$newfilename);
-        $url = env('MARKETPLACE_BANNER_BASEURL', 'refund')."/".$newfilename;
+        $url = $this->baseurl."/".$newfilename;
         echo " url:".$url;
         $banner = new MarketBanner();
         $banner->regionCountryId = $request->selectCountry;
