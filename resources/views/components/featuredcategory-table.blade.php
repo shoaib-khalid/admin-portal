@@ -27,7 +27,7 @@
                   $.each(resultData,function(index,row){
                     //console.log(row.stateId+"->"+row.cityName);
 
-                    bodyData+='<form action="edit_featuredcategory" method="post" enctype="multipart/form-data" accept-charset="UTF-8">{{@csrf_field()}}';
+                    
                     bodyData+='<tr class="text-center">';
                     bodyData+='<td>'+row.verticalCode+'</td>';
                    
@@ -42,20 +42,20 @@
                         bodyData+='<td>'+row.cityName+'</td>';    
                     }
                     
-                    bodyData+='<td>'+row.categoryName+'</td>';                   
-                        bodyData+='<td><input type="hidden" name="id" value="'+row.id+'">';
-                        bodyData+='<input type="text" name="sequence" value="'+row.sequence+'" class="form-control" >';
-                        bodyData+='</td>';
-                        bodyData+='<td><div class="input-group-append"><button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i></button></div></td>';                        
-                        bodyData+='<td></td>';                        
-                    bodyData+='</tr>';
-                    bodyData+='</form>';
+                    bodyData+='<td>'+row.categoryName+'</td>';
+                    bodyData+='<td><form action="edit_featuredcategory" method="post" enctype="multipart/form-data" accept-charset="UTF-8">{{@csrf_field()}}';              
+                    bodyData+='<input type="hidden" name="id" value="'+row.id+'">';
+                    bodyData+='<div class="input-group mb-3"><input type="text" name="sequence" value="'+row.sequence+'" class="form-control" >';
+                    bodyData+='<div class="input-group-append"><button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i></button></div></div>';    
+                    bodyData+='</form></td>';                        
+                    bodyData+='<td></td>';                                      
+                    bodyData+='</tr>';                                        
                   })
                   $("#areaList").html(bodyData);
                }
             });
          }
-      </script>
+</script>
 
 <script>
          function searchCityCategory() {
