@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Featured Category</h1>        
+        <h1>Category Sequence</h1>        
     </x-slot>
     <div>
-        <x-featuredcategory-table :datas="$datas" :citySelected="$citySelected" :cityList="$cityList" :stateSelected="$stateSelected" :stateList="$stateList" :categoryList="$categoryList" :categorySelected="$categorySelected"></x-featuredcategory-table>
+        <x-featuredcategory-table :datas="$datas" :citySelected="$citySelected" :cityList="$cityList" :stateSelected="$stateSelected" :stateList="$stateList" :categoryList="$categoryList" :categorySelected="$categorySelected" :verticalList="$verticalList" :verticalSelected="$verticalSelected"></x-featuredcategory-table>
     </div>
 </x-app-layout>
 <script>

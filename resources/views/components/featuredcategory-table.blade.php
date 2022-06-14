@@ -4,7 +4,59 @@
 @endphp
 
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-      
+
+<script>
+         function searchByVertical() {
+           var vertical = document.getElementById('selectVertical').value;
+            $.ajax({
+               type:'POST',
+               url:'/searchByVertical',
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type' : 'application/x-www-form-urlencoded'
+                },
+               data:{
+                    vertical : vertical
+                },
+               success:function(data) {
+                  $("#msg").html(data.cityList);
+                  //console.log(data);
+                  var resultData = data.cityList;
+                  var bodyData = '';
+                  var i=1;
+                  $.each(resultData,function(index,row){
+                    //console.log(row.stateId+"->"+row.cityName);
+
+                    bodyData+='<form action="edit_featuredcategory" method="post" enctype="multipart/form-data" accept-charset="UTF-8">{{@csrf_field()}}';
+                    bodyData+='<tr class="text-center">';
+                    bodyData+='<td>'+row.verticalCode+'</td>';
+                   
+                    if (row.stateId==undefined) {
+                        bodyData+='<td></td>';
+                    } else {
+                        bodyData+='<td>'+row.stateId+'</td>';    
+                    }
+                    if (row.cityName==undefined) {
+                        bodyData+='<td></td>';
+                    } else {
+                        bodyData+='<td>'+row.cityName+'</td>';    
+                    }
+                    
+                    bodyData+='<td>'+row.categoryName+'</td>';                   
+                        bodyData+='<td><input type="hidden" name="id" value="'+row.id+'">';
+                        bodyData+='<input type="text" name="sequence" value="'+row.sequence+'" class="form-control" >';
+                        bodyData+='</td>';
+                        bodyData+='<td><div class="input-group-append"><button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i></button></div></td>';                        
+                        bodyData+='<td></td>';                        
+                    bodyData+='</tr>';
+                    bodyData+='</form>';
+                  })
+                  $("#areaList").html(bodyData);
+               }
+            });
+         }
+      </script>
+
 <script>
          function searchCityCategory() {
            var city = document.getElementById('selectCity').value;
@@ -81,7 +133,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <div class="card section">
     <div class="card-header">
-        <h4>Featured Category</h4>
+        <h4>Category Sequence</h4>
     </div>
     <div class="card-body">
 
@@ -92,6 +144,15 @@
                 
                 <form action="add_featuredcategory" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}} 
+
+                    <div class="input-group mb-3">
+                        <select name="selectVertical" id="selectVertical" class="form-control" onchange="searchByVertical()">   
+                            <option value="">Select Vertical</option>                         
+                            @foreach ($verticalList as $vertical)
+                            <option value="{{$vertical->code}}" <?php if ($verticalSelected==$vertical->code) echo "selected"; ?>>{{$vertical->code}}</option>                            
+                            @endforeach
+                        </select>                                 
+                    </div>
 
                      <div class="input-group mb-3">
                         <select name="selectState" id="selectState" class="form-control" onchange="filterCity()">   

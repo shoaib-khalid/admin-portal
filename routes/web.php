@@ -139,7 +139,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     
 
     Route::get('/featuredcategory', [FeaturedCategoryController::class, "index"])->name('featuredcategory');   
-     
+    
+    Route::post('/searchByVertical', [FeaturedCategoryController::class, "searchByVertical"])->name('searchByVertical');        
     Route::post('/searchCityCategory', [FeaturedCategoryController::class, "searchCityCategory"])->name('searchCityCategory');        
     Route::post('/filter_featuredcategory', [FeaturedCategoryController::class, "filter_featuredcategoryn"])->name('filter_featuredcategory');
     Route::post('/add_featuredcategory', [FeaturedCategoryController::class, "add_featuredcategory"])->name('add_featuredcategory');

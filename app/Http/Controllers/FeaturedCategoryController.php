@@ -39,7 +39,8 @@ class FeaturedCategoryController extends Controller
         $citySelected = "";
         $stateSelected = "";
         $categorySelected = "";
-        
+        $verticalSelected = "";
+
         $sql="SELECT id, name, regionStateId FROM region_city ORDER BY regionStateId, name";
         $cityList = DB::connection('mysql2')->select($sql);
 
@@ -48,11 +49,21 @@ class FeaturedCategoryController extends Controller
 
         $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL ORDER BY verticalCode, name";
         $categoryList = DB::connection('mysql2')->select($sql);
-        //dd($categoryList);
+        
+        $sql="SELECT * FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
 
-        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected'));
+        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
     }
 
+    public function searchByVertical(Request $request) {    
+      $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
+                ->whereRaw("verticalCode = '".$request->vertical."'")
+                ->orderBy('verticalCode', 'ASC')
+                ->orderBy('displaySequence', 'ASC')
+                ->get(); 
+      return response()->json(array('cityList'=> $datas), 200);
+    }
 
     public function searchCityCategory(Request $request) {    
       $datas = FeaturedCategory::select('location_category_config.*','city.name AS cityName', 
@@ -66,8 +77,7 @@ class FeaturedCategoryController extends Controller
       return response()->json(array('cityList'=> $datas), 200);
     }
   
-    public function filter_cityregion(Request $req){
-        
+    public function filter_cityregion(Request $req){        
         $datas = CityRegion::select('location_area.*','usercity.name AS userCityName', 
                     'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
                     ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
@@ -114,7 +124,11 @@ class FeaturedCategoryController extends Controller
                     ->orderBy('location_category_config.sequence', 'ASC')
                     ->get();
 
-        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected'));
+        $sql="SELECT * FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+        $verticalSelected = "";
+
+        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
 
     }
 
@@ -146,7 +160,11 @@ class FeaturedCategoryController extends Controller
             $categoryList = DB::connection('mysql2')->select($sql);
             $categorySelected="";
 
-            return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected'));
+            $sql="SELECT * FROM region_vertical";
+            $verticalList = DB::connection('mysql2')->select($sql);
+            $verticalSelected = "";
+
+            return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
 
         } else {
 
@@ -174,7 +192,11 @@ class FeaturedCategoryController extends Controller
                     ->get();
             $citySelected = $request->cityId;
 
-            return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected'));
+            $sql="SELECT * FROM region_vertical";
+            $verticalList = DB::connection('mysql2')->select($sql);
+            $verticalSelected = "";
+
+            return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
         }
         
 
@@ -206,7 +228,11 @@ class FeaturedCategoryController extends Controller
         $categoryList = DB::connection('mysql2')->select($sql);
         $categorySelected="";
 
-        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected'));
+        $sql="SELECT * FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+        $verticalSelected = "";
+        
+        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
 
     }
 
