@@ -120,9 +120,13 @@ class FeaturedCategoryController extends Controller
 
     public function edit_featuredcategory(Request $request){
         if ($request->cityName==null) {            
-           
-            DB::connection('mysql2')->update("UPDATE store_category SET displaySequence=".$request->sequence." WHERE id='".$request->id."'");
-
+            
+            if ($request->sequence=="") {
+                DB::connection('mysql2')->update("UPDATE store_category SET displaySequence=NULL WHERE id='".$request->id."'");
+            } else {
+                DB::connection('mysql2')->update("UPDATE store_category SET displaySequence=".$request->sequence." WHERE id='".$request->id."'");
+            }
+            
             $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw('verticalCode IS NOT NULL')
                 ->orderBy('verticalCode', 'ASC')
