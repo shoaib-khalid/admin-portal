@@ -686,7 +686,7 @@ class ActivityController extends Controller
         }
 
         //query group by sessionId
-        $sql="SELECT ".$groupList." FROM customer_activities WHERE created BETWEEN '".$start_date."' AND '".$end_date."'";
+        $sql="SELECT ".$groupList." FROM customer_activities WHERE created BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
         //dd($datas);
         
         if ($req->storename_chosen<>"") {
