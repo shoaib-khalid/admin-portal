@@ -59,63 +59,6 @@
   });
 
 
-  // Add event listener for opening and closing details
-  $('#table-4 tbody').on('click', '.view_store', function () {
-
-    var clientId = $(this).attr("clientId");
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
-
-    // alert('clientId: ' + clientId)
-
-    // return false
-
-    var newObj = datas.find(x => x.id === clientId)
-
-    // alert(JSON.stringify(newObj))
-
-    // console.log('obj', newObj)
-
-    // return false;
-
-    if (row.child.isShown()) {
-      // This row is already open - close it
-      row.child.hide();
-      tr.removeClass('shown');
-    }
-      else
-    {
-      // Open this row
-      row.child(formatTable(row.data(), newObj)).show();
-      tr.addClass('shown');
-    }
-  });
-
-
-   $('#RefundDetailsModal').on('show.bs.modal', function(e) {
-        var created = $(e.relatedTarget).data('created');      
-        var refundId = $(e.relatedTarget).data('refundid');      
-        var invoiceId = $(e.relatedTarget).data('invoiceid'); 
-        var storeName = $(e.relatedTarget).data('storename'); 
-        var customerName = $(e.relatedTarget).data('customername'); 
-        var refundType = $(e.relatedTarget).data('refundtype'); 
-        var refundAmount = $(e.relatedTarget).data('refundamount'); 
-        var paymentChannel = $(e.relatedTarget).data('paymentchannel'); 
-        var refundStatus = $(e.relatedTarget).data('refundstatus'); 
-        var remarks = $(e.relatedTarget).data('remarks'); 
-        console.log("storeName:"+storeName);
-        $('#created').val(created);  
-        $('#refund_id').val(refundId);
-        $('#invoice_id').val(invoiceId);
-        $('#storename').val(storeName);
-        $('#customer_name').val(customerName);
-        $('#refund_type').val(refundType);
-        $('#refund_amount').val(refundAmount);
-        $('#payment_channel').val(paymentChannel);
-        $('#refund_status').val(refundStatus);
-        $('#remarks').val(remarks);
-   });
-
 
     $('.daterange-btn4').daterangepicker({
             locale: {format: 'MMMM D, YYYY'},
