@@ -21,7 +21,7 @@
         // console.log('datas: ', datas)
 
         
-  
+  /*
   var table = $('#table-4').DataTable({
     // 'dom' : 't',
     // "bPaginate": true,
@@ -56,7 +56,7 @@
         'width': '100px',
       },
     ]
-  });
+  });*/
 
 
 
