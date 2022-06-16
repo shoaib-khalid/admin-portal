@@ -56,6 +56,7 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
 
             $newArray[] = $cur_item;
         }
+        //dd($newArray);
 
         // Array Format
         // return new Collection([

@@ -2,6 +2,12 @@
     // var_dump($datas);
     // dd($datas);
 @endphp
+<script type="text/javascript">
+    function exportToExcel() {
+        document.getElementById("exportExcel").value=1;
+        document.getElementById("searchForm").submit();
+    }
+</script>
 <div class="card section">
     <div class="card-header">
         <h4>Customer Summary</h4>
@@ -13,7 +19,7 @@
         <div class="row">
             <div class="col-12">
                 
-                <form action="filter_useractivitysummary" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="filter_useractivitysummary" method="post" enctype="multipart/form-data" accept-charset='UTF-8' id="searchForm">
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-2">Date</div>
@@ -66,10 +72,15 @@
                         <div class="col-2">
                         <input type="checkbox" name="grouppage" id="grouppage" value="grouppage" <?php if ($grouppage<>"") echo "checked"; ?>>
                         Page
+                        </div>                      
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-4"><button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
-                        <div class="col-2">
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                        </div>
+                        <input type="hidden" name="exportExcel" id="exportExcel" value="0">
+                        <div class="col-4"><button type="button" class="btn btn-success icon-left btn-icon float-right" onclick="exportToExcel()"><i class="fas fa-file"></i> <span>Export Excel</span>
+                            </button>
+                        </div>                  
                     </div>
                 </form>
             </div>
@@ -79,18 +90,6 @@
             
         </div>
 
-        <div class="row">
-            <div class="col">
-                <form action="export_useractivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}}
-                        
-                            <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
-                            <button type="submit" class="btn btn-success icon-left btn-icon float-right" style="margin-bottom: 1rem!important;"><i class="fas fa-file"></i> <span>Export Excel</span>
-                            </button>
-                        
-                    </form>
-            </div>
-        </div>    
 
         <div class="table-responsive">
 

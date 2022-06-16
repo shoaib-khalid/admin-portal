@@ -21,6 +21,7 @@ use App\Exports\SettlementsExport;
 use App\Exports\MerchantExport;
 use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
+use App\Exports\UserActivitySummaryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -636,6 +637,8 @@ class ActivityController extends Controller
 
     public function filter_useractivitysummary(Request $req){
 
+       // echo "excel:".$req->exportExcel;
+
         $date = new DateTime('7 days ago');
 
         $data = $req->input();
@@ -767,9 +770,13 @@ class ActivityController extends Controller
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
 
-        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage'));
-
-    }
+        if ($req->exportExcel==1) {
+             return Excel::download(new UserActivitySummaryExport($datas, $req), 'CustomerSummary.xlsx');
+         } else {
+            return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage'));    
+         }
+        
+    }    
 
     public function userabandoncartsummary(){
 
