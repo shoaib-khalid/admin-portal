@@ -7,6 +7,10 @@
         document.getElementById("exportExcel").value=1;
         document.getElementById("searchForm").submit();
     }
+    function viewReport() {
+        document.getElementById("exportExcel").value=0;
+        document.getElementById("searchForm").submit();
+    }
 </script>
 <div class="card section">
     <div class="card-header">
@@ -75,7 +79,7 @@
                         </div>                      
                     </div>
                     <div class="input-group mb-3">
-                        <div class="col-4"><button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
                         <input type="hidden" name="exportExcel" id="exportExcel" value="0">
                         <div class="col-4"><button type="button" class="btn btn-success icon-left btn-icon float-right" onclick="exportToExcel()"><i class="fas fa-file"></i> <span>Export Excel</span>
@@ -111,7 +115,8 @@
                         <?php if ($grouppage<>"") { ?>
                         <th>Page</th>
                         <?php } ?>
-                        <th>Total Hits</th>    
+                        <th>Total Hits</th>  
+                        <th>Total Unique User</th>    
                     </tr>
                 </thead>      
                 <tbody>                    
@@ -133,6 +138,7 @@
                             <td>{{ $data->pageVisited }}</td>
                             <?php } ?>
                             <td>{{ $data->total }}</td>                                               
+                            <td>{{ $data->totalUnique }}</td>                                               
                         </tr>
                     @endforeach
 

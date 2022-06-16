@@ -650,7 +650,7 @@ class ActivityController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $groupList="COUNT(*) AS total"; 
+        $groupList="COUNT(*) AS total, COUNT(DISTINCT(sessionId)) AS totalUnique"; 
         $groupBy=""; 
         if ($req->groupstore<>"") {
             $groupList .= " , storeId";

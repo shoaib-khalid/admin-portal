@@ -50,6 +50,7 @@ class UserActivitySummaryExport implements FromCollection, ShouldAutoSize, WithH
             }
 
             array_push( $cur_item,$data->total);
+            array_push( $cur_item,$data->totalUnique);
           
             $newArray[] = $cur_item;
 
@@ -87,6 +88,7 @@ class UserActivitySummaryExport implements FromCollection, ShouldAutoSize, WithH
             array_push( $headers,  'Page');
         }
         array_push( $headers, 'Total Hits');
+        array_push( $headers, 'Total Unique User');
         return $headers;
     }
 }
