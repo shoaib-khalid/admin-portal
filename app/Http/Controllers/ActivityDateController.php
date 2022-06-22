@@ -78,7 +78,7 @@ class ActivityDateController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         $groupList="SUM(totalCount) AS total, SUM(totalUniqueUser) AS totalUnique, dt"; 
-        $groupBy=""; 
+        $groupBy="dt "; 
         if ($req->groupstore<>"") {
             $groupList .= " , storeId";
             if ($groupBy=="")
@@ -141,7 +141,7 @@ class ActivityDateController extends Controller
             $sql .= " AND browser = ".$req->browser_chosen;            
         }
 
-        $sql .= " GROUP BY dt, ".$groupBy." ORDER BY dt";
+        $sql .= " GROUP BY ".$groupBy." ORDER BY dt";
        // dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
 
