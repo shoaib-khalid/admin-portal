@@ -106,8 +106,12 @@
                         <?php if ($grouppage<>"") { ?>
                         <th>Page</th>
                         <?php } ?>
-                        <th>Total Hits</th>  
+                        <th>Total Hits</th> 
+                        <?php if ($groupstore<>"") { ?> 
+                        <th>Total Unique User By Store</th>    
+                        <?php } else { ?>
                         <th>Total Unique User</th>    
+                        <?php } ?>   
                     </tr>
                 </thead>      
                 <tbody>                    
@@ -130,7 +134,7 @@
                             <td>{{ $data->page }}</td>
                             <?php } ?>
                             <td>{{ $data->total }}</td>                                               
-                            <td>{{ $data->totalUnique }}</td>                                               
+                            <td>{{ $data->totalUser }}</td>                                               
                         </tr>
                     @endforeach
 

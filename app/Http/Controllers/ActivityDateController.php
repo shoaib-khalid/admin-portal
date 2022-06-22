@@ -118,7 +118,8 @@ class ActivityDateController extends Controller
         //query group by sessionId
         $sql="SELECT ".$groupList." FROM customer_activities_summary WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
         //dd($datas);
-        
+
+
         if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
             $search_storeId_list = array();  
@@ -144,6 +145,37 @@ class ActivityDateController extends Controller
         $sql .= " GROUP BY ".$groupBy." ORDER BY dt";
        // dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
+
+        if ($req->groupstore=="" && $req->groupbrowser=="" && $req->groupdevice=="" && $req->groupos=="" && $req->grouppage=="") {
+            $sql2="SELECT SUM(totalUnique), dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59' GROUP BY dt";
+        } else {
+            $sql2="SELECT totalUnique, storeId, dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
+        }
+        
+        $newArray2 = array();   
+        foreach ($datas as $data) { 
+            if (property_exists($data, 'storeId')) {
+                 $sql2="SELECT totalUnique, storeId, dt FROM total_unique_user WHERE dt='".$data->dt."' AND storeId='".$data->storeId."'";
+                 $datas2 = DB::connection('mysql3')->select($sql2);
+                 if (count($datas2)>0) {
+                    $data->totalUser =  $datas2[0]->totalUnique;      
+                 }                 
+            } else {
+                $sql2="SELECT SUM(totalUnique) AS totalUnique FROM total_unique_user WHERE dt='".$data->dt."'";
+                 $datas2 = DB::connection('mysql3')->select($sql2);
+                 if (count($datas2)>0) {
+                    $data->totalUser =  $datas2[0]->totalUnique;      
+                 } 
+            }
+            
+            $object = $data;
+
+            array_push( 
+                $newArray2,
+                $object
+            );
+        }
+        $datas = $newArray2;
 
         if ($req->groupstore<>"") {
             $storeList=array();
