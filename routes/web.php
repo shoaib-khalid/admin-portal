@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RefundController;
 use App\Http\Controllers\SettlementController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ActivityDateController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\PromotextController;
 use App\Http\Controllers\FeaturedStoreController;
@@ -88,6 +89,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
     Route::post('/filter_useractivitysummary', [ActivityController::class, "filter_useractivitysummary"])->name('filter_useractivitysummary');
     Route::post('/export_useractivitysummary', [ActivityController::class, "export_useractivitysummary"])->name('export_useractivitysummary');
+
+     Route::get('/useractivitysummarydate', [ActivityDateController::class, "useractivitysummarydate"])->name('useractivitysummarydate');
+    Route::post('/filter_useractivitysummarydate', [ActivityDateController::class, "filter_useractivitysummarydate"])->name('filter_useractivitysummarydate');
+    Route::post('/export_useractivitysummarydate', [ActivityDateController::class, "export_useractivitysummarydate"])->name('export_useractivitysummarydate');
 
     Route::get('/userabandoncartsummary', [ActivityController::class, "userabandoncartsummary"])->name('userabandoncartsummary');
     Route::post('/filter_userabandoncartsummary', [ActivityController::class, "filter_userabandoncartsummary"])->name('filter_userabandoncartsummary');

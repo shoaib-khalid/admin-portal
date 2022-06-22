@@ -1,3 +1,10 @@
+Version 1.9.6
+------------------------
+Date:22-June-2022
+
+New menu : user activity summary by date
+
+
 Version 1.9.5
 ------------------------
 Date:16-June-2022

@@ -78,6 +78,9 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('useractivitysummary') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-calculator"></i><span>Customer Summary</span></a>
             </li>
+            <li class="{{ Request::routeIs('useractivitysummarydate') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('useractivitysummarydate') }}"><i class="fas fa-calculator"></i><span>Customer Summary By Date</span></a>
+            </li>
             <li class="{{ Request::routeIs('userabandoncartsummary') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('userabandoncartsummary') }}"><i class="fas fa-cart-arrow-down"></i><span>Abandon Cart</span></a>
             </li>
