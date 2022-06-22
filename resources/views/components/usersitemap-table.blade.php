@@ -71,6 +71,7 @@
                 <thead>
                     <tr class="text-center">                        
                         <th>Session ID</th>
+                        <th>Customer</th>
                         <th>Store</th>
                         <th>Start Timestamp</th>                        
                         <th>End Timestamp</th>
@@ -88,6 +89,7 @@
                     @foreach ($datas as $data)
                         <tr class="text-center">                            
                             <td>{{ $data['sessionId'] }}</td>
+                            <td>{{ $data['customerName'] }}</td>
                             <td>{{ $data['storeName'] }}</td>
                             <td>{{ \Carbon\Carbon::parse($data['startTimestamp'])->format('d/m/Y H:i:s') }}</td>
                             <td>{{ \Carbon\Carbon::parse($data['endTimestamp'])->format('d/m/Y H:i:s') }}</td>                            
