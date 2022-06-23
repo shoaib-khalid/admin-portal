@@ -74,7 +74,10 @@
       null,
       null,
       null,
-      null,     
+      null, 
+      null,
+      null,
+      null    
     ],
     "aaSorting": [],
     'columnDefs': [

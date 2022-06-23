@@ -879,6 +879,17 @@ class ActivityController extends Controller
                 } else {
                     $customerName = $customerList[$data['customerId']];
                 }
+
+                 //find delivery details
+                $deliveryAddress = "";
+                $deliveryFee = "";
+                $sql="SELECT deliveryAddress, amount FROM delivery_quotation WHERE cartId='".$data['id']."' ORDER BY createdDate DESC LIMIT 1";
+                $rsdelivery = DB::connection('mysql2')->select($sql);
+                if (count($rsdelivery)>0) {
+                    $deliveryAddress = $rsdelivery[0]->deliveryAddress;
+                    $deliveryFee = $rsdelivery[0]->amount;
+                }
+                
                  
                  //check if any item in cart
                 $sql="SELECT productId, quantity, name FROM cart_item A INNER JOIN product B ON A.productId=B.id WHERE cartId='".$data['id']."'";
@@ -888,6 +899,7 @@ class ActivityController extends Controller
                 } else {
                     $itemAdded="NO";
                 }
+
 
                 $item_array = array();
                 if (count($rsitem) > 0) {
@@ -907,15 +919,6 @@ class ActivityController extends Controller
                     }
                 }
 
-                 //find delivery details
-                $deliveryAddress = "";
-                $deliveryFee = "";
-                $sql="SELECT deliveryAddress, amount FROM delivery_quotation WHERE cartId='".$data['id']."' ORDER BY createdDate DESC LIMIT 1";
-                $rsdelivery = DB::connection('mysql2')->select($sql);
-                if (count($rsdelivery)>0) {
-                    $deliveryAddress = $rsdelivery[0]->deliveryAddress;
-                    $deliveryFee = $rsdelivery[0]->amount;
-                }
                 
                 $object = [
                     'id' => $data['id'],
@@ -944,7 +947,7 @@ class ActivityController extends Controller
            
 
             $datas = $newArray;
-
+            //dd($datas);
             $datechosen = $req->date_chosen4;   
             $storename = $req->storename;;   
             $customername = '';
