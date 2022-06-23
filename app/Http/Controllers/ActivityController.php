@@ -913,8 +913,8 @@ class ActivityController extends Controller
                 $sql="SELECT deliveryAddress, amount FROM delivery_quotation WHERE cartId='".$data['id']."' ORDER BY createdDate DESC LIMIT 1";
                 $rsdelivery = DB::connection('mysql2')->select($sql);
                 if (count($rsdelivery)>0) {
-                    $deliveryAddress = $rsdelivery[0]['deliveryAddress'];
-                    $deliveryFee = $rsdelivery[0]['amount'];
+                    $deliveryAddress = $rsdelivery[0]->deliveryAddress;
+                    $deliveryFee = $rsdelivery[0]->amount;
                 }
                 
                 $object = [
