@@ -1,7 +1,14 @@
+Version 1.9.7
+------------------------
+Date:23-June-2022
+
+Bug fix for abandon cart
+
+
 Version 1.9.6
 ------------------------
 Date:22-June-2022
-
+ 
 New menu : user activity summary by date
 
 

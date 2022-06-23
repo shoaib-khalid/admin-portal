@@ -60,8 +60,11 @@
                         <th>Customer ID</th>
                         <th>Store</th>
                         <th>Created</th> 
-                        <th>Updated</th>                               
+                        <th>Updated</th>
+                        <th>Stage</th>               
                         <th>Item Added</th>                        
+                        <th>Delivery Address</th>
+                        <th>Delivery Fee</th>
                         <th></th>
                     </tr>
                 </thead>      
@@ -73,7 +76,10 @@
                             <td>{{ $data['storeName'] }}</td>
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>  
                             <td>{{ \Carbon\Carbon::parse($data['updated'])->format('d/m/Y H:i:s') }}</td>                            
+                            <td>{{ $data['stage'] }}</td>
                             <td>{{ $data['itemAdded'] }}</td>
+                            <td>{{ $data['deliveryAddress'] }}</td>
+                            <td>{{ $data['deliveryFee'] }}</td>
                             <td>
                                 <a href="#" class="btn btn-primary view_details" rowId="{{ $data['id'] }}">
                                     <i class="far fa-check-circle"></i>

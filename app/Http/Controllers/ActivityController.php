@@ -839,7 +839,7 @@ class ActivityController extends Controller
             $end_date = date("Y-m-d", strtotime($end_date));
 
             //query group by sessionId
-            $datas = Cart::select('id','customerId','storeId','created','updated','isOpen')
+            $datas = Cart::select('id','customerId','storeId','created','updated','isOpen', 'stage')
                             ->whereBetween('created', [$start_date, $end_date." 23:59:59"])  
                             ->where('isOpen',1)
                             ->where('storeId', $req->storeId)
@@ -906,15 +906,28 @@ class ActivityController extends Controller
                        
                     }
                 }
+
+                 //find delivery details
+                $deliveryAddress = "";
+                $deliveryFee = "";
+                $sql="SELECT deliveryAddress, amount FROM delivery_quotation WHERE cartId='".$data['id']."' ORDER BY createdDate DESC LIMIT 1";
+                $rsdelivery = DB::connection('mysql2')->select($sql);
+                if (count($rsdelivery)>0) {
+                    $deliveryAddress = $rsdelivery[0]['deliveryAddress'];
+                    $deliveryFee = $rsdelivery[0]['amount'];
+                }
                 
                 $object = [
                     'id' => $data['id'],
                     'created' => $data['created'],
                     'updated' => $data['updated'],
                     'isOpen' => $data['isOpen'],
+                    'stage' => $data['stage'],
                     'storeName' => $storeName,
                     'customerName' => $customerName,
                     'itemAdded' => $itemAdded,
+                    'deliveryAddress' => $deliveryAddress,
+                    'deliveryFee' => $deliveryFee,
                     'item_list' => $item_array
                 ];
 
