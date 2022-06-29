@@ -1,16 +1,18 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Available Voucher</h1>        
+        <h1>Redeemed Voucher</h1>        
     </x-slot>
     <div>
         <table id="table-4" class="table table-striped">        
                 <thead>
                     <tr class="text-center">
                         <th>Created</th>
+                        <th>Order Id</th> 
                         <th>Customer Name</th>                        
+                        <th>Phone Number</th>                        
+                        <th>Email</th>                        
                         <th>Registered</th>                        
-                        <th>Channel</th>                        
-                        <th></th> 
+                        <th>Channel</th>                                                
                     </tr>
                 </thead>      
                 <tbody>
@@ -18,6 +20,7 @@
                     @foreach ($userList as $data)
                         <tr class="text-center">
                             <td>{{ \Carbon\Carbon::parse($data->created)->format('d/m/Y H:i:s') }}</td>
+                            <td>{{ $data->orderId }}</td>  
                             <td>{{ $data->name }}</td>  
                             <td>{{ $data->phoneNumber }}</td>  
                             <td>{{ $data->email }}</td>  

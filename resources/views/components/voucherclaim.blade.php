@@ -1,16 +1,17 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Available Voucher</h1>        
+        <h1>Claimed Voucher</h1>        
     </x-slot>
     <div>
         <table id="table-4" class="table table-striped">        
                 <thead>
                     <tr class="text-center">
                         <th>Created</th>
-                        <th>Customer Name</th>                        
+                        <th>Customer Name</th>   
+                        <th>Phone Number</th>                        
+                        <th>Email</th>                           
                         <th>Registered</th>                        
                         <th>Channel</th>                        
-                        <th></th> 
                     </tr>
                 </thead>      
                 <tbody>
