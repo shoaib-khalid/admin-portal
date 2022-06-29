@@ -43,7 +43,7 @@ class VoucherController extends Controller
     }
 
     public function voucherclaim($voucherId){
-        $sql="SELECT A.*, B.name, B.isActivated, B.channel
+        $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email
              FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id WHERE 
             voucherId='".$voucherId."' AND isUsed=0";
         $userList = DB::connection('mysql2')->select($sql);        
@@ -51,7 +51,7 @@ class VoucherController extends Controller
     }
 
     public function voucherredeem($voucherId){
-        $sql="SELECT A.*, B.name, B.isActivated, B.channel
+        $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email
              FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id WHERE 
             voucherId='".$voucherId."' AND isUsed=1";
         $userList = DB::connection('mysql2')->select($sql);

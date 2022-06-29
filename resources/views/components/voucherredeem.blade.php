@@ -19,6 +19,8 @@
                         <tr class="text-center">
                             <td>{{ \Carbon\Carbon::parse($data->created)->format('d/m/Y H:i:s') }}</td>
                             <td>{{ $data->name }}</td>  
+                            <td>{{ $data->phoneNumber }}</td>  
+                            <td>{{ $data->email }}</td>  
                             <td><?php if ($data->isActivated==1) echo "Yes"; else echo "No"; ?></td>
                             <td>{{ $data->channel }}</td>
                         </tr>
