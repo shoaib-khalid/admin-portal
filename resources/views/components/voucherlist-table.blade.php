@@ -67,6 +67,7 @@
                         <th>Discount Value</th>
                         <th>Capped Amt</th>
                         <th>Voucher Code</th> 
+                        <th>Total Claim</th>
                         <th>Available Qty</th>
                         <th></th> 
                     </tr>
@@ -86,7 +87,8 @@
                             <td>{{ $data['discountValue'] }} {{ $data['calculationType'] }}</td>     
                             <td>{{ $data['maxDiscountAmount'] }}</td>                       
                             <td>{{ $data['voucherCode'] }}</td>  
-                            <td>{{ $data['totalQuantity']-$data['totalRedeem'] }} / {{ $data['totalQuantity'] }}</td>  
+                            <td><a href="voucherclaim/{{$data['id']}}">{{ $totalClaim[$data['id']] }}</a></td>  
+                            <td><a href="voucherredeem/{{$data['id']}}">{{ $data['totalQuantity']-$data['totalRedeem'] }} / {{ $data['totalQuantity'] }}</a></td>  
                             <td>
                                 <form action="voucheredit" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}

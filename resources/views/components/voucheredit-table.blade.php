@@ -170,6 +170,17 @@
                         </div>
                        
                     </div>
+
+                    <div class="input-group mb-3">
+                        <div class="col-3">Require Customer to Claim</div>
+                        <div class="col-3">
+                        <input type="radio" id="requireclaim" name="requireToClaim" value="1" <?php if ($voucher->requireToClaim=="1") echo "checked"; ?>>
+                            <label for="requireclaim">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notrequireclaim" name="requireToClaim" value="0" <?php if ($voucher->requireToClaim=="0") echo "checked"; ?>>
+                            <label for="notrequireclaim">No</label>&nbsp;&nbsp;                        
+                        </div>                    
+                    </div>
+
                     <div class="input-group mb-3">
                         <div class="col-3">Special Voucher Condition</div>
                         <div class="col-7">

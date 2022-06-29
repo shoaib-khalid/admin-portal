@@ -42,6 +42,22 @@ class VoucherController extends Controller
         return view('components.voucheradd',compact('storelist','verticalList'));
     }
 
+    public function voucherclaim($voucherId){
+        $sql="SELECT A.*, B.name, B.isActivated, B.channel
+             FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id WHERE 
+            voucherId='".$voucherId."' AND isUsed=0";
+        $userList = DB::connection('mysql2')->select($sql);        
+        return view('components.voucherclaim',compact('userList'));
+    }
+
+    public function voucherredeem($voucherId){
+        $sql="SELECT A.*, B.name, B.isActivated, B.channel
+             FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id WHERE 
+            voucherId='".$voucherId."' AND isUsed=1";
+        $userList = DB::connection('mysql2')->select($sql);
+        return view('components.voucherredeem',compact('userList'));
+    }
+
     public function post_voucheradd(Request $request){
         //dd($request);
         $validated = $request->validate([
@@ -86,6 +102,7 @@ class VoucherController extends Controller
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
         $voucher->minimumSpend = $request->minimumSpend;
         $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
+        $voucher->requireToClaim = $request->requireToClaim;
 
         if ($voucher->voucherType=="STORE") {
             $voucher->storeId = $request->selectStore;
@@ -130,9 +147,19 @@ class VoucherController extends Controller
                         ->where('status','ACTIVE')
                         ->whereRaw("endDate > '".date("Y-m-d H:i:s")."'")
                         ->get();
-        
+        $totalClaim=array();
+        foreach ($datas as $data) {
+            //get total claim
+            $sql = "SELECT COUNT(*) AS total FROM customer_voucher WHERE voucherId='".$data->id."'";
+            $voucherdata = DB::connection('mysql2')->select($sql);
+            if (count($voucherdata)>0) {
+                $totalClaim[$data->id] = $voucherdata[0]->total;
+            } else {
+                $totalClaim[$data->id] = 0;
+            }
+        }
         $codechosen='';
-        return view('components.voucherlist', compact('datas','datechosen','codechosen'));
+        return view('components.voucherlist', compact('datas','datechosen','codechosen','totalClaim'));
     }
 
     
@@ -158,14 +185,23 @@ class VoucherController extends Controller
         $query->orderBy('created_at', 'DESC');
        // dd($query);
         $datas = $query->get();
-
+        foreach ($datas as $data) {
+            //get total claim
+            $sql = "SELECT COUNT(*) AS total FROM customer_voucher WHERE voucherId='".$data->id."'";
+            $voucherdata = DB::connection('mysql2')->select($sql);
+            if (count($voucherdata)>0) {
+                $totalClaim[$data->id] = $voucherdata[0]->total;
+            } else {
+                $totalClaim[$data->id] = 0;
+            }
+        }
         //print_r($datas);                    
 
         // return $datas;
         // die();
         $datechosen = $req->date_chosen4;    
         $codechosen = $req->code_chosen;            
-        return view('components.voucherlist', compact('datas', 'datechosen', 'codechosen'));
+        return view('components.voucherlist', compact('datas', 'datechosen', 'codechosen','totalClaim'));
 
     }
 
@@ -228,6 +264,7 @@ class VoucherController extends Controller
             $voucher->minimumSpend = $request->minimumSpend;
             $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
             $voucher->editReason = $request->reason;
+            $voucher->requireToClaim = $request->requireToClaim;
 
             if ($voucher->voucherType=="STORE") {
                 $voucher->storeId = $request->selectStore;

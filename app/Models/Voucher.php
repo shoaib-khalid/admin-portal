@@ -31,6 +31,7 @@ class Voucher extends Model
                             'totalRedeem',
                             'deleteReason',
                             'currencyLabel',
-                            'verticalCode'                            
+                            'verticalCode',
+                            'requireToClaim'                            
                         ];
 }
