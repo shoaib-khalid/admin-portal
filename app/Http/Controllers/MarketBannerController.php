@@ -20,10 +20,12 @@ class MarketBannerController extends Controller
 {
 
     protected $baseurl;
+    protected $basepreviewurl;
     protected $basepath;
 
     function __construct() {
             $this->baseurl = config('services.banner_svc.url');
+            $this->basepreviewurl = config('services.banner_svc.previewurl');
             $this->basepath = config('services.banner_svc.path');
     }
 
@@ -32,7 +34,8 @@ class MarketBannerController extends Controller
         $datas = MarketBanner::get();
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
-        return view('components.marketbanner', compact('datas','countryList'));
+        $basepreviewurl = $this->basepreviewurl;
+        return view('components.marketbanner', compact('datas','countryList', 'basepreviewurl'));
     }
 
 

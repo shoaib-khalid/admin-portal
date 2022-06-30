@@ -75,7 +75,7 @@
                     @foreach ($datas as $data)
                         <tr class="text-center">
                             <td>{{ $data['bannerUrl'] }}</td>
-                            <td><img src="{{ $data['bannerUrl'] }}" height="100px"></td>
+                            <td><img src="{{ $basepreviewurl.$data['bannerUrl'] }}" height="100px"></td>
                             <td>{{ $data['regionCountryId'] }}</td>
                             <td>{{ $data['type'] }}</td>
                             <td>

@@ -3,7 +3,7 @@
         <h1>Promo Text</h1>        
     </x-slot>
     <div>
-        <x-marketbanner-table :datas="$datas" :countryList="$countryList"></x-marketbanner-table>
+        <x-marketbanner-table :datas="$datas" :countryList="$countryList" :basepreviewurl="$basepreviewurl"></x-marketbanner-table>
     </div>
 </x-app-layout>
 <script>

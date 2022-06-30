@@ -38,6 +38,7 @@ return [
     'banner_svc' => [
         'url' => env('MARKETPLACE_BANNER_BASEURL'),
         'path' => env('MARKETPLACE_BANNER_PATH'),
+        'previewurl' => env('MARKETPLACE_BANNER_PREVIEWURL'),
     ],
 
 ];
