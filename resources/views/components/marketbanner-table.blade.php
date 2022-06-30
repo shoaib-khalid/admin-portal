@@ -26,6 +26,15 @@
                                 @endforeach
                             </select>
                             </div>
+                        </div> 
+                        <div class="input-group mb-3">  
+                            <div class="col-3">Select Country</div>
+                            <div class="col-7">
+                            <select name="selectType" id="selectType" class="form-control">   
+                               <option value="DESKTOP">DESKTOP</option>
+                               <option value="MOBILE">MOBILE</option>
+                            </select>
+                            </div>
                         </div>                         
                         <div class="input-group mb-3">  
                             <div class="col-3">Upload Banner</div>
@@ -56,7 +65,8 @@
                     <tr class="text-center">
                         <th>Url</th>
                         <th>Preview</th>
-                        <th>Region</th>     
+                        <th>Region</th>  
+                        <th>Type</th>    
                         <th></th>                  
                     </tr>
                 </thead>      
@@ -67,6 +77,7 @@
                             <td>{{ $data['bannerUrl'] }}</td>
                             <td><img src="{{ $data['bannerUrl'] }}" height="100px"></td>
                             <td>{{ $data['regionCountryId'] }}</td>
+                            <td>{{ $data['type'] }}</td>
                             <td>
                                 <form action="delete_marketbanner" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}

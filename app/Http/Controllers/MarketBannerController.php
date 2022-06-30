@@ -49,6 +49,7 @@ class MarketBannerController extends Controller
         $banner = new MarketBanner();
         $banner->regionCountryId = $request->selectCountry;
         $banner->bannerUrl = $url;
+        $banner->type = $request->selectType;
         $banner->save();
 
         $datas = MarketBanner::get();       
