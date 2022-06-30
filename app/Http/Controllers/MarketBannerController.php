@@ -58,7 +58,8 @@ class MarketBannerController extends Controller
         $datas = MarketBanner::get();       
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
-        return view('components.marketbanner', compact('datas','countryList'));
+        $basepreviewurl = $this->basepreviewurl;
+        return view('components.marketbanner', compact('datas','countryList', 'basepreviewurl'));
     }
 
 
