@@ -1,0 +1,125 @@
+affinity: {}
+autoscaling:
+  enabled: false
+  maxReplicas: 100
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80
+csvLogging:
+  enable: true
+  volumeMount:
+    - mountPath: /var/www/html/storage/logs/
+      name: admin-portal-csvl-vol
+  volumes:
+    - configMap:
+        name: admin-portal-csvl-cm
+      name: admin-portal-csvl-vol
+environmentConfig:
+  configmap:
+    .env: |
+      APP_NAME=admin-portal
+      APP_ENV=production
+      APP_KEY=base64:UEkmgHYj9i054G7QdkAWL0hakjh4m3jnyZyhpIHrD1Q=
+      APP_DEBUG=true
+      APP_URL=https://adm.symplified.it
+      ASSET_URL=https://adm.symplified.it
+      URL_REPORT_SERVICE=https://api.symplified.it/report-service/v1
+      MARKETPLACE_BANNER_PATH=/home/docker/Software/assets/store-assets
+      MARKETPLACE_BANNER_BASEURL=/store-assets
+      MARKETPLACE_BANNER_PREVIEWURL=https://assets.symplified.it
+      TOKEN_REPORT_SERVICE=accessToken
+
+      LOG_CHANNEL=stack
+
+      DB_CONNECTION=mysql
+      DB_HOST=my-release-mysql-primary.default.svc.cluster.local
+      DB_PORT=3306
+      DB_DATABASE=admin_portal
+      DB_USERNAME=root
+      DB_PASSWORD=kalsym@123
+
+      DB_CONNECTION_SECOND=mysql
+      DB_HOST_SECOND=my-release-mysql-primary.default.svc.cluster.local
+      DB_PORT_SECOND=3306
+      DB_DATABASE_SECOND=symplified
+      DB_USERNAME_SECOND=root
+      DB_PASSWORD_SECOND=kalsym@123
+      DB_CONNECTION_THIRD=mysql
+      DB_HOST_THIRD=my-release-mysql-primary.default.svc.cluster.local
+      DB_PORT_THIRD=3306
+      DB_DATABASE_THIRD=symplified_analytic
+      DB_USERNAME_THIRD=root
+      DB_PASSWORD_THIRD=kalsym@123
+      BROADCAST_DRIVER=log
+      CACHE_DRIVER=file
+      QUEUE_CONNECTION=sync
+      SESSION_DRIVER=database
+      SESSION_LIFETIME=120
+
+      REDIS_HOST=127.0.0.1
+      REDIS_PASSWORD=null
+      REDIS_PORT=6379
+
+      MAIL_MAILER=smtp
+      MAIL_HOST=smtpout.secureserver.net
+      MAIL_PORT=465
+      MAIL_USERNAME=no-reply@symplified.it
+      MAIL_PASSWORD=K@lSYmSyMPl1fieD@9796
+      MAIL_ENCRYPTION=ssl
+      MAIL_FROM_ADDRESS=no-reply@symplified.it
+      MAIL_FROM_NAME="${APP_NAME}"
+
+      AWS_ACCESS_KEY_ID=
+      AWS_SECRET_ACCESS_KEY=
+      AWS_DEFAULT_REGION=us-east-1
+      AWS_BUCKET=
+
+      PUSHER_APP_ID=
+      PUSHER_APP_KEY=
+      PUSHER_APP_SECRET=
+      PUSHER_APP_CLUSTER=mt1
+
+      MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+      MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+  volumeMount:
+    - mountPath: /var/www/html/.env
+      name: admin-portal-ec-vol
+      subPath: .env
+  volumes:
+    - configMap:
+        name: admin-portal-ec-cm
+      name: admin-portal-ec-vol
+fullnameOverride: ''
+image:
+  pullPolicy: Always
+  repository: kalsym/admin-portal
+  tag: 1.9.8-alpha
+imagePullSecrets:
+  - name: kalsym-docker-hub
+ingress:
+  annotations: {}
+  className: ''
+  enabled: true
+  hosts:
+    - host: adm.symplified.it
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - adm.symplified.it
+      secretName: secret-tls-it
+nameOverride: ''
+nodeSelector: {}
+podAnnotations: {}
+podSecurityContext: {}
+replicaCount: 1
+resources: {}
+securityContext: {}
+service:
+  port: 80
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  create: false
+  name: ''
+tolerations: []
