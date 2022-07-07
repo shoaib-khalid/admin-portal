@@ -319,6 +319,65 @@ class UserController extends Controller
     }
 
 
+    public function daily_group_details(){
+
+        $to = date("Y-m-d");
+        $date = new DateTime('7 days ago');
+        $from = $date->format("Y-m-d");
+        
+        $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+            'from' => $from,
+            'to' => $to,
+            'sortingOrder' => "DESC",
+            'pageSize' => 1000
+        ]); 
+        
+        
+        if($request->successful()){
+
+            $result = $request['data'];
+
+        }
+        //dd($result['content']);
+        $datas = $result['content'];
+        
+        // return json_decode($datas);
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.daily-group-details', compact('datas','datechosen'));
+    }
+
+    public function daily_group_details_filter(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+            'startDate' => $start_date,
+            'endDate' => $end_date,
+            'sortingOrder' => "DESC",
+            'pageSize' => 1000
+        ]); 
+        
+        if($request->successful()){
+
+            $datas = $request['data'];
+
+        }
+
+        //dd($datas);
+
+        // return $datas;
+        $datechosen = $req->date_chosen2;
+        return view('components.daily-group-details', compact('datas','datechosen'));
+    }
+
+
     public function settlement(){
 
         $to = date("Y-m-d");

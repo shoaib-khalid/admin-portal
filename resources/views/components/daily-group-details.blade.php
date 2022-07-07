@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Voucher Redemption</h1>
+        <h1>Daily Details Sales 1</h1>
         <div class="section-header-breadcrumb">
             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
             <div class="breadcrumb-item">Daile Detailed Sales</div>
         </div>
     </x-slot>
     <div>
-        <x-daily-details-table :datas="$datas" :datechosen="$datechosen"></x-daily-details-table>
+        <x-daily-group-details-table :datas="$datas" :datechosen="$datechosen"></x-daily-group-details-table>
     </div>
 </x-app-layout>
 

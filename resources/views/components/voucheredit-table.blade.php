@@ -160,6 +160,16 @@
                     </div>
 
                      <div class="input-group mb-3">
+                        <div class="col-3">Registered User Only</div>
+                        <div class="col-3">
+                        <input type="radio" id="requireclaim" name="requireToClaim" value="1" <?php if ($voucher->requireToClaim=="1") echo "checked"; ?> <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
+                            <label for="requireclaim">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notrequireclaim" name="requireToClaim" value="0" <?php if ($voucher->requireToClaim=="0") echo "checked"; ?> <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
+                            <label for="notrequireclaim">No</label>&nbsp;&nbsp;                        
+                        </div>                    
+                    </div>
+
+                     <div class="input-group mb-3">
                         <div class="col-3">Status</div>
                         <div class="col-7">
                         <select name="status" class="form-control">
@@ -169,17 +179,7 @@
                         </select>
                         </div>
                        
-                    </div>
-
-                    <div class="input-group mb-3">
-                        <div class="col-3">Require Customer to Claim</div>
-                        <div class="col-3">
-                        <input type="radio" id="requireclaim" name="requireToClaim" value="1" <?php if ($voucher->requireToClaim=="1") echo "checked"; ?>>
-                            <label for="requireclaim">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" id="notrequireclaim" name="requireToClaim" value="0" <?php if ($voucher->requireToClaim=="0") echo "checked"; ?>>
-                            <label for="notrequireclaim">No</label>&nbsp;&nbsp;                        
-                        </div>                    
-                    </div>
+                    </div>                   
 
                     <div class="input-group mb-3">
                         <div class="col-3">Special Voucher Condition</div>
