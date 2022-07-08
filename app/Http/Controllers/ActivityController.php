@@ -98,6 +98,8 @@ class ActivityController extends Controller
                 'browser' => $data['browserType'],
                 'errorType' => $data['errorType'],
                 'errorOccur' => $data['errorOccur'],
+                'address' => $data['address'],
+                'city' => $data['city']
             ];
 
             array_push( 
@@ -211,6 +213,8 @@ class ActivityController extends Controller
                 'browser' => $data['browserType'],
                 'errorType' => $data['errorType'],
                 'errorOccur' => $data['errorOccur'],
+                'address' => $data['address'],
+                'city' => $data['city']
             ];
 
             array_push( 
