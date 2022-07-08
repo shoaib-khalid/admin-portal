@@ -73,13 +73,13 @@
                         <th>Timestamp</th>
                         <th>Store</th>
                         <th>Customer</th>
-                        <th>Session ID</th>
+                        <th>Location</th>
                         <th>Page Visited</th>
                         <th>IP</th>
                         <th>Device</th>
                         <th>OS</th>
                         <th>Browser</th>
-                        <th>Error</th>    
+                        <th>Error</th>  
                     </tr>
                 </thead>      
                 <tbody>
@@ -89,7 +89,7 @@
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>
                             <td>{{ $data['storeName'] }}</td>
                             <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['sessionId'] }}</td>
+                            <td>{{ $data['address'] }} {{ $data['city'] }}</td>
                             <td>{{ $data['pageVisited'] }}</td>
                             <td>{{ $data['ip'] }}</td>
                             <td>{{ $data['device'] }}</td>

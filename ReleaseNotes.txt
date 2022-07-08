@@ -1,3 +1,10 @@
+Version 1.9.10
+------------------------
+Date:08-July-2022
+
+New column for user activity : location
+
+
 Version 1.9.9
 ------------------------
 Date:07-July-2022

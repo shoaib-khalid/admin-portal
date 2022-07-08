@@ -27,6 +27,11 @@ class UserActivity extends Model
                             'browserType', 
                             'errorOccur',                            
                             'errorType',
-                            'created'
+                            'created',
+                            'city',
+                            'state',
+                            'country',
+                            'postcode',
+                            'address'
                         ];
 }
