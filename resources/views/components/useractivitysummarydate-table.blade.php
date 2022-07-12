@@ -108,8 +108,10 @@
                         <?php } ?>
                         <th>Total Hits</th> 
                         <?php if ($groupstore<>"") { ?> 
+                        <th>Total Unique Guest By Store</th>    
                         <th>Total Unique User By Store</th>    
                         <?php } else { ?>
+                        <th>Total Unique Guest</th>    
                         <th>Total Unique User</th>    
                         <?php } ?>   
                     </tr>

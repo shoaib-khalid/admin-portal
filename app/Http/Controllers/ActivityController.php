@@ -48,14 +48,17 @@ class ActivityController extends Controller
         $from = $date->format("Y-m-d");
 
         // $datas = Client::limit(100)->get();
-        $datas = UserActivity::whereBetween('created', [$from, $to." 23:59:59"])  
-                        ->orderBy('created', 'DESC')
+        $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->orderBy('customer_activities.created', 'DESC')
                         ->get();
        
         $newArray = array();
         $storeList = array();
         $customerList = array();
 
+        dd($datas);
         foreach ($datas as $data) {
 
             $storeName = '';
@@ -84,7 +87,9 @@ class ActivityController extends Controller
             } else {
                 $customerName = $customerList[$data['customerId']];
             }
-             
+
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];             
             
             $object = [
                 'created' => $data['created'],
@@ -98,8 +103,8 @@ class ActivityController extends Controller
                 'browser' => $data['browserType'],
                 'errorType' => $data['errorType'],
                 'errorOccur' => $data['errorOccur'],
-                'address' => $data['address'],
-                'city' => $data['city']
+                'address' => $sessionAddress,
+                'city' => $sessionCity
             ];
 
             array_push( 
@@ -133,7 +138,11 @@ class ActivityController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $query = UserActivity::whereBetween('created', [$start_date, $end_date." 23:59:59"]);
+        //$query = UserActivity::whereBetween('created', [$start_date, $end_date." 23:59:59"]);
+         // $datas = Client::limit(100)->get();
+        $query = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"])  
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
 
         if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
@@ -199,7 +208,9 @@ class ActivityController extends Controller
             } else {
                 $customerName = $customerList[$data['customerId']];
             }
-             
+
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];
             
             $object = [
                 'created' => $data['created'],
@@ -213,8 +224,8 @@ class ActivityController extends Controller
                 'browser' => $data['browserType'],
                 'errorType' => $data['errorType'],
                 'errorOccur' => $data['errorOccur'],
-                'address' => $data['address'],
-                'city' => $data['city']
+                'address' => $sessionAddress,
+                'city' => $sessionCity
             ];
 
             array_push( 
@@ -267,8 +278,10 @@ class ActivityController extends Controller
 
         //query group by sessionId
         $datas = UserActivity::select('sessionId')->distinct()
-                        ->whereBetween('created', [$from, $to." 23:59:59"])  
-                        ->orderBy('created', 'DESC')
+                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->orderBy('customer_activities.created', 'DESC')
                         ->get();
         //dd($datas);
 
@@ -385,6 +398,9 @@ class ActivityController extends Controller
             }
             //dd($activityList);
 
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];            
+
             $object = [
                 'storeName' => $storeName,
                 'customerName' => $customerName,
@@ -398,7 +414,8 @@ class ActivityController extends Controller
                 'orderCreated' => $orderCreated,
                 'orderStatus' => $orderStatus,
                 'activity_list' => $activityList,
-                'order_details' => $orderDetails
+                'order_details' => $orderDetails,
+                'location' => $sessionAddress.", ".$sessionCity
             ];
 
             
@@ -434,8 +451,9 @@ class ActivityController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         //query group by sessionId
-        $query = UserActivity::select('sessionId')->distinct()
-                ->whereBetween('created', [$start_date, $end_date." 23:59:59"]);
+        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId')->distinct()
+                ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"]);
 
         if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
@@ -466,7 +484,7 @@ class ActivityController extends Controller
             $query->where('browserType', $req->browser_chosen);
         }
 
-        $query->orderBy('created', 'DESC');
+        $query->orderBy('customer_activities.created', 'DESC');
         $datas = $query->get();
 
         $newArray = array();
@@ -581,6 +599,9 @@ class ActivityController extends Controller
             }
             //dd($activityList);
 
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];  
+
             $object = [
                 'storeName' => $storeName,
                 'customerName' => $customerName,
@@ -595,7 +616,8 @@ class ActivityController extends Controller
                 'orderStatus' => $orderStatus,
                 'orderId' => $orderId,
                 'activity_list' => $activityList,
-                'order_details' => $orderDetails
+                'order_details' => $orderDetails,
+                'location' => $sessionAddress.", ".$sessionCity
             ];
 
             
