@@ -58,7 +58,7 @@ class ActivityController extends Controller
         $storeList = array();
         $customerList = array();
 
-        dd($datas);
+        //dd($datas);
         foreach ($datas as $data) {
 
             $storeName = '';
