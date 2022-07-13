@@ -136,8 +136,8 @@
                             <td>{{ $data->page }}</td>
                             <?php } ?>
                             <td>{{ $data->total }}</td>                                               
-                            <td>{{ $data->totalUser }}</td> 
                             <td>{{ $data->totalGuest }}</td> 
+                            <td>{{ $data->totalUser }}</td> 
                         </tr>
                     @endforeach
 
