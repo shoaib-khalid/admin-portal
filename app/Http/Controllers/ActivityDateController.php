@@ -147,7 +147,7 @@ class ActivityDateController extends Controller
         $datas = DB::connection('mysql3')->select($sql);
 
         if ($req->groupstore=="" && $req->groupbrowser=="" && $req->groupdevice=="" && $req->groupos=="" && $req->grouppage=="") {
-            $sql2="SELECT SUM(totalUnique), SUM(totalUniqueGuest), dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59' GROUP BY dt";
+            $sql2="SELECT SUM(totalUnique), SUM(totalUniqueGuest), dt FROM total_unique_user_overall WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59' GROUP BY dt";
         } else {
             $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
         }
@@ -162,7 +162,7 @@ class ActivityDateController extends Controller
                     $data->totalGuest =  $datas2[0]->totalUniqueGuest;   
                  }                 
             } else {
-                $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user WHERE dt='".$data->dt."'";
+                $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user_overall WHERE dt='".$data->dt."'";
                  $datas2 = DB::connection('mysql3')->select($sql2);
                  if (count($datas2)>0) {
                     $data->totalUser =  $datas2[0]->totalUnique;
