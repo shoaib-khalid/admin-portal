@@ -53,7 +53,8 @@
                     <th>Platform Voucher Discount</th>
                     <th>Commission</th>   
                     <th>Total</th>   
-                    <th>Payment Status</th>                 
+                    <th>Payment Status</th> 
+                    <th>Order Status</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -63,12 +64,18 @@
                             <?php 
                             $totalComm = 0;
                             $storeName='';
+                            $orderStatus='';
                             foreach ($data['orderList'] as $order) {
                                 $totalComm = $totalComm + $order['klCommission'];
                                 if ($storeName=='')
                                     $storeName = $order['store']['name'];
                                 else
                                     $storeName = $storeName . ", " .$order['store']['name'];
+
+                                if ($orderStatus=='')
+                                    $orderStatus = $order['completionStatus'];
+                                else
+                                    $orderStatus = $storeName . ", " .$order['completionStatus'];
                             }
                             ?>
 
