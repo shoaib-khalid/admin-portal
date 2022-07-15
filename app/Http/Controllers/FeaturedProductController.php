@@ -30,7 +30,7 @@ class FeaturedProductController extends Controller
 
     public function index(){
         
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName',  'store.city AS storeCity','store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
@@ -40,12 +40,16 @@ class FeaturedProductController extends Controller
         $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
         $categorylist = DB::connection('mysql2')->select($sql);
 
+        $sql="SELECT cityId FROM location_config";
+        $locationlist = DB::connection('mysql2')->select($sql);
+
         $searchresult=array();
         $product_name = "";
         $store_name = "";
         $categoryselected="";
+        $locationselected="";
 
-        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name','categorylist','categoryselected'));
+        return view('components.featuredproduct', compact('datas','searchresult','product_name', 'store_name','categorylist','categoryselected', 'locationlist', 'locationselected'));
     }
 
     public function filter_product(Request $req){

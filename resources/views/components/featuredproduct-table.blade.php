@@ -18,7 +18,15 @@
 
             <div class="row">
                 <div class="col">
-                    
+                          <div class="input-group mb-3">
+                            <select name="selectLocation" id="selectLocation" class="form-control" onchange="changeLocation()">   
+                                <option value="">Select Location</option>  
+                                <option value="main">Main Page</option>                       
+                                @foreach ($locationlist as $location)
+                                <option value="{{$location->cityId}}" <?php if ($locationselected==$location->cityId) echo "selected"; ?>>{{$location->cityId}}</option>                            
+                                @endforeach
+                            </select>                
+                        </div>
                          <div class="input-group mb-3">
                             <select name="selectCategory" id="selectCategory" class="form-control">   
                                 <option value="">Select Parent Category</option>                         
@@ -51,7 +59,8 @@
                         <th style="width: 20%;">Product Name</th>
                         <th style="width: 20%;">Parent Category</th>
                         <th style="width: 20%;">Category</th>
-                        <th style="width: 20%;">Store</th>     
+                        <th style="width: 20%;">Store</th> 
+                        <th style="width: 20%;">Store Location</th> 
                         <th style="width: 10%;">Sequence</th>    
                         <th style="width: 10%;"></th>                       
                     </tr>
@@ -66,6 +75,7 @@
                             <td style="padding: 0">{{ $data->parentcategory }}</td>
                             <td style="padding: 0">{{ $data->category }}</td>
                             <td style="padding: 0">{{ $data->storeName }}</td>
+                            <td style="padding: 0">{{ $data->storeCity }}</td>
                             <td style="padding: 0"> <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control"></td>
                             <td style="padding: 0">
                                      <?php if ($data->sequence=="") { ?>                              
@@ -118,10 +128,11 @@
             <table id="table-5" class="table table-striped">        
                 <thead>
                     <tr class="text-center">
-                        <th style="width: 30%;">Product Name</th>
-                        <th style="width: 30%;">Category</th>
-                        <th style="width: 25%;">Store</th>  
-                        <th style="width: 5%;">Sequence</th>    
+                        <th style="width: 20%;">Product Name</th>
+                        <th style="width: 20%;">Category</th>
+                        <th style="width: 25%;">Store</th> 
+                        <th style="width: 25%;">Store Location</th> 
+                        <th style="width: 10%;">Sequence</th>    
                         <th style="width: 5%;"></th>                         
                         <th style="width: 5%;"></th>                         
                     </tr>
@@ -133,6 +144,7 @@
                             <td>{{ $data->productName }}</td>
                             <td>{{ $data->category }}</td>
                             <td>{{ $data->storeName }}</td>
+                            <td>{{ $data->storeCity }}</td>
                             <form action="edit_featuredproduct" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                     <input type="hidden" name="id" value="{{ $data->id }}">
