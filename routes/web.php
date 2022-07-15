@@ -158,8 +158,12 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');  
     Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner'); 
 
-    Route::get('/voucherredemption', [UserController::class, "daily_group_details"])->name('voucherredemption');   
-    Route::post('/filter_voucherredemption', [UserController::class, "daily_group_details_filter"])->name('filter_voucherredemption');  
+    Route::get('/groupsales', [UserController::class, "daily_group_details"])->name('groupsales');   
+    Route::post('/filter_groupsales', [UserController::class, "filter_daily_group_details"])->name('filter_groupsales');
+    Route::post('/export_groupsales', [UserController::class, "export_daily_group_details"])->name('export_groupsales');
+      
+    Route::get('/voucherredemption', [UserController::class, "voucherredemption"])->name('voucherredemption');   
+    Route::post('/filter_voucherredemption', [UserController::class, "filter_voucherredemption"])->name('filter_voucherredemption');  
 });
 
 

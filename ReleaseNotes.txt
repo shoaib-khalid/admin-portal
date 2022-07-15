@@ -1,3 +1,10 @@
+Version 1.9.12
+------------------------
+Date:15-July-2022
+
+Change daily details sales to read from group order
+
+
 Version 1.9.11
 ------------------------
 Date:12-July-2022

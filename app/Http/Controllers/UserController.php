@@ -15,6 +15,7 @@ use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
 use App\Exports\SettlementsExport;
 use App\Exports\MerchantExport;
+use App\Exports\GroupSalesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -328,6 +329,7 @@ class UserController extends Controller
         $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
             'from' => $from,
             'to' => $to,
+            'sortBy' => 'created',            
             'sortingOrder' => "DESC",
             'pageSize' => 1000
         ]); 
@@ -346,7 +348,7 @@ class UserController extends Controller
         return view('components.daily-group-details', compact('datas','datechosen'));
     }
 
-    public function daily_group_details_filter(Request $req){
+    public function filter_daily_group_details(Request $req){
 
         $data = $req->input();
 
@@ -358,23 +360,108 @@ class UserController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
-            'startDate' => $start_date,
-            'endDate' => $end_date,
+            'from' => $start_date,
+            'to' => $end_date,
+            'sortBy' => 'created',            
             'sortingOrder' => "DESC",
             'pageSize' => 1000
         ]); 
         
         if($request->successful()){
 
-            $datas = $request['data'];
+            $result = $request['data'];
 
         }
+        //dd($result['content']);
+        $datas = $result['content'];
 
         //dd($datas);
 
         // return $datas;
         $datechosen = $req->date_chosen2;
         return view('components.daily-group-details', compact('datas','datechosen'));
+    }
+
+
+    public function export_daily_group_details(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2_copy );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        // return $start_date."|".$end_date;
+        // return $data;
+        // die();
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        // $from = "2021-08-01";
+        // $to = "2021-08-30";
+
+        return Excel::download(new GroupSalesExport($start_date, $end_date), 'dailyDetailsSales.xlsx');
+    }
+
+
+    public function voucherredemption(){
+
+        $to = date("Y-m-d");
+        $date = new DateTime('7 days ago');
+        $from = $date->format("Y-m-d");
+        
+        $request = Http::withToken($this->token)->get($this->url.'/store/null/voucherOrderGroupList', [
+            'from' => $from,
+            'to' => $to,
+            'sortingOrder' => "DESC",
+            'pageSize' => 1000
+        ]); 
+        
+        
+        if($request->successful()){
+
+            $result = $request['data'];
+
+        }
+        //dd($result['content']);
+        $datas = $result['content'];
+        //dd($datas);
+        // return json_decode($datas);
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        return view('components.voucher-redemption', compact('datas','datechosen'));
+    }
+
+    public function filter_voucherredemption(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+        //echo "startDate:".$start_date." endDate:".$end_date;
+        $request = Http::withToken($this->token)->get($this->url.'/store/null/voucherOrderGroupList', [
+            'from' => $start_date,
+            'to' => $end_date,
+            'sortingOrder' => "DESC",
+            'pageSize' => 1000
+        ]); 
+        
+        if($request->successful()){
+
+            $result = $request['data'];
+
+        }
+
+        $datas = $result['content'];
+        //dd($datas);
+
+        // return $datas;
+        $datechosen = $req->date_chosen2;
+        return view('components.voucher-redemption', compact('datas','datechosen'));
     }
 
 
