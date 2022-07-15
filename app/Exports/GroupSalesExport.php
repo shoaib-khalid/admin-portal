@@ -54,13 +54,21 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
 
                 $totalComm = 0;
                 $storeName='';
+                $orderStatus='';
                 foreach ($data['orderList'] as $order) {
                     $totalComm = $totalComm + $order['klCommission'];
                     if ($storeName=='')
                         $storeName = $order['store']['name'];
                     else
                         $storeName = $storeName . ", " .$order['store']['name'];
+
+                     if ($orderStatus=='')
+                        $orderStatus = $order['completionStatus'];
+                    else
+                        $orderStatus = $orderStatus . ", " .$order['completionStatus'];
                 }
+
+
 
                 
                 array_push( 
@@ -77,6 +85,7 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
                     $totalComm,
                     $data['total'],
                     $data['paymentStatus'],
+                    $orderStatus,
                 );
 
                 $newArray[] = $cur_item;
@@ -107,6 +116,7 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
             'Platform Voucher Discount',
             'Commision',
             'Total',
+            'Payment Status',
             'Order Status',
         ];
     }
