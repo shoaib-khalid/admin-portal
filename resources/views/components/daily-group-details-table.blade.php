@@ -75,7 +75,7 @@
                                 if ($orderStatus=='')
                                     $orderStatus = $order['completionStatus'];
                                 else
-                                    $orderStatus = $storeName . ", " .$order['completionStatus'];
+                                    $orderStatus = $orderStatus . ", " .$order['completionStatus'];
                             }
                             ?>
 
@@ -98,6 +98,7 @@
                                             <div class="badge badge-warning">{{ $data['paymentStatus'] }}</div>
                                         @endif
                             </td>
+                            <td>{{ $orderStatus }}</td>
                         </tr>
                     @endforeach
                     
