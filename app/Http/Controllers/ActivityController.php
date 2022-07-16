@@ -740,14 +740,14 @@ class ActivityController extends Controller
             } else {
                 $search_customerId = "NOT FOUND";
             }
-            $sql .= " AND customerId = ".$search_customerId;
+            $sql .= " AND customerId = '".$search_customerId."'";
             //dd($query);
         }
         if ($req->device_chosen<>"") {
-            $sql .= " AND deviceModel = ".$req->device_chosen;            
+            $sql .= " AND deviceModel = '".$req->device_chosen."'";            
         }
         if ($req->browser_chosen<>"") {
-            $sql .= " AND browserType = ".$req->browser_chosen;            
+            $sql .= " AND browserType = '".$req->browser_chosen."'";            
         }
 
         $sql .= " GROUP BY ".$groupBy;
