@@ -79,7 +79,17 @@
                             }
                             ?>
 
-                            <td>{{ $data['created'] }}</td>                            
+                            <td>
+                            <?php
+                            $date = $data['created'];
+                            $format = 'Y-m-d H:i:s';
+                            $userTimeZone = 'Asia/Kuala_Lumpur';
+                            $serverTimeZone = 'UTC';
+                            $dateTime = new DateTime ($date, new \DateTimeZone($serverTimeZone));
+                            $dateTime->setTimezone(new \DateTimeZone($userTimeZone));
+                            echo " ".$dateTime->format($format);
+                            ?>
+                            </td>                            
                             <td>{{ $data['customer']['name'] }}</td>
                             <td>{{ $storeName }}</td>
                             <td>{{ number_format($data['subTotal'], 2, '.', ',') ?? '0.00' }}</td>

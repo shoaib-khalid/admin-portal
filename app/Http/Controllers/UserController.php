@@ -426,6 +426,7 @@ class UserController extends Controller
         }
         //dd($result['content']);
         $datas = $result['content'];
+       
         //dd($datas);
         // return json_decode($datas);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
@@ -727,5 +728,16 @@ class UserController extends Controller
         // die();
         $datechosen = $req->date_chosen4;
         return view('components.merchants', compact('datas','datechosen'));
+    }
+
+    public function convert_to_user_date($date, $format = 'Y-m-d H:i:s', $userTimeZone = 'Asia/Kuala_Lumpur', $serverTimeZone = 'UTC')
+    {
+        try {
+            $dateTime = new DateTime ($date, new \DateTimeZone($serverTimeZone));
+            $dateTime->setTimezone(new \DateTimeZone($userTimeZone));
+            return $dateTime->format($format);
+        } catch (Exception $e) {
+            return '';
+        }
     }
 }

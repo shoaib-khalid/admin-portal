@@ -36,7 +36,7 @@ class FeaturedProductController extends Controller
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
                     ->orderBy('sequence', 'ASC')->get();     
-
+        //dd($datas);           
         $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
         $categorylist = DB::connection('mysql2')->select($sql);
 
@@ -53,18 +53,8 @@ class FeaturedProductController extends Controller
     }
 
     public function filter_product(Request $req){
-
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
-                    ->join('product as product', 'productId', '=', 'product.id')
-                    ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
-                    ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
-                    ->orderBy('sequence', 'ASC')->get();            
-
-        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
-        $categorylist = DB::connection('mysql2')->select($sql);
-
-        $sql="SELECT A.*, B.name as storeName, C.name as category, D.sequence, E.name AS parentcategory
+        
+       $sql="SELECT A.*, B.name as storeName, B.city AS storeCity, C.name as category, D.isMainLevel, D.sequence, E.name AS parentcategory
                     FROM product A 
                         INNER JOIN store B ON A.storeId=B.id 
                         INNER JOIN store_category C ON A.categoryId=C.id
@@ -80,38 +70,55 @@ class FeaturedProductController extends Controller
         if ($req->selectCategory<>"") {
             $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
         }
+        if ($req->locationId<>"" && $req->locationId<>"main") {
+            $sql .= "AND B.city = '".$req->locationId."'";    
+        }
         //echo $sql;
         $searchresult = DB::connection('mysql2')->select($sql);
-        $product_name = $req->product_name;
-        $store_name = $req->store_name;
-        $categoryselected= $req->selectCategory;
+        return response()->json(array('productList'=> $searchresult), 200);        
 
-        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name', 'categorylist','categoryselected'));
+    }
 
+    public function searchByLocation(Request $request) {   
+
+      $query = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName',  'store.city AS storeCity','store_category.name AS category', 'parent_category.name AS parentcategory')
+                    ->join('product as product', 'productId', '=', 'product.id')
+                    ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
+                    ->join('store as store', 'product.storeId', '=', 'store.id')
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
+                    ->orderBy('sequence', 'ASC');
+
+        if ($request->locationId=="main") {
+            $query->where('isMainLevel',1);
+        } else {
+            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+        }
+        $datas = $query->get(); 
+        //dd($datas);   
+        return response()->json(array('productList'=> $datas), 200);
     }
 
     public function add_featuredproduct(Request $request){
         $f = new FeaturedProduct();
         $f->productId = $request->id;
         $f->sequence = $request->sequence;
+       // echo "mainPage:".$request->mainPage;
+        $f->isMainLevel = $request->mainPage;
         $f->save();
 
-         $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+
+        $sql = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
-                    ->orderBy('sequence', 'ASC')->get();   
-         
-        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
-        $categorylist = DB::connection('mysql2')->select($sql);
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id');
+        
+        if ($request->locationId=="main") {
+            $sql->where('isMainLevel',1);
+        }
+        $datas = $sql->orderBy('sequence', 'ASC')->get();   
 
-        $searchresult=array();
-        $product_name = null;
-        $store_name = null;
-        $categoryselected="";
-
-        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name', 'categorylist','categoryselected'));
+        return response()->json(array('productList'=> $datas), 200);
     }
 
     public function edit_featuredproduct(Request $request){
@@ -120,42 +127,26 @@ class FeaturedProductController extends Controller
         $data->sequence = $request->sequence;
         $data->save();
                
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
                     ->orderBy('sequence', 'ASC')->get();   
 
-        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
-        $categorylist = DB::connection('mysql2')->select($sql);
-
-        $searchresult=array();
-        $product_name = null;
-        $store_name = null;
-        $categoryselected="";
-
-        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name', 'categorylist','categoryselected'));
+        return response()->json(array('productList'=> $datas), 200);
     }
 
      public function delete_featuredproduct(Request $request){
         DB::connection('mysql2')->delete("DELETE FROM product_feature_config WHERE id='".$request->id."'");
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
                     ->orderBy('sequence', 'ASC')->get();        
 
-        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL";
-        $categorylist = DB::connection('mysql2')->select($sql);
-
-        $searchresult=array();
-        $product_name = null;
-        $store_name = null;
-        $categoryselected="";
-        
-        return view('components.featuredproduct', compact('datas','searchresult', 'product_name', 'store_name', 'categorylist','categoryselected'));
+        return response()->json(array('productList'=> $datas), 200);
         
     }
 

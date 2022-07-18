@@ -46,11 +46,10 @@ $navigation_links = array_to_object($links);
                 <a class="nav-link" href="{{ route('detail') }}"><i class="fas fa-search-dollar"></i><span>Daily Detail Sales (Individual)</span></a>
             </li>
             
-<!--
             <li class="{{ Request::routeIs('groupsales') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('groupsales') }}"><i class="fas fa-search-dollar"></i><span>Daily Detail Sales (Group)</span></a>
             </li>
-!-->
+
             <li class="{{ Request::routeIs('voucherredemption') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('voucherredemption') }}"><i class="fas fa-search-dollar"></i><span>Voucher Redemption</span></a>
             </li>

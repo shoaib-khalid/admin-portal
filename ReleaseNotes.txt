@@ -1,3 +1,18 @@
+Version 1.9.14
+------------------------
+Date:18-July-2022
+
+Add location to featured product
+
+
+Version 1.9.13
+------------------------
+Date:15-July-2022
+
+Daily details sales to read individual order
+Order Group put in different menu Daily details sales (group)
+
+
 Version 1.9.12
 ------------------------
 Date:15-July-2022

@@ -54,7 +54,17 @@
                     @php $index = 1; @endphp
                     @foreach ($datas as $data)                       
                         <tr class="text-center">
-                            <td>{{ $data['created'] }}</td>
+                            <td>                            
+                            <?php
+                            $date = $data['created'];
+                            $format = 'Y-m-d H:i:s';
+                            $userTimeZone = 'Asia/Kuala_Lumpur';
+                            $serverTimeZone = 'UTC';
+                            $dateTime = new DateTime ($date, new \DateTimeZone($serverTimeZone));
+                            $dateTime->setTimezone(new \DateTimeZone($userTimeZone));
+                            echo " ".$dateTime->format($format);
+                            ?>
+                            </td>
                             <td>{{ $data['customer']['name'] }}</td>
                             <td>{{ $data['total'] }}</td>
                             <td>{{ $data['platformVoucherDiscount'] }}</td>
