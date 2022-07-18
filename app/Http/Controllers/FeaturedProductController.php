@@ -107,16 +107,18 @@ class FeaturedProductController extends Controller
         $f->save();
 
 
-        $sql = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $query = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
                     ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id');
         
         if ($request->locationId=="main") {
-            $sql->where('isMainLevel',1);
+            $query->where('isMainLevel',1);
+        } else {
+            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
         }
-        $datas = $sql->orderBy('sequence', 'ASC')->get();   
+        $datas = $query->orderBy('sequence', 'ASC')->get();   
 
         return response()->json(array('productList'=> $datas), 200);
     }
@@ -127,24 +129,36 @@ class FeaturedProductController extends Controller
         $data->sequence = $request->sequence;
         $data->save();
                
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $query = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
-                    ->orderBy('sequence', 'ASC')->get();   
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id');
+        
+        if ($request->locationId=="main") {
+            $query->where('isMainLevel',1);
+        } else {
+            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+        }
+        $datas = $query->orderBy('sequence', 'ASC')->get(); 
 
         return response()->json(array('productList'=> $datas), 200);
     }
 
      public function delete_featuredproduct(Request $request){
         DB::connection('mysql2')->delete("DELETE FROM product_feature_config WHERE id='".$request->id."'");
-        $datas = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
+        $query = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
                     ->join('product as product', 'productId', '=', 'product.id')
                     ->join('store_category as store_category', 'categoryId', '=', 'store_category.id')
                     ->join('store as store', 'product.storeId', '=', 'store.id')
-                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id')
-                    ->orderBy('sequence', 'ASC')->get();        
+                    ->leftJoin('store_category as parent_category', 'store_category.parentCategoryId', '=', 'store_category.id');
+        
+        if ($request->locationId=="main") {
+            $query->where('isMainLevel',1);
+        } else {
+            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+        }
+        $datas = $query->orderBy('sequence', 'ASC')->get();       
 
         return response()->json(array('productList'=> $datas), 200);
         
