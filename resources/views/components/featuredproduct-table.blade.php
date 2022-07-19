@@ -92,6 +92,7 @@
                   //console.log(data);
                   var resultData = data.productList;
                   showData(resultData);
+                  alert('Product added!')
                }
             });
         }
@@ -130,7 +131,7 @@
                     bodyData+='<td>'+row.category+'</td>';
                     bodyData+='<td>'+row.storeName+'</td>';
                     if (row.isMainLevel==1) {
-                        bodyData+='<td>MainPage</td>';
+                        bodyData+='<td>MainPage / '+row.storeCity+'</td>';
                     } else {
                         bodyData+='<td>'+row.storeCity+'</td>';                            
                     }
@@ -363,7 +364,7 @@
                             <td>{{ $data->storeName }}</td>
                             <?php
                             if ($data->isMainLevel==1) {
-                                echo '<td>MainPage</td>';
+                                echo '<td>MainPage / '.$data->storeCity.'</td>';
                             } else {
                                 echo '<td>'.$data->storeCity.'</td>';
                             }

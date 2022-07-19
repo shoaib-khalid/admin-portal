@@ -91,7 +91,7 @@ class FeaturedProductController extends Controller
         if ($request->locationId=="main") {
             $query->where('isMainLevel',1);
         } else {
-            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+            $query->where('store.city',$request->locationId);                  
         }
         $datas = $query->get(); 
         //dd($datas);   
@@ -116,7 +116,7 @@ class FeaturedProductController extends Controller
         if ($request->locationId=="main") {
             $query->where('isMainLevel',1);
         } else {
-            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+            $query->where('store.city',$request->locationId);                
         }
         $datas = $query->orderBy('sequence', 'ASC')->get();   
 
@@ -138,7 +138,7 @@ class FeaturedProductController extends Controller
         if ($request->locationId=="main") {
             $query->where('isMainLevel',1);
         } else {
-            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+            $query->where('store.city',$request->locationId);                 
         }
         $datas = $query->orderBy('sequence', 'ASC')->get(); 
 
@@ -156,7 +156,7 @@ class FeaturedProductController extends Controller
         if ($request->locationId=="main") {
             $query->where('isMainLevel',1);
         } else {
-            $query->where('store.city',$request->locationId)->where('isMainLevel',0);                  
+            $query->where('store.city',$request->locationId);                 
         }
         $datas = $query->orderBy('sequence', 'ASC')->get();       
 
