@@ -42,8 +42,9 @@ class MarketBannerController extends Controller
     public function add_marketbanner(Request $request){
         //copy file to folder
         $file = $request->file('selectFile');
+        $extension = $file->getClientOriginalExtension();
         //Move Uploaded File
-        $newfilename = date("YmdHis");
+        $newfilename = date("YmdHis")".".$extension;
         $destinationPath = $this->basepath;
         echo " path:".$destinationPath;
         $file->move($destinationPath,$newfilename);
