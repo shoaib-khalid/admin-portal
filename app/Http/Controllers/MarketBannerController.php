@@ -44,7 +44,7 @@ class MarketBannerController extends Controller
         $file = $request->file('selectFile');
         $extension = $file->getClientOriginalExtension();
         //Move Uploaded File
-        $newfilename = date("YmdHis")".".$extension;
+        $newfilename = date("YmdHis").".".$extension;
         $destinationPath = $this->basepath;
         echo " path:".$destinationPath;
         $file->move($destinationPath,$newfilename);
