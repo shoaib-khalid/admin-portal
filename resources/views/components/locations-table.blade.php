@@ -155,7 +155,7 @@
                         <tr class="text-center">
                             <td>{{ $data['regionStateId'] }}</td>
                             <td>{{ $data['cityId'] }}</td>                            
-                            <td><img src="https://symplified.biz/{{ $data['imageUrl'] }}"></td>
+                            <td><img src="{{ $basepreviewurl.$data['imageUrl'] }}" height="100px"></td>
                             <td><?php if (array_key_exists($data['cityId'],  $regionCityList)) echo $regionCityList[$data['cityId']] ?>                            
                             </td>
 

@@ -3,7 +3,7 @@
         <h1>Locations</h1>        
     </x-slot>
     <div>
-        <x-locations-table :datas="$datas" :citySelected="$citySelected" :cityList="$cityList" :stateSelected="$stateSelected" :stateList="$stateList" :regionCityList="$regionCityList"></x-locations-table>
+        <x-locations-table :datas="$datas" :citySelected="$citySelected" :cityList="$cityList" :stateSelected="$stateSelected" :stateList="$stateList" :regionCityList="$regionCityList" :basepreviewurl="$basepreviewurl"></x-locations-table>
     </div>
 </x-app-layout>
 <script>

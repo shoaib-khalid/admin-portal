@@ -62,7 +62,9 @@ class CityRegionController extends Controller
             else
                 $regionCityList[$region['userLocationCityId']]=$region['storeCityId'];
         }
-        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList'));
+        $basepreviewurl = $this->basepreviewurl;
+
+        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
     }
 
     public function add_location(Request $request){
@@ -108,7 +110,9 @@ class CityRegionController extends Controller
             else
                 $regionCityList[$region['userLocationCityId']]=$region['storeCityId'];
         }
-        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList'));
+        $basepreviewurl = $this->basepreviewurl;
+
+        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
     }
 
     public function delete_location(Request $request){
@@ -139,7 +143,9 @@ class CityRegionController extends Controller
             else
                 $regionCityList[$region['userLocationCityId']]=$region['storeCityId'];
         }
-        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList'));
+        $basepreviewurl = $this->basepreviewurl;
+
+        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
 
     }
 
@@ -193,7 +199,9 @@ class CityRegionController extends Controller
             else
                 $regionCityList[$region['userLocationCityId']]=$region['storeCityId'];
         }
-        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList'));
+        $basepreviewurl = $this->basepreviewurl;
+        
+        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
 
     }
 
