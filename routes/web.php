@@ -138,6 +138,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_location', [FeaturedLocationController::class, "filter_location"])->name('filter_location');
     Route::post('/edit_featuredlocation', [FeaturedLocationController::class, "edit_featuredlocation"])->name('edit_featuredlocation');
 
+    Route::get('/citylocation', [CityRegionController::class, "citylocation"])->name('citylocation');
+    Route::post('/add_location', [CityRegionController::class, "add_location"])->name('add_location');
+    Route::post('/delete_location', [CityRegionController::class, "delete_location"])->name('delete_location');
+     Route::post('/edit_location', [CityRegionController::class, "edit_location"])->name('edit_location');
+
     Route::get('/cityregion', [CityRegionController::class, "index"])->name('cityregion');            
     Route::post('/filterCity', [CityRegionController::class, "filterCity"])->name('filterCity');
     Route::post('/searchCity', [CityRegionController::class, "searchCity"])->name('searchCity');

@@ -35,7 +35,19 @@
                                <option value="MOBILE">MOBILE</option>
                             </select>
                             </div>
-                        </div>                         
+                        </div>
+                        <div class="input-group mb-3">  
+                            <div class="col-3">Sequence</div>
+                            <div class="col-7">
+                            <input type="text" name="sequence" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">  
+                            <div class="col-3">Display Duration in second (1-10)</div>
+                            <div class="col-7">
+                            <input type="text" name="delayDisplay" class="form-control" >
+                            </div>
+                        </div>
                         <div class="input-group mb-3">  
                             <div class="col-3">Upload Banner</div>
                             <div class="col-7">
@@ -66,7 +78,9 @@
                         <th>Url</th>
                         <th>Preview</th>
                         <th>Region</th>  
-                        <th>Type</th>    
+                        <th>Type</th>
+                        <th>Sequence</th>
+                        <th>Display Duration</th>
                         <th></th>                  
                     </tr>
                 </thead>      
@@ -78,6 +92,8 @@
                             <td><img src="{{ $basepreviewurl.$data['bannerUrl'] }}" height="100px"></td>
                             <td>{{ $data['regionCountryId'] }}</td>
                             <td>{{ $data['type'] }}</td>
+                            <td>{{ $data['sequence'] }}</td>
+                            <td>{{ $data['delayDisplay'] }}</td>
                             <td>
                                 <form action="delete_marketbanner" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}

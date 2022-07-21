@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MarketBanner extends Model
+class Locations extends Model
 {
     use HasFactory;
 
@@ -16,14 +16,14 @@ class MarketBanner extends Model
      *
      * @var string
      */
-    protected $table = 'marketplace_banner_config';
+    protected $table = 'location_config';
 
    
    // protected $primaryKey = 'eventId';
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'bannerUrl', 'regionCountryId', 'type', 'sequence', 'delayDisplay'];
+    protected $fillable = ['id', 'imageUrl', 'cityId', 'isDisplay', 'sequence'];
 
 
 

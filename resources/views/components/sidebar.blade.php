@@ -122,6 +122,9 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('featuredcategory') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('featuredcategory') }}"><i class="fas fa-bullhorn"></i><span>Category Sequence</span></a>
             </li>
+            <li class="{{ Request::routeIs('citylocation') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('citylocation') }}"><i class="fas fa-bullhorn"></i><span>Locations</span></a>
+            </li>
             <li class="{{ Request::routeIs('cityregion') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('cityregion') }}"><i class="fas fa-bullhorn"></i><span>City Region</span></a>
             </li>

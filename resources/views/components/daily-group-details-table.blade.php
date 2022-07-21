@@ -90,7 +90,13 @@
                             echo " ".$dateTime->format($format);
                             ?>
                             </td>                            
-                            <td>{{ $data['customer']['name'] }}</td>
+                            <td><?php if ($data['customer']['name']=="") { 
+                                        echo $data['customer']['username'];
+                                    } else {
+                                        echo $data['customer']['name'];
+                                    }
+                                ?>
+                            </td>
                             <td>{{ $storeName }}</td>
                             <td>{{ number_format($data['subTotal'], 2, '.', ',') ?? '0.00' }}</td>
                             <td>{{ number_format($data['appliedDiscount'], 2, '.', ',') ?? '0.00' }}</td>
