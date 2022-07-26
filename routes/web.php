@@ -131,6 +131,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_featuredproduct', [FeaturedProductController::class, "add_featuredproduct"])->name('add_featuredproduct');
     Route::post('/edit_featuredproduct', [FeaturedProductController::class, "edit_featuredproduct"])->name('edit_featuredproduct');
     Route::post('/delete_featuredproduct', [FeaturedProductController::class, "delete_featuredproduct"])->name('delete_featuredproduct');
+    Route::post('/deletemultiple_featuredproduct', [FeaturedProductController::class, "deletemultiple_featuredproduct"])->name('deletemultiple_featuredproduct');
     Route::post('/post_featuredproduct', [FeaturedProductController::class, "post_editfeaturedproduct"])->name('post_editfeaturedproduct');
     Route::post('/searchByLocation', [FeaturedProductController::class, "searchByLocation"])->name('searchByLocation');
     

@@ -59,6 +59,46 @@
             });
         }
 
+        function deleteMultiple() {
+            if (!confirm('Are you sure want to delete selected product?')) {
+                return false;
+            }
+
+            var locationId = document.getElementById('selectLocation').value;
+            var checkboxes = document.getElementsByName("delete_sequence");  
+            console.log(checkboxes);
+            const  rowIds=[];
+            var x=0;
+            for(var i = 0; i < checkboxes.length; i++)  
+            {  
+                if(checkboxes[i].checked)  {
+                    console.log(checkboxes[i].value); 
+                    rowIds[x] = checkboxes[i].value;
+                    x++;
+                }
+            }  
+
+            
+            $.ajax({
+               type:'POST',
+               url:'/deletemultiple_featuredproduct',
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type' : 'application/x-www-form-urlencoded'
+                },
+               data:{
+                    ids : rowIds,
+                    locationId : locationId,                
+                },
+               success:function(data) {
+                 $("#msg").html(data.productList);
+                  //console.log(data);
+                  var resultData = data.productList;
+                  showData(resultData);
+               }
+            });
+        }
+
         function addProduct(productId) {
             
             var oForm = document.forms["addProd_"+productId];
@@ -145,8 +185,7 @@
                                 bodyData+='</button>';                                
                         bodyData+='</td>';                        
                     bodyData+='<td>';
-                        bodyData+='<button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteSequence('+row.id+')"><i class="fas fa-window-close"></i>';
-                            bodyData+='</button>';
+                        bodyData+='<input type="checkbox" name="delete_sequence" value="'+row.id+'">';
                     bodyData+='</td>';
                 bodyData+='</tr>';
 
@@ -360,7 +399,7 @@
                         <th style="width: 10%;">Sequence</th> 
                         <th style="width: 10%;">Main Page</th>    
                         <th style="width: 5%;"></th>                         
-                        <th style="width: 5%;"></th>                         
+                        <th style="width: 5%;">Delete</th>                         
                     </tr>
                 </thead>      
                 <tbody id="productList">
@@ -391,20 +430,17 @@
                                     
                                 </td>
                             
-                            <td>
-                               
-                                    {{@csrf_field()}}
-                                     <input type="hidden" name="id" value="{{ $data->id }}">
-                                     <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteSequence('{{ $data->id }}')"><i class="fas fa-window-close"></i> 
-                                    </button>
-                                
-                               
-                            </td>                           
+                            <td><input type="checkbox" name="delete_sequence" value="{{ $data->id }}"></td>                           
                         </tr>
                     @endforeach
 
                 </tbody>
             </table>
+
+            <div class="w-full flex flex-row justify-end">
+                 <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteMultiple()"><span>Delete Product</span> 
+                 </button>
+            </div>
 
             {{-- <div class="row" style="margin-top: 5px;">
                 <div class="col">
