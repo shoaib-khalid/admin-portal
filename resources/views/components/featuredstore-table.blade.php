@@ -232,6 +232,15 @@
             });
         }
 
+        function toggleDelete(source) {
+          checkboxes = document.getElementsByName('delete_sequence');
+          for(var i=0; i<checkboxes.length; i++){  
+                    if(source.checked)  
+                        checkboxes[i].checked=true;  
+                    else
+                        checkboxes[i].checked=false;  
+                }  
+        }
 
       </script>
 
@@ -306,9 +315,7 @@
                         <th style="width: 10%;">Sequence</th>     
                         <th style="width: 10%;">Main Page</th>     
                         <th style="width: 10%;"></th> 
-                        <th style="width: 10%;"></th>                 
-                        <th style="width: 10%;"></th>
-                        <th style="width: 10%;"></th>
+                        <th style="width: 5%;">Delete <input type="checkbox" onClick="toggleDelete(this)" /></th>                         
                     </tr>
                 </thead>      
                 <tbody  id="storeList">
