@@ -37,7 +37,6 @@
                 return false;
             }
 
-            var oForm = document.forms["saveSeq_"+rowId];
             var locationId = document.getElementById('selectLocation').value;
             
             $.ajax({
@@ -129,17 +128,18 @@
                 bodyData+='<tr class="text-center">';
                     bodyData+='<td>'+row.productName+'</td>';
                     bodyData+='<td>'+row.category+'</td>';
-                    bodyData+='<td>'+row.storeName+'</td>';
-                    if (row.isMainLevel==1) {
-                        bodyData+='<td>MainPage / '+row.storeCity+'</td>';
-                    } else {
-                        bodyData+='<td>'+row.storeCity+'</td>';                            
-                    }
+                    bodyData+='<td>'+row.storeName+'</td>';                    
+                    bodyData+='<td>'+row.storeCity+'</td>';                                                
                     
                             bodyData+='<input type="hidden" id="saveSeq_id_'+row.id+'" value="'+row.id+'">';
                         bodyData+='<td>';
                             bodyData+='<input type="text" id="saveSeq_sequence_'+row.id+'" value="'+row.sequence+'" class="form-control" >';
                         bodyData+='</td>';
+                        if (row.isMainLevel==1) {
+                            bodyData+='<td><input type="checkbox" checked></td>';
+                        } else {
+                            bodyData+='<td><input type="checkbox"></td>';
+                        }                        
                         bodyData+='<td>';
                              bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('+row.id+')"><i class="fas fa-save"></i>';
                                 bodyData+='</button>';                                
@@ -158,7 +158,7 @@
 
          function filterProduct() {
            var locationId = document.getElementById('selectLocation').value;
-           var selectCategory = document.getElementById('selectCat').value;
+           //var selectCategory = document.getElementById('selectCat').value;
            var storeName = document.getElementById('storeName').value;
            var productName = document.getElementById('productName').value;
           // alert(storeName);
@@ -172,7 +172,7 @@
                 },
                data:{
                     locationId : locationId,
-                    selectCategory : selectCategory,
+                    //selectCategory : selectCategory,
                     store_name : storeName,
                     product_name : productName
                 },
@@ -200,7 +200,12 @@
                         bodyData+='<td style="padding: 0">'+row.storeCity+'</td>';
                         if (row.sequence) {
                             bodyData+='<td style="padding: 0"><input type="text" name="sequence" id="addProd_sequence_'+row.id+'" class="form-control" value="'+row.sequence+'"></td>';
-                                bodyData+='<td style="padding: 0"><input type="checkbox" checked></td>';                            
+                            if (row.isMainLevel==1) {
+                                bodyData+='<td style="padding: 0"><input type="checkbox" checked></td>';
+                            } else {
+                                bodyData+='<td style="padding: 0"><input type="checkbox"></td>';
+                            }
+                                                        
                             bodyData+='<td style="padding: 0"></td>';
                         } else {
                             bodyData+='<td style="padding: 0"><input type="text" name="sequence" id="addProd_sequence_'+row.id+'" class="form-control"></td>';
@@ -244,6 +249,7 @@
                                 @endforeach
                             </select>                
                         </div>
+                        <!--
                          <div class="input-group mb-3">
                             <select name="selectCat" id="selectCat" class="form-control">   
                                 <option value="">Select Parent Category</option>                         
@@ -252,6 +258,7 @@
                                 @endforeach
                             </select>                
                         </div>
+                        !-->
                         <div class="input-group mb-3">
                             <input type="text" name="storeName" id="storeName" class="form-control"  value="" placeholder="Store name">                      
                         </div>
@@ -350,7 +357,8 @@
                         <th style="width: 20%;">Category</th>
                         <th style="width: 25%;">Store</th> 
                         <th style="width: 25%;">Location</th> 
-                        <th style="width: 10%;">Sequence</th>    
+                        <th style="width: 10%;">Sequence</th> 
+                        <th style="width: 10%;">Main Page</th>    
                         <th style="width: 5%;"></th>                         
                         <th style="width: 5%;"></th>                         
                     </tr>
@@ -362,33 +370,34 @@
                             <td>{{ $data->productName }}</td>
                             <td>{{ $data->category }}</td>
                             <td>{{ $data->storeName }}</td>
-                            <?php
-                            if ($data->isMainLevel==1) {
-                                echo '<td>MainPage / '.$data->storeCity.'</td>';
-                            } else {
-                                echo '<td>'.$data->storeCity.'</td>';
-                            }
-                            ?>
+                            <td>{{ $data->storeCity }}</td>                                                        
                             
-                            <form action="edit_featuredproduct" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                    {{@csrf_field()}}
-                                    <input type="hidden" name="id" value="{{ $data->id }}">
+                                    <input type="hidden" name="id" value="{{ $data->id }}">                                
+                                <td>                                   
+                                    <input type="text" name="sequence" id="saveSeq_sequence_{{ $data->id }}" value="{{ $data->sequence }}" class="form-control">
+                                </td>
                                 <td>
-                                    <input type="text" name="sequence" value="{{ $data->sequence }}" class="form-control" >
+                                     <?php
+                                    if ($data->isMainLevel==1) {
+                                        echo '<input type="checkbox" checked>';
+                                    } else {
+                                        echo '<input type="checkbox">';
+                                    }
+                                    ?>
                                 </td>
                                 <td>                                                                                            
-                                     <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> 
+                                     <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('{{ $data->id }}')"><i class="fas fa-save"></i> 
                                         </button>
                                     
                                 </td>
-                            </form>
+                            
                             <td>
-                                <form action="delete_featuredproduct" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                               
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data->id }}">
-                                     <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to delete this product?')"><i class="fas fa-window-close"></i> 
+                                     <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteSequence('{{ $data->id }}')"><i class="fas fa-window-close"></i> 
                                     </button>
-                                </form>
+                                
                                
                             </td>                           
                         </tr>
