@@ -23,7 +23,7 @@ class FeaturedStore extends Model
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'storeId', 'sequence'];
+    protected $fillable = ['id', 'storeId', 'sequence', 'isMainLevel'];
 
 
 

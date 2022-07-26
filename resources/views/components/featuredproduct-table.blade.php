@@ -9,7 +9,9 @@
         function saveSequence(rowId) {
             var oForm = document.forms["saveSeq_"+rowId];
             var sequence = document.getElementById("saveSeq_sequence_"+rowId).value;
+            var isMainLevel = document.getElementById("isMainLevel_"+rowId).checked;
             var locationId = document.getElementById('selectLocation').value;
+            console.log(isMainLevel);
 
             $.ajax({
                type:'POST',
@@ -22,6 +24,7 @@
                     id : rowId,
                     sequence : sequence,
                     locationId : locationId,
+                    isMainLevel : isMainLevel
                 },
                success:function(data) {
                  $("#msg").html(data.productList);
@@ -176,9 +179,9 @@
                             bodyData+='<input type="text" id="saveSeq_sequence_'+row.id+'" value="'+row.sequence+'" class="form-control" >';
                         bodyData+='</td>';
                         if (row.isMainLevel==1) {
-                            bodyData+='<td><input type="checkbox" checked></td>';
+                            bodyData+='<td><input type="checkbox" checked name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
                         } else {
-                            bodyData+='<td><input type="checkbox"></td>';
+                            bodyData+='<td><input type="checkbox" name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
                         }                        
                         bodyData+='<td>';
                              bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('+row.id+')"><i class="fas fa-save"></i>';
@@ -292,6 +295,7 @@
                           <div class="input-group mb-3">
                             <select name="selectLocation" id="selectLocation" class="form-control" onchange="changeLocation()">   
                                 <option value="">Select Location</option>  
+                                <option value="">All Location</option>  
                                 <option value="main">Main Page</option>                       
                                 @foreach ($locationlist as $location)
                                 <option value="{{$location->cityId}}" <?php if ($locationselected==$location->cityId) echo "selected"; ?>>{{$location->cityId}}</option>                            
@@ -340,29 +344,6 @@
                     </tr>
                 </thead>      
                 <tbody id="filterProductList">
-
-                    @foreach ($searchresult as $data)                    
-                        <tr class="text-center">
-                             <form method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                    {{@csrf_field()}}
-                            <td style="padding: 0">{{ $data->name }}</td>
-                            <td style="padding: 0">{{ $data->parentcategory }}</td>
-                            <td style="padding: 0">{{ $data->category }}</td>
-                            <td style="padding: 0">{{ $data->storeName }}</td>
-                            <td style="padding: 0">{{ $data->storeCity }}</td>
-                            <td style="padding: 0"> <input type="text" name="sequence" id="addProd_sequence_{{ $data->id }}" value="{{ $data->sequence }}" class="form-control"></td>
-                            <td style="padding: 0">
-                                     <?php if ($data->sequence=="") { ?>                              
-                                     <input type="hidden" name="id" value="{{ $data->id }}">
-                                     <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="addProduct('{{ $data->id }}')"><i class="fas fa-plus"></i> 
-                                    </button>
-                                    <?php } ?>
-                               
-                            </td> 
-
-                            </form>                          
-                        </tr>
-                    @endforeach
 
                 </tbody>
             </table>
@@ -413,36 +394,6 @@
                     </tr>
                 </thead>      
                 <tbody id="productList">
-
-                    @foreach ($datas as $data)
-                        <tr class="text-center">
-                            <td>{{ $data->productName }}</td>
-                            <td>{{ $data->category }}</td>
-                            <td>{{ $data->storeName }}</td>
-                            <td>{{ $data->storeCity }}</td>                                                        
-                            
-                                    <input type="hidden" name="id" value="{{ $data->id }}">                                
-                                <td>                                   
-                                    <input type="text" name="sequence" id="saveSeq_sequence_{{ $data->id }}" value="{{ $data->sequence }}" class="form-control">
-                                </td>
-                                <td>
-                                     <?php
-                                    if ($data->isMainLevel==1) {
-                                        echo '<input type="checkbox" checked>';
-                                    } else {
-                                        echo '<input type="checkbox">';
-                                    }
-                                    ?>
-                                </td>
-                                <td>                                                                                            
-                                     <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('{{ $data->id }}')"><i class="fas fa-save"></i> 
-                                        </button>
-                                    
-                                </td>
-                            
-                            <td><input type="checkbox" name="delete_sequence" value="{{ $data->id }}"></td>                           
-                        </tr>
-                    @endforeach
 
                 </tbody>
             </table>

@@ -31,7 +31,7 @@ class MarketBannerController extends Controller
 
 
     public function index(){        
-        $datas = MarketBanner::get();
+        $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;
@@ -58,7 +58,7 @@ class MarketBannerController extends Controller
         $banner->delayDisplay = $request->delayDisplay;
         $banner->save();
 
-        $datas = MarketBanner::get();       
+        $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;
@@ -68,7 +68,21 @@ class MarketBannerController extends Controller
 
     public function delete_marketbanner(Request $request){
         DB::connection('mysql2')->delete("DELETE FROM marketplace_banner_config WHERE id='".$request->id."'");
-        $datas = MarketBanner::get();       
+        $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
+        $sql="SELECT id, name FROM region_country";
+        $countryList = DB::connection('mysql2')->select($sql);
+        $basepreviewurl = $this->basepreviewurl;
+        return view('components.marketbanner', compact('datas','countryList', 'basepreviewurl'));
+    }
+
+    public function edit_marketbanner(Request $request){
+        $datalist = MarketBanner::where('id',$request->id)->get();
+        $data = $datalist[0];
+        $data->sequence = $request->sequence;
+        $data->delayDisplay = $request->delayDisplay;
+        $data->save();
+
+        $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;

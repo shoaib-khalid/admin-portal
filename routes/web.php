@@ -124,8 +124,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_featuredstore', [FeaturedStoreController::class, "add_featuredstore"])->name('add_featuredstore');
     Route::post('/edit_featuredstore', [FeaturedStoreController::class, "edit_featuredstore"])->name('edit_featuredstore');
     Route::post('/delete_featuredstore', [FeaturedStoreController::class, "delete_featuredstore"])->name('delete_featuredstore');
+    Route::post('/deletemultiple_featuredstore', [FeaturedProductController::class, "deletemultiple_featuredstore"])->name('deletemultiple_featuredstore');
     Route::post('/post_editfeaturedstore', [FeaturedStoreController::class, "post_editfeaturedstore"])->name('post_editfeaturedstore');
-
+    Route::post('/storeSearchByLocation', [FeaturedStoreController::class, "storeSearchByLocation"])->name('storeSearchByLocation');
+    Route::post('/deletemultiple_featuredstore', [FeaturedStoreController::class, "deletemultiple_featuredstore"])->name('deletemultiple_featuredstore');
+    
     Route::get('/featuredproduct', [FeaturedProductController::class, "index"])->name('featuredproduct');    
     Route::post('/filter_product', [FeaturedProductController::class, "filter_product"])->name('filter_product');
     Route::post('/add_featuredproduct', [FeaturedProductController::class, "add_featuredproduct"])->name('add_featuredproduct');
@@ -163,6 +166,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/marketbanner', [MarketBannerController::class, "index"])->name('marketbanner');    
     Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');  
+    Route::post('/edit_marketbanner', [MarketBannerController::class, "edit_marketbanner"])->name('edit_marketbanner');
     Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner'); 
 
     Route::get('/groupsales', [UserController::class, "daily_group_details"])->name('groupsales');   

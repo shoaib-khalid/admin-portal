@@ -2,6 +2,15 @@
     // var_dump($datas);
     // dd($datas);
 @endphp
+<script type="text/javascript">
+    function saveSequence(rowId) {
+            var oForm = document.forms["saveSequenceForm_"+rowId];
+            //var sequence = document.getElementById("sequence_"+rowId).value;
+            //var sequence = document.getElementById("delayDisplay_"+rowId).value;
+            //var locationId = document.getElementById('selectLocation').value;
+            oForm.submit();
+        }
+</script>
 <div class="card section">
     <div class="card-header">
         <h4>Marketplace banner</h4>
@@ -79,8 +88,9 @@
                         <th>Preview</th>
                         <th>Region</th>  
                         <th>Type</th>
-                        <th>Sequence</th>
-                        <th>Display Duration</th>
+                        <th style="width: 10%;">Sequence</th>
+                        <th style="width: 10%;">Display Duration</th>
+                        <th></th>
                         <th></th>                  
                     </tr>
                 </thead>      
@@ -92,8 +102,18 @@
                             <td><img src="{{ $basepreviewurl.$data['bannerUrl'] }}" height="100px"></td>
                             <td>{{ $data['regionCountryId'] }}</td>
                             <td>{{ $data['type'] }}</td>
-                            <td>{{ $data['sequence'] }}</td>
-                            <td>{{ $data['delayDisplay'] }}</td>
+                            
+                            <form action="edit_marketbanner" name="saveSequenceForm_{{ $data->id }}" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                                    {{@csrf_field()}}
+                                    <input type="hidden" name="id" value="{{ $data['id'] }}">
+                            <td><input type="text" name="sequence" class="form-control"  value="{{ $data['sequence'] }}"></td>
+                            <td><input type="text" name="delayDisplay" class="form-control"  value="{{ $data['delayDisplay'] }}"></td>
+                           
+                            <td>
+                                 <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('{{ $data->id }}')"><i class="fas fa-save"></i> 
+                                        </button>
+                            </td>
+                            </form>
                             <td>
                                 <form action="delete_marketbanner" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}

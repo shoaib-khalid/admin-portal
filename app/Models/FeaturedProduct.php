@@ -23,7 +23,7 @@ class FeaturedProduct extends Model
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'productId', 'sequence'];
+    protected $fillable = ['id', 'productId', 'sequence', 'isMainLevel'];
 
 
 
