@@ -262,6 +262,16 @@
               })
               $("#filterProductList").html(bodyData);
          }
+
+        function toggleDelete(source) {
+          checkboxes = document.getElementsByName('delete_sequence');
+          for(var i=0; i<checkboxes.length; i++){  
+                    if(source.checked)  
+                        checkboxes[i].checked=true;  
+                    else
+                        checkboxes[i].checked=false;  
+                }  
+        }
 </script>
 
 <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -399,7 +409,7 @@
                         <th style="width: 10%;">Sequence</th> 
                         <th style="width: 10%;">Main Page</th>    
                         <th style="width: 5%;"></th>                         
-                        <th style="width: 5%;">Delete</th>                         
+                        <th style="width: 5%;">Delete <input type="checkbox" onClick="toggleDelete(this)" /></th>                         
                     </tr>
                 </thead>      
                 <tbody id="productList">
