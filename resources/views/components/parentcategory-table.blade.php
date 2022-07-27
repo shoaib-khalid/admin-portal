@@ -80,7 +80,7 @@
                             <td>{{ $data['verticalCode'] }}</td>
                             <td>{{ $data['id'] }}</td>
                             <td>{{ $data['name'] }}</td>                            
-                            <td><img src="{{ $basepreviewurl.$data['imageUrl'] }}" height="100px"></td>                        
+                            <td><img src="{{ $basepreviewurl.$data['thumbnailUrl'] }}" height="100px"></td>                        
                             <form action="edit_parentcategory" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
