@@ -143,7 +143,7 @@
                         <th style="width: 20%;">State</th>
                         <th style="width: 20%;">Locations</th>                        
                         <th style="width: 20%;">Logo</th>
-                        <th style="width: 20%;">Neighbour</th>  
+                        <th style="width: 20%;">Neighbour (Max 5)</th>  
                         <th style="width: 20%;"></th> 
                         <th style="width: 20%;"></th>                                            
                         <th style="width: 20%;"></th>                 

@@ -131,7 +131,7 @@
                     <tr class="text-center">
                         <th style="width: 20%;">State</th>
                         <th style="width: 20%;">City</th>
-                        <th style="width: 20%;">Neighbour</th>     
+                        <th style="width: 20%;">Neighbour (Max 5 per city)</th>     
                         <th style="width: 20%;"></th>                 
                     </tr>
                 </thead>      

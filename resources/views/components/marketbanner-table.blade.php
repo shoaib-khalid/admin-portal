@@ -58,6 +58,12 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">  
+                            <div class="col-3">Action Url (with http://..)</div>
+                            <div class="col-7">
+                            <input type="text" name="actionUrl" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">  
                             <div class="col-3">Upload Banner</div>
                             <div class="col-7">
                               <input type="file" name="selectFile">
@@ -90,6 +96,7 @@
                         <th>Type</th>
                         <th style="width: 10%;">Sequence</th>
                         <th style="width: 10%;">Display Duration</th>
+                        <th style="width: 30%;">Action Url</th>
                         <th></th>
                         <th></th>                  
                     </tr>
@@ -108,7 +115,8 @@
                                     <input type="hidden" name="id" value="{{ $data['id'] }}">
                             <td><input type="text" name="sequence" class="form-control"  value="{{ $data['sequence'] }}"></td>
                             <td><input type="text" name="delayDisplay" class="form-control"  value="{{ $data['delayDisplay'] }}"></td>
-                           
+                            <td><input type="text" name="actionUrl" class="form-control"  value="{{ $data['actionUrl'] }}"></td>
+
                             <td>
                                  <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('{{ $data->id }}')"><i class="fas fa-save"></i> 
                                         </button>

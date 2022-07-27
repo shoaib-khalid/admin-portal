@@ -1,3 +1,15 @@
+Version 1.10.2
+------------------------
+Date:27-July-2022
+
+New menu : Parent Category
+
+#DB Changes:
+ALTER TABLE marketplace_banner_config ADD actionUrl varchar(500);
+ALTER TABLE store_category ADD created_at datetime;
+ALTER TABLE store_category ADD updated_at datetime;
+
+
 Version 1.10.1
 ------------------------
 Date:26-July-2022

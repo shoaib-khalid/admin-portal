@@ -23,7 +23,7 @@ class MarketBanner extends Model
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'bannerUrl', 'regionCountryId', 'type', 'sequence', 'delayDisplay'];
+    protected $fillable = ['id', 'bannerUrl', 'regionCountryId', 'type', 'sequence', 'delayDisplay', 'actionUrl'];
 
 
 

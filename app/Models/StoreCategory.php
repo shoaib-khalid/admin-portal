@@ -23,7 +23,7 @@ class StoreCategory extends Model
 
     protected $casts = ['id' => 'string'];
 
-    protected $fillable = ['id', 'name', 'verticalCode'];
+    protected $fillable = ['id', 'name', 'verticalCode', 'thumbnailUrl'];
 
 
 

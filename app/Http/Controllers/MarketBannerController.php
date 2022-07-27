@@ -46,16 +46,17 @@ class MarketBannerController extends Controller
         //Move Uploaded File
         $newfilename = date("YmdHis").".".$extension;
         $destinationPath = $this->basepath;
-        echo " path:".$destinationPath;
+        //echo " path:".$destinationPath;
         $file->move($destinationPath,$newfilename);
         $url = $this->baseurl."/".$newfilename;
-        echo " url:".$url;
+        //echo " url:".$url;
         $banner = new MarketBanner();
         $banner->regionCountryId = $request->selectCountry;
         $banner->bannerUrl = $url;
         $banner->type = $request->selectType;
         $banner->sequence = $request->sequence;
         $banner->delayDisplay = $request->delayDisplay;
+        $banner->actionUrl = $request->actionUrl;
         $banner->save();
 
         $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
@@ -80,6 +81,7 @@ class MarketBannerController extends Controller
         $data = $datalist[0];
         $data->sequence = $request->sequence;
         $data->delayDisplay = $request->delayDisplay;
+        $data->actionUrl = $request->actionUrl;
         $data->save();
 
         $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 

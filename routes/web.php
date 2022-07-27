@@ -13,6 +13,7 @@ use App\Http\Controllers\FeaturedLocationController;
 use App\Http\Controllers\CityRegionController;
 use App\Http\Controllers\FeaturedCategoryController;
 use App\Http\Controllers\MarketBannerController;
+use App\Http\Controllers\ParentCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -154,6 +155,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_cityregion', [CityRegionController::class, "add_cityregion"])->name('add_cityregion');
     Route::post('/delete_cityregion', [CityRegionController::class, "delete_cityregion"])->name('delete_cityregion');
     
+    Route::get('/parentcategory', [ParentCategoryController::class, "index"])->name('parentcategory');
+    Route::post('/add_parentcategory', [ParentCategoryController::class, "add_parentcategory"])->name('add_location');
+    Route::post('/delete_parentcategory', [ParentCategoryController::class, "delete_parentcategory"])->name('delete_location');
+    Route::post('/edit_parentcategory', [ParentCategoryController::class, "edit_parentcategory"])->name('edit_location');
 
     Route::get('/featuredcategory', [FeaturedCategoryController::class, "index"])->name('featuredcategory');   
     
