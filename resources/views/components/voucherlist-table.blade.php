@@ -96,12 +96,12 @@
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
                                     </button>
                                 </form>
-                                <form action="voucherdelete" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                                <!--<form action="voucherdelete" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="voucherId" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close"></i> 
                                     </button>
-                                </form>
+                                </form>!-->
                             </td>
                         </tr>
                     @endforeach

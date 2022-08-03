@@ -13,6 +13,7 @@ use App\Http\Controllers\FeaturedLocationController;
 use App\Http\Controllers\CityRegionController;
 use App\Http\Controllers\FeaturedCategoryController;
 use App\Http\Controllers\MarketBannerController;
+use App\Http\Controllers\MarketPopupController;
 use App\Http\Controllers\ParentCategoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -173,6 +174,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');  
     Route::post('/edit_marketbanner', [MarketBannerController::class, "edit_marketbanner"])->name('edit_marketbanner');
     Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner'); 
+
+    Route::get('/marketpopup', [MarketPopupController::class, "index"])->name('marketpopup');    
+    Route::post('/add_marketpopup', [MarketPopupController::class, "add_marketpopup"])->name('add_marketpopup');  
+    Route::post('/edit_marketpopup', [MarketPopupController::class, "edit_marketpopup"])->name('edit_marketpopup');
+    Route::post('/delete_marketpopup', [MarketPopupController::class, "delete_marketpopup"])->name('delete_marketpopup'); 
 
     Route::get('/groupsales', [UserController::class, "daily_group_details"])->name('groupsales');   
     Route::post('/filter_groupsales', [UserController::class, "filter_daily_group_details"])->name('filter_groupsales');

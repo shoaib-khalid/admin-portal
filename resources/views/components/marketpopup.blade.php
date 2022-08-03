@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>Marketplace Banner</h1>        
+        <h1>Marketplace Popup</h1>        
     </x-slot>
     <div>
-        <x-marketbanner-table :datas="$datas" :countryList="$countryList" :basepreviewurl="$basepreviewurl"></x-marketbanner-table>
+        <x-marketpopup-table :datas="$datas" :countryList="$countryList" :basepreviewurl="$basepreviewurl"></x-marketpopup-table>
     </div>
 </x-app-layout>
 <script>
