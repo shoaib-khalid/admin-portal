@@ -1,10 +1,11 @@
 Version 1.10.3
 ------------------------
-Date:3-Aug-2022
+Date:4-Aug-2022
 
 Remove delete voucher
 New menu : guest popup image
 Hide individual sales menu
+Hide feature locations
 
 
 Version 1.10.2

@@ -116,9 +116,10 @@ $navigation_links = array_to_object($links);
                 <a class="nav-link" href="{{ route('featuredproduct') }}"><i class="fas fa-bullhorn"></i><span>Featured Product</span></a>
             </li>
            
+           <!--
             <li class="{{ Request::routeIs('featuredlocation') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('featuredlocation') }}"><i class="fas fa-bullhorn"></i><span>Featured Location</span></a>
-            </li>
+            </li>!-->
 
             <li class="{{ Request::routeIs('parentcategory') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('parentcategory') }}"><i class="fas fa-bullhorn"></i><span>Parent Category</span></a>

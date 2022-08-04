@@ -39,6 +39,7 @@ class CityRegionController extends Controller
     public function citylocation(){        
         $datas = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->orderBy('sequence', 'ASC')
                     ->get();        
         $citySelected = "";
         $stateSelected = "";
@@ -87,6 +88,7 @@ class CityRegionController extends Controller
 
          $datas = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->orderBy('sequence', 'ASC')
                     ->get();      
         $citySelected = "";
         $stateSelected = "";
@@ -120,6 +122,7 @@ class CityRegionController extends Controller
 
          $datas = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->orderBy('sequence', 'ASC')
                     ->get();        
         $citySelected = "";
         $stateSelected = "";
@@ -176,6 +179,7 @@ class CityRegionController extends Controller
         
         $datas = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->orderBy('sequence', 'ASC')
                     ->get();  
         $citySelected = "";
         $stateSelected = "";
