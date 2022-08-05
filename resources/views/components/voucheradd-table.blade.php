@@ -55,12 +55,26 @@
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
-                        <select name="selectStore" id="selectStore" disabled="true" class="form-control">   
-                            <option></option>                         
-                            @foreach ($storelist as $store)
-                            <option value="{{$store->id}}">{{$store->name}}</option>                            
-                            @endforeach
-                        </select>
+                            <div class="input-group mb-3">
+                                <select name="selectStore" id="selectStore" disabled="true" class="form-control">   
+                                    <option></option>                         
+                                    @foreach ($storelist as $store)
+                                    <option value="{{$store->id}}">{{$store->name}}</option>                            
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" id="addStore" type="button"><i class="fas fa-plus"></i> <span>Add</span></button>
+                                </div>
+                            </div>                       
+                        </div>
+                       
+                    </div> 
+
+                    <div class="input-group mb-3">
+                        <div class="col-3"></div>
+                        <div class="col-7">
+                                 <ul name="selectedStoreList" id="selectedStoreList">
+                                 </ul>                
                         </div>
                        
                     </div> 

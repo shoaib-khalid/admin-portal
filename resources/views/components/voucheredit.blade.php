@@ -3,7 +3,7 @@
         <h1>Edit Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucheredit-table :voucher="$voucher" :storelist="$storelist" :verticalList="$verticalList" :termsList="$termsList" :voucherVerticalList="$voucherVerticalList"></x-voucheredit-table>
+        <x-voucheredit-table :voucher="$voucher" :storelist="$storelist" :verticalList="$verticalList" :termsList="$termsList" :voucherVerticalList="$voucherVerticalList" :selectedStorelist="$selectedStorelist"></x-voucheredit-table>
     </div>
 </x-app-layout>
 <script>
@@ -38,7 +38,17 @@
        } 
      });
 
+     $("#addStore").click(function() {        
+        var dropDown = document.getElementById("selectStore");
+        var selectedStore = dropDown.value; 
+        var selectedText = dropDown.options[dropDown.selectedIndex].text
+        $("#selectedStoreList").append('<li value='+selectedStore+'>'+selectedText+' <button type="button" class="delete btn btn-danger icon-left btn-icon" onclick="deleteStore(this)">Delete</button><input type="hidden" name="addStoreList[]" value="'+selectedStore+'"/></li>');        
+     });
         
     });
+
+    function deleteStore(store) {
+        store.parentElement.remove();
+    }
     
 </script>

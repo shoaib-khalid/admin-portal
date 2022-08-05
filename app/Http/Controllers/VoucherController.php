@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Voucher;
 use App\Models\VoucherTerms;
 use App\Models\VoucherVertical;
+use App\Models\VoucherStore;
 use App\Models\Store;
 use Carbon\Carbon;
 use DateTime;
@@ -104,12 +105,18 @@ class VoucherController extends Controller
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
         $voucher->minimumSpend = $request->minimumSpend;
         $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
-        $voucher->requireToClaim = $request->requireToClaim;
+        $voucher->requireToClaim = $request->requireToClaim;        
+        $voucher->save();
 
         if ($voucher->voucherType=="STORE") {
-            $voucher->storeId = $request->selectStore;
-        }
-        $voucher->save();
+            foreach ($request->addStoreList as $storeId) {
+                $vStore = new VoucherStore();
+                $vStore->id = Str::uuid();
+                $vStore->voucherId = $voucherId;
+                $vStore->storeId = $storeId;
+                $vStore->save();
+            }
+        }   
 
         foreach ($request->verticalList as $verticalCode) {
             $vcode = new VoucherVertical();
@@ -238,7 +245,20 @@ class VoucherController extends Controller
             $i++;
         }
 
-        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList','voucherVerticalList'));
+        $sList = VoucherStore::select('voucher_store.*','store.name AS storeName')
+                        ->where('voucherId', $req->voucherId)  
+                        ->join('store as store', 'storeId', '=', 'store.id')                      
+                        ->get();
+        $selectedStorelist=array();
+        $x=0;
+        foreach ($sList as $store) {
+            $selectedStorelist[$x]['name'] = $store->storeName;
+            $selectedStorelist[$x]['storeId'] = $store->storeId;
+            $x++;
+        }
+        //print_r($selectedStorelist);
+        
+        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList','voucherVerticalList','selectedStorelist'));
     }
 
     public function post_voucheredit(Request $request){        
@@ -268,11 +288,17 @@ class VoucherController extends Controller
             $voucher->editReason = $request->reason;
             $voucher->requireToClaim = $request->requireToClaim;
 
+            DB::connection('mysql2')->delete("DELETE FROM voucher_store WHERE voucherId='".$voucher->id."'");
+
             if ($voucher->voucherType=="STORE") {
-                $voucher->storeId = $request->selectStore;
-            } else {
-                $voucher->storeId = null;
-            }
+                foreach ($request->addStoreList as $storeId) {
+                    $vStore = new VoucherStore();
+                    $vStore->id = Str::uuid();
+                    $vStore->voucherId = $voucher->id;
+                    $vStore->storeId = $storeId;
+                    $vStore->save();
+                }
+            }   
 
             DB::connection('mysql2')->delete("DELETE FROM voucher_vertical WHERE voucherId='".$voucher->id."'");
 
@@ -329,7 +355,19 @@ class VoucherController extends Controller
             $i++;
         }
 
-        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList','voucherVerticalList'));
+        $sList = VoucherStore::select('voucher_store.*','store.name AS storeName')
+                        ->where('voucherId', $request->voucherId)  
+                        ->join('store as store', 'storeId', '=', 'store.id')                      
+                        ->get();
+        $selectedStorelist=array();
+        $x=0;
+        foreach ($sList as $store) {
+            $selectedStorelist[$x]['name'] = $store->storeName;
+            $selectedStorelist[$x]['storeId'] = $store->storeId;
+            $x++;
+        }
+
+        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList','voucherVerticalList', 'selectedStorelist'));
     }
 
       public function voucherdelete(Request $req){        

@@ -49,16 +49,37 @@
 
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>
+
                         <div class="col-7">
-                        <select name="selectStore" id="selectStore" <?php if ($voucher->voucherType!="STORE") { ?> disabled="true" <?php } ?> class="form-control" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?> >
-                            <option></option>                            
-                            @foreach ($storelist as $store)
-                            <option value="{{$store->id}}" <?php if ($voucher->storeId==$store->id) echo "selected"; ?>>{{$store->name}}</option>                            
-                            @endforeach
-                        </select>
+
+                            <div class="input-group mb-3">
+                                <select name="selectStore" id="selectStore" <?php if ($voucher->voucherType!="STORE") { ?> disabled="true" <?php } ?> class="form-control" <?php if ($voucher->totalRedeem>0) echo "disabled"; ?> >
+                                <option></option>                            
+                                @foreach ($storelist as $store)
+                                <option value="{{$store->id}}" <?php if ($voucher->storeId==$store->id) echo "selected"; ?>>{{$store->name}}</option>                            
+                                @endforeach
+                            </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" id="addStore" type="button"><i class="fas fa-plus"></i> <span>Add</span></button>
+                                </div>
+                            </div>   
+
+                        
                         </div>
                        
-                    </div>  
+                    </div>
+
+                     <div class="input-group mb-3">
+                        <div class="col-3"></div>
+                        <div class="col-7">
+                                 <ul name="selectedStoreList" id="selectedStoreList">
+                                    @foreach ($selectedStorelist as $store)
+                                    <li><?php echo $store['name']; ?>&nbsp;&nbsp;<button type="button" class="delete btn btn-danger icon-left btn-icon" onclick="deleteStore(this)">Delete</button><input type="hidden" name="addStoreList[]" value="<?php echo $store['storeId']; ?>"/></li>
+                                    @endforeach
+                                 </ul>                
+                        </div>
+                       
+                    </div>   
 
                   <div class="input-group mb-3">
                         
