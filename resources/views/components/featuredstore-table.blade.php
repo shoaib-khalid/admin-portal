@@ -68,13 +68,14 @@
                     
                             bodyData+='<input type="hidden" id="saveSeq_id_'+row.id+'" value="'+row.id+'">';
                         bodyData+='<td>';
-                            bodyData+='<input type="text" id="saveSeq_sequence_'+row.id+'" value="'+row.sequence+'" class="form-control" >';
+                            bodyData+='<input type="text" id="saveSeq_sequence_'+row.id+'" name="sequence" value="'+row.sequence+'" class="form-control" >';
                         bodyData+='</td>';
                          if (row.isMainLevel==1) {
                             bodyData+='<td><input type="checkbox" checked name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
                         } else {
                             bodyData+='<td><input type="checkbox" name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
-                        }                        
+                        }    
+                        bodyData+='<td><input type="text" id="saveMainSeq_sequence_'+row.id+'" name="mainLevelSequence" value="'+row.mainLevelSequence+'" class="form-control" ></td>';                    
                         bodyData+='<td>';
                              bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('+row.id+')"><i class="fas fa-save"></i>';
                                 bodyData+='</button>';                                
@@ -106,11 +107,13 @@
                             } else {
                                 bodyData+='<td style="padding: 0"><input type="checkbox"></td>';
                             }
+                            bodyData+='<td style="padding: 0"><input type="text" name="mainLevelSequence" id="addStore_mainLevelSequence_'+row.id+'" class="form-control"  value="'+row.mainLevelSequence+'"></td>';
                                                         
                             bodyData+='<td style="padding: 0"></td>';
                         } else {
                             bodyData+='<td style="padding: 0"><input type="text" name="sequence" id="addStore_sequence_'+row.id+'" class="form-control"></td>';
                             bodyData+='<td style="padding: 0"><input type="checkbox" id="addStore_check_'+row.id+'"></td>';
+                            bodyData+='<td style="padding: 0"><input type="text" name="mainLevelSequence" id="addStore_mainLevelSequence_'+row.id+'" class="form-control"></td>';
                             bodyData+='<td style="padding: 0">';                                 
                                  bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="addStore(\''+row.id+'\')"><i class="fas fa-plus"></i>';
                                 bodyData+='</button>';
@@ -131,6 +134,7 @@
             var oForm = document.forms["addStore_"+storeId];
             var sequence = document.getElementById("addStore_sequence_"+storeId).value;
             var mainLevel = document.getElementById("addStore_check_"+storeId).checked;
+            var mainLevelSequence = document.getElementById("addStore_mainLevelSequence_"+storeId).value;
             var locationId = document.getElementById('selectLocation').value;
 
             //alert(mainLevel);
@@ -152,6 +156,7 @@
                     sequence : sequence,
                     mainPage : mainPage,
                     locationId : locationId,
+                    mainLevelSequence : mainLevelSequence
                 },
                success:function(data) {
                   $("#msg").html(data.storeList);
@@ -206,6 +211,7 @@
          function saveSequence(rowId) {
             var oForm = document.forms["saveSeq_"+rowId];
             var sequence = document.getElementById("saveSeq_sequence_"+rowId).value;
+            var mainLevelSequence = document.getElementById("saveMainSeq_sequence_"+rowId).value;
             var isMainLevel = document.getElementById("isMainLevel_"+rowId).checked;
             var locationId = document.getElementById('selectLocation').value;
             console.log(isMainLevel);
@@ -221,7 +227,8 @@
                     id : rowId,
                     sequence : sequence,
                     locationId : locationId,
-                    isMainLevel : isMainLevel
+                    isMainLevel : isMainLevel,
+                    mainLevelSequence : mainLevelSequence
                 },
                success:function(data) {
                  $("#msg").html(data.storeList);
@@ -296,6 +303,7 @@
                         <th style="width: 20%;">City</th>
                         <th style="width: 10%;">Sequence</th>    
                         <th style="width: 10%;">Main Page</th> 
+                        <th style="width: 10%;">Main Page Sequence</th> 
                         <th style="width: 10%;"></th>                                             
                     </tr>
                 </thead>      
@@ -313,7 +321,8 @@
                         <th style="width: 30%;">Store</th>
                         <th style="width: 30%;">Location</th>
                         <th style="width: 10%;">Sequence</th>     
-                        <th style="width: 10%;">Main Page</th>     
+                        <th style="width: 10%;">Main Page</th>
+                        <th style="width: 10%;">Main Page Sequence</th>                           
                         <th style="width: 10%;"></th> 
                         <th style="width: 5%;">Delete <input type="checkbox" onClick="toggleDelete(this)" /></th>                         
                     </tr>

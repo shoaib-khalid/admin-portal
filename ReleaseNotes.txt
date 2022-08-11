@@ -1,3 +1,14 @@
+Version 1.10.5
+------------------------
+Date:11-Aug-2022
+
+Add new column mainLevelSequence in feature store & featured product
+
+#DB Changes:
+ALTER TABLE product_feature_config ADD mainLevelSequence decimal(10,2);
+ALTER TABLE store_display_config ADD mainLevelSequence decimal(10,2);
+
+
 Version 1.10.4
 ------------------------
 Date:5-Aug-2022
