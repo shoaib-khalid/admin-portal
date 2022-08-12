@@ -13,9 +13,11 @@ use DateTime;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
+use App\Exports\VoucherRedemptionExport;
 use App\Exports\SettlementsExport;
 use App\Exports\MerchantExport;
 use App\Exports\GroupSalesExport;
+use App\Exports\VoucherListExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -127,6 +129,19 @@ class UserController extends Controller
         // $to = "2021-08-30";
 
         return Excel::download(new MerchantExport($start_date, $end_date), 'merchant.xlsx');
+    }
+
+    public function export_voucherredemption(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen2_copy );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+        return Excel::download(new VoucherRedemptionExport($start_date, $end_date), 'voucherredemption.xlsx');
     }
 
     public function index_view ()

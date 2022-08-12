@@ -8,9 +8,11 @@ use App\Models\VoucherTerms;
 use App\Models\VoucherVertical;
 use App\Models\VoucherStore;
 use App\Models\Store;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 
+use App\Exports\VoucherListExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -213,6 +215,13 @@ class VoucherController extends Controller
         return view('components.voucherlist', compact('datas', 'datechosen', 'codechosen','totalClaim'));
 
     }
+
+    public function export_voucherlist(Request $req) 
+    {
+        
+        return Excel::download(new VoucherListExport, 'AvailableVoucherList.xlsx');
+    }
+    
 
      public function voucheredit(Request $req){        
         $datas = Voucher::where('id', $req->voucherId)                        

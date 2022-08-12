@@ -80,9 +80,11 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_refundhistory', [RefundController::class, "filter_refundhistory"])->name('filter_refundhistory');
     Route::post('/export_refundhistory', [RefundController::class, "export_refundhistory"])->name('export_refundhistory');
 
+ 
     Route::get('/useractivitylog', [ActivityController::class, "useractivitylog"])->name('useractivitylog');
     Route::post('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
-    Route::post('/export_useractivitylog', [ActivityController::class, "export_useractivitylog"])->name('export_refundhistory');
+    Route::post('/export_useractivitylog', [ActivityController::class, "export_useractivitylog"])->name('export_useractivitylog');
+
 
     Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap');
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
@@ -114,6 +116,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/post_voucherdelete', [VoucherController::class, "post_voucherdelete"])->name('post_voucherdelete');
     Route::get('/voucherclaim/{voucherId}', [VoucherController::class, "voucherclaim"])->name('voucherclaim');
     Route::get('/voucherredeem/{voucherId}', [VoucherController::class, "voucherredeem"])->name('voucherredeem');
+    Route::post('/export_voucherlist', [VoucherController::class, "export_voucherlist"])->name('export_voucherlist');
 
     Route::get('/promotext', [PromotextController::class, "index"])->name('promotext');
     Route::post('/add_promotext', [PromotextController::class, "add_promotext"])->name('add_promotext');
@@ -186,6 +189,5 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
       
     Route::get('/voucherredemption', [UserController::class, "voucherredemption"])->name('voucherredemption');   
     Route::post('/filter_voucherredemption', [UserController::class, "filter_voucherredemption"])->name('filter_voucherredemption');  
+    Route::post('/export_voucherredemption', [UserController::class, "export_voucherredemption"])->name('export_voucherredemption');
 });
-
-

@@ -6,6 +6,9 @@ use App\Models\Refund;
 use App\Models\PaymentDetail as Payment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
+
+use Illuminate\Support\Facades\Http;
+
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;

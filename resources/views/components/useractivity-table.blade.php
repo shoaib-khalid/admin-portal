@@ -20,7 +20,7 @@
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
                         </div>
-                        <div class="col-2">Store</div>
+                        <div class="col-2">Stffore</div>
                         <div class="col-4">
                         <input type="text" name="storename_chosen" id="storename_chosen" class="form-control" value="{{$storename}}">
                         </div>
@@ -54,7 +54,7 @@
 
         <div class="row">
             <div class="col">
-                <form action="export_useractivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="export_useractivitylog" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         
                             <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>

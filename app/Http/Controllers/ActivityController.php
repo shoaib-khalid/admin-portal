@@ -22,6 +22,7 @@ use App\Exports\MerchantExport;
 use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
 use App\Exports\UserActivitySummaryExport;
+use App\Exports\UserActivityExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -266,7 +267,7 @@ class ActivityController extends Controller
         // $from = "2021-08-01";
         // $to = "2021-08-30";
 
-        return Excel::download(new PendingRefundExport($start_date, $end_date." 23:59:59"), 'pendingrefund.xlsx');
+        return Excel::download(new UserActivityExport($start_date, $end_date." 23:59:59"), 'useractivity.xlsx');
     }
 
 
@@ -783,6 +784,9 @@ class ActivityController extends Controller
 
             $datas = $newArray;
         }
+//defect
+
+
 
         $groupstore=$req->groupstore;
         $groupbrowser=$req->groupbrowser;
