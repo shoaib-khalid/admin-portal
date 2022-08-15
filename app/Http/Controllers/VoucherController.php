@@ -56,7 +56,7 @@ class VoucherController extends Controller
     public function voucherredeem($voucherId){
         $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
              FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id 
-             INNER JOIN `order` C ON A.voucherId=C.voucherId AND A.customerId=C.customerId
+             INNER JOIN `order_group` C ON A.voucherId=C.platformVoucherId AND A.customerId=C.customerId
              WHERE 
             A.voucherId='".$voucherId."' AND isUsed=1";
         $userList = DB::connection('mysql2')->select($sql);

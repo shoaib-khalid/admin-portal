@@ -56,7 +56,7 @@ class FeaturedStoreController extends Controller
         $sql=" SELECT DISTINCT(A.id),
             A.name AS storeName,
             A.city AS storeCity,
-            B.sequence FROM store A 
+            B.sequence, B.mainLevelSequence FROM store A 
             LEFT JOIN store_display_config B ON B.storeId=A.id
              WHERE A.id IS NOT NULL ";
         if ($req->store_name<>"") {
@@ -80,6 +80,9 @@ class FeaturedStoreController extends Controller
         $f->storeId = $request->id;
         $f->sequence = $request->sequence;
         $f->isMainLevel = $request->mainPage;
+        if ($f->isMainLevel==true) {
+            $f->mainLevelSequence = $request->mainLevelSequence;
+        }
         $f->save();
 
         $query = FeaturedStore::select('store_display_config.*',
@@ -141,10 +144,12 @@ class FeaturedStoreController extends Controller
         $datalist = FeaturedStore::where('id',$request->id)->get();
         $data = $datalist[0];
         $data->sequence = $request->sequence;
-        if ($request->isMainLevel=="true")
+        if ($request->isMainLevel=="true") {
             $data->isMainLevel = 1;
-        else
+            $data->mainLevelSequence = $request->mainLevelSequence;
+        } else {
             $data->isMainLevel = 0;
+        }
         $data->save();
         
         $query = FeaturedStore::select('store_display_config.*',

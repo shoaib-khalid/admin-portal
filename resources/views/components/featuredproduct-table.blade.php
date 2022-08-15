@@ -10,6 +10,7 @@
             var oForm = document.forms["saveSeq_"+rowId];
             var sequence = document.getElementById("saveSeq_sequence_"+rowId).value;
             var isMainLevel = document.getElementById("isMainLevel_"+rowId).checked;
+            var mainLevelSequence = document.getElementById("saveMainLevelSeq_sequence_"+rowId).value;
             var locationId = document.getElementById('selectLocation').value;
             console.log(isMainLevel);
 
@@ -24,7 +25,8 @@
                     id : rowId,
                     sequence : sequence,
                     locationId : locationId,
-                    isMainLevel : isMainLevel
+                    isMainLevel : isMainLevel,
+                    mainLevelSequence : mainLevelSequence
                 },
                success:function(data) {
                  $("#msg").html(data.productList);
@@ -106,6 +108,7 @@
             
             var oForm = document.forms["addProd_"+productId];
             var sequence = document.getElementById("addProd_sequence_"+productId).value;
+            var mainLevelSequence = document.getElementById("addMainLevelProd_sequence_"+productId).value;
             var mainLevel = document.getElementById("addProd_check_"+productId).checked;
             var locationId = document.getElementById('selectLocation').value;
 
@@ -128,6 +131,7 @@
                     sequence : sequence,
                     mainPage : mainPage,
                     locationId : locationId,
+                    mainLevelSequence : mainLevelSequence
                 },
                success:function(data) {
                   $("#msg").html(data.productList);
@@ -182,7 +186,8 @@
                             bodyData+='<td><input type="checkbox" checked name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
                         } else {
                             bodyData+='<td><input type="checkbox" name="isMainLevel" id="isMainLevel_'+row.id+'"></td>';
-                        }                        
+                        }  
+                         bodyData+='<td><input type="text" id="saveMainLevelSeq_sequence_'+row.id+'" value="'+row.mainLevelSequence+'" class="form-control" ></td>';                      
                         bodyData+='<td>';
                              bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('+row.id+')"><i class="fas fa-save"></i>';
                                 bodyData+='</button>';                                
@@ -247,11 +252,12 @@
                             } else {
                                 bodyData+='<td style="padding: 0"><input type="checkbox"></td>';
                             }
-                                                        
+                            bodyData+='<td style="padding: 0"><input type="text" name="mainLevelSequence" id="addMainLevelProd_sequence_'+row.id+'" class="form-control" value="'+row.sequence+'"></td>';                            
                             bodyData+='<td style="padding: 0"></td>';
                         } else {
                             bodyData+='<td style="padding: 0"><input type="text" name="sequence" id="addProd_sequence_'+row.id+'" class="form-control"></td>';
                             bodyData+='<td style="padding: 0"><input type="checkbox" id="addProd_check_'+row.id+'"></td>';
+                            bodyData+='<td style="padding: 0"><input type="text" name="mainLevelSequence" id="addMainLevelProd_sequence_'+row.id+'" class="form-control"></td>';
                             bodyData+='<td style="padding: 0">';                                 
                                  bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="addProduct(\''+row.id+'\')"><i class="fas fa-plus"></i>';
                                 bodyData+='</button>';
@@ -339,7 +345,8 @@
                         <th style="width: 20%;">Store</th> 
                         <th style="width: 20%;">Store Location</th> 
                         <th style="width: 10%;">Sequence</th>  
-                        <th style="width: 10%;">MainPage</th>  
+                        <th style="width: 10%;">MainPage</th>
+                        <th style="width: 10%;">MainPage Sequence</th>    
                         <th style="width: 10%;"></th>                       
                     </tr>
                 </thead>      
@@ -385,10 +392,11 @@
                     <tr class="text-center">
                         <th style="width: 20%;">Product Name</th>
                         <th style="width: 20%;">Category</th>
-                        <th style="width: 25%;">Store</th> 
-                        <th style="width: 25%;">Location</th> 
+                        <th style="width: 20%;">Store</th> 
+                        <th style="width: 20%;">Location</th> 
                         <th style="width: 10%;">Sequence</th> 
-                        <th style="width: 10%;">Main Page</th>    
+                        <th style="width: 10%;">Main Page</th>  
+                        <th style="width: 10%;">MainPage Sequence</th>    
                         <th style="width: 5%;"></th>                         
                         <th style="width: 5%;">Delete <input type="checkbox" onClick="toggleDelete(this)" /></th>                         
                     </tr>

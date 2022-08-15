@@ -104,6 +104,9 @@ class FeaturedProductController extends Controller
         $f->sequence = $request->sequence;
        // echo "mainPage:".$request->mainPage;
         $f->isMainLevel = $request->mainPage;
+        if ($f->isMainLevel==true) {
+            $f->mainLevelSequence = $request->mainLevelSequence;
+        }
         $f->save();
 
 
@@ -127,10 +130,13 @@ class FeaturedProductController extends Controller
         $datalist = FeaturedProduct::where('id',$request->id)->get();
         $data = $datalist[0];
         $data->sequence = $request->sequence;
-        if ($request->isMainLevel=="true")
+        if ($request->isMainLevel=="true") {
             $data->isMainLevel = 1;
-        else
+            $data->mainLevelSequence = $request->mainLevelSequence;
+        }
+        else {
             $data->isMainLevel = 0;
+        }
         $data->save();
                
         $query = FeaturedProduct::select('product_feature_config.*','product.name AS productName','store.name AS storeName', 'store.city AS storeCity', 'store_category.name AS category', 'parent_category.name AS parentcategory')
