@@ -20,8 +20,31 @@ class VoucherListExport implements FromCollection, ShouldAutoSize, WithHeadings
     */
     public function collection()
     {
-        return Transaction::all();
+        foreach($datas as $data){
+
+            $cur_item = array();
+
+            array_push( 
+                $cur_item,
+                $data['name'],
+                $data['status'],
+                $data['startDate'],
+                $data['endDate'],
+                $data['voucherType'],
+                $data['storeName']
+                $data['discountType']['calculationType'],
+                $data['discountValue'],
+                $data['maxDiscountAmount'],
+                $data['voucherCode'],
+                $data['requireToClaim'],
+                $data['totalQuantity']
+            );
+
+            $newArray[] = $cur_item;
+
+        }       
     }
+
     
     public function headings(): array
     {

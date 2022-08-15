@@ -219,6 +219,42 @@ class VoucherController extends Controller
     public function export_voucherlist(Request $req) 
     {
         
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen4 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        $query = Voucher::select('voucher.*','store.name AS storeName')
+                        ->leftJoin('store as store', 'storeId', '=', 'store.id')
+                        ->whereBetween('created_at', [$start_date, $end_date." 23:59:59"]);
+
+        if ($req->code_chosen<>"") {
+            $query->where('voucherCode', 'like', '%'.$req->code_chosen.'%');
+        }
+
+        $query->orderBy('created_at', 'DESC');
+       // dd($query);
+        $datas = $query->get();
+        foreach ($datas as $data) {
+            //get total claim
+            $sql = "SELECT COUNT(*) AS total FROM customer_voucher WHERE voucherId='".$data->id."'";
+            $voucherdata = DB::connection('mysql2')->select($sql);
+            if (count($voucherdata)>0) {
+                $totalClaim[$data->id] = $voucherdata[0]->total;
+            } else {
+                $totalClaim[$data->id] = 0;
+            }
+        }
+        //print_r($datas);                    
+
+        // return $datas;
+        // die();
+        $datechosen = $req->date_chosen4;    
+        $codechosen = $req->code_chosen;            
         return Excel::download(new VoucherListExport, 'AvailableVoucherList.xlsx');
     }
     
