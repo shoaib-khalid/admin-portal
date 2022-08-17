@@ -32,6 +32,7 @@ class UserActivity extends Model
                             'state',
                             'country',
                             'postcode',
-                            'address'
+                            'address',
+                            'channel'
                         ];
 }

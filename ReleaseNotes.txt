@@ -1,3 +1,14 @@
+Version 1.10.7
+------------------------
+Date:17-Aug-2022
+
+Add menu in sidebar : Customer Visit Channel
+Add select option in Customer Activity Page 
+
+#DB Changes
+Add channel attribute in customer_activities table 
+
+
 Version 1.10.6
 ------------------------
 Date:15-Aug-2022

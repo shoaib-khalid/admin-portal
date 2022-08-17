@@ -85,6 +85,9 @@ $navigation_links = array_to_object($links);
             <li class="{{ Request::routeIs('usersitemap') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('usersitemap') }}"><i class="fas fa-sitemap"></i><span>Customer Site Map</span></a>
             </li>
+            <li class="{{ Request::routeIs('visitchannel') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('visitchannel') }}"><i class="fas fa-mouse-pointer"></i><span>Customer Visits Channel</span></a>
+            </li>
             <li class="{{ Request::routeIs('useractivitysummary') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('useractivitysummary') }}"><i class="fas fa-calculator"></i><span>Customer Summary</span></a>
             </li>

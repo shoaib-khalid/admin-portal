@@ -23,6 +23,7 @@ use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
 use App\Exports\UserActivitySummaryExport;
 use App\Exports\UserActivityExport;
+use App\Exports\AbandonCartExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -123,8 +124,10 @@ class ActivityController extends Controller
         $customername = '';
         $device = '';  
         $browser = ''; 
+        $malaysia = '';
+        $pakistan = '';
 
-        return view('components.useractivity', compact('datas','datechosen','storename','customername','device','browser'));
+        return view('components.useractivity', compact('datas','datechosen','storename','customername','device','browser','malaysia','pakistan'));
     }
 
     
@@ -144,8 +147,8 @@ class ActivityController extends Controller
         $query = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
                         ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"])  
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
-
-        if ($req->storename_chosen<>"") {
+          
+            if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
             $search_storeId_list = array();        
             if (count($search_store_info) > 0) {
@@ -166,6 +169,7 @@ class ActivityController extends Controller
             $query->where('customerId', $search_customerId);
             //dd($query);
         }
+
         if ($req->device_chosen<>"") {
             $query->where('deviceModel', $req->device_chosen);
         }
@@ -173,6 +177,14 @@ class ActivityController extends Controller
             $query->where('browserType', $req->browser_chosen);
         }
           
+        if($req->malaysia<>""){
+            $sql .= UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+          }
+  
+         if($req->malaysia<>""){
+              $sql .= UserActivity::where('pageVisited', 'like', '%dev-pk%')->get();
+            }
+
         $query->orderBy('created', 'DESC');
         //dd($query);
         $datas = $query->get();
@@ -243,8 +255,10 @@ class ActivityController extends Controller
         $customername = $req->customer_chosen;
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
+        $malaysia= $req->malaysia;
+        $pakistan= $req->pakistan;
 
-        return view('components.useractivity', compact('datas', 'datechosen', 'storename', 'customername','device','browser'));
+        return view('components.useractivity', compact('datas', 'datechosen', 'storename', 'customername','device','browser','malaysia','pakistan'));
 
     }
 
@@ -294,8 +308,6 @@ class ActivityController extends Controller
 
         foreach ($datas as $data) {
 
-            
-             
             //get starttimestamp & endtimestamp, startpage & lastpage
             $sql="SELECT created, pageVisited, storeId, customerId FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC LIMIT 1";
             $rsstart = DB::connection('mysql3')->select($sql);
@@ -468,6 +480,7 @@ class ActivityController extends Controller
             //dd($query);
         }
 
+
         if ($req->customer_chosen<>"") {
             $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
             if (count($search_customer_info) > 0) {
@@ -515,6 +528,7 @@ class ActivityController extends Controller
             $mins = ($end - $start) / 60;
             $timeSpent=$mins;
 
+                        
             //check if any item in cart
             $sql="SELECT * FROM cart_item WHERE cartId='".$data['sessionId']."'";
             $rsitem = DB::connection('mysql2')->select($sql);
@@ -657,8 +671,10 @@ class ActivityController extends Controller
         $groupos=null;
         $grouppage=null;
         $groupstore=null;
+        $malaysia=null;
+        $pakistan=null;
 
-        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage'));        
+        return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));        
     }
    
 
@@ -734,6 +750,16 @@ class ActivityController extends Controller
             $sql .= " AND storeId IN (".$commaList.")";
         }
 
+
+        if($req->malaysia<>""){
+          $sql .= UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+        }
+
+        if($req->malaysia<>""){
+            $sql .= UserActivity::where('pageVisited', 'like', '%dev-pk%')->get();
+          }
+
+
         if ($req->customer_chosen<>"") {
             $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
             if (count($search_customer_info) > 0) {
@@ -799,14 +825,177 @@ class ActivityController extends Controller
         $customername = $req->customer_chosen;
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
+        $malaysia = $req->malaysia;
+        $pakistan = $req->pakistan;
 
         if ($req->exportExcel==1) {
              return Excel::download(new UserActivitySummaryExport($datas, $req), 'CustomerSummary.xlsx');
          } else {
-            return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage'));    
+            return view('components.useractivitysummary', compact('datas','datechosen','storename','customername','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));    
          }
         
     }    
+
+    public function visitchannel(){
+
+        $to = date("Y-m-d");
+        $date = new DateTime('1 days ago');
+        $from = $date->format("Y-m-d");
+
+        //query group by sessionId
+        $datas = UserActivity::select('sessionId')->distinct()
+                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->orderBy('customer_activities.created', 'DESC')
+                        ->get();
+        //dd($datas);
+
+        $newArray = array();
+        $storeList = array();
+        $customerList = array();
+
+        //dd($datas);
+
+        foreach ($datas as $data) {
+
+            //get starttimestamp & endtimestamp, startpage & lastpage
+            $sql="SELECT created, pageVisited, storeId, customerId FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC LIMIT 1";
+            $rsstart = DB::connection('mysql3')->select($sql);
+            $startTimestamp = $rsstart[0]->created;
+            $firstPage = $rsstart[0]->pageVisited;
+            $storeId = $rsstart[0]->storeId;
+            $customerId = $rsstart[0]->customerId;
+
+            $sql="SELECT created, pageVisited FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created DESC LIMIT 1";
+            $rsend = DB::connection('mysql3')->select($sql);
+            $endTimestamp = $rsend[0]->created;
+            $lastPage = $rsend[0]->pageVisited;
+            
+            $start = strtotime($startTimestamp);
+            $end = strtotime($endTimestamp);
+            $mins = ($end - $start) / 60;
+            $timeSpent=$mins;
+
+            //dd($activityList);
+
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];            
+
+            $object = [
+                'storeName' => $storeName,
+                'customerName' => $customerName,
+                'startTimestamp' => $startTimestamp,
+                'endTimestamp' => $endTimestamp,
+                'timeSpent' => $timeSpent,
+                'firstPage' => $firstPage,
+                'lastPage' => $lastPage,
+                'channel' => $channel
+            ];
+
+            
+            array_push( 
+                $newArray,
+                $object
+            );
+
+        }
+       
+
+        $datas = $newArray;
+
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
+        $storename = '';   
+        $customername = '';
+        $device = '';  
+        $browser = ''; 
+
+        return view('components.visitchannel', compact('datas','datechosen','storename','customername','device','browser'));
+    }
+
+
+    public function filter_visitchannel(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen4 );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        //query group by sessionId
+        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId')->distinct()
+                ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"]);
+
+
+        $query->orderBy('customer_activities.created', 'DESC');
+        $datas = $query->get();
+
+        $newArray = array();
+        $storeList = array();
+        $customerList = array();
+
+        //dd($datas);
+
+        foreach ($datas as $data) {
+
+                         
+            //get starttimestamp & endtimestamp, startpage & lastpage
+            $sql="SELECT created, pageVisited, storeId, customerId FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC LIMIT 1";
+            $rsstart = DB::connection('mysql3')->select($sql);
+            $startTimestamp = $rsstart[0]->created;
+            $firstPage = $rsstart[0]->pageVisited;
+            $storeId = $rsstart[0]->storeId;
+            $customerId = $rsstart[0]->customerId;
+
+            $sql="SELECT created, pageVisited FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created DESC LIMIT 1";
+            $rsend = DB::connection('mysql3')->select($sql);
+            $endTimestamp = $rsend[0]->created;
+            $lastPage = $rsend[0]->pageVisited;
+            
+            $start = strtotime($startTimestamp);
+            $end = strtotime($endTimestamp);
+            $mins = ($end - $start) / 60;
+            $timeSpent=$mins;
+
+            //dd($activityList);
+
+            $sessionAddress = $data['sessionAddress'];
+            $sessionCity = $data['sessionCity'];  
+
+            $object = [
+                'storeName' => $storeName,
+                'customerName' => $customerName,
+                'startTimestamp' => $startTimestamp,
+                'endTimestamp' => $endTimestamp,
+                'timeSpent' => $timeSpent,
+                'firstPage' => $firstPage,
+                'lastPage' => $lastPage,
+                'channel' => $channel
+            ];
+
+            
+            array_push( 
+                $newArray,
+                $object
+            );
+
+        }
+       
+        $datas = $newArray;
+
+        $datechosen = $req->date_chosen4;   
+        $storename = $req->storename_chosen;
+        $customername = $req->customer_chosen;
+        $device = $req->device_chosen;
+        $browser = $req->browser_chosen;
+
+        return view('components.visitchannel', compact('datas','datechosen','storename','customername','device','browser'));
+
+    }
 
     public function userabandoncartsummary(){
 
@@ -856,6 +1045,18 @@ class ActivityController extends Controller
     }
     
 
+    public function export_userabandoncartsummary(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen4_copy );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+        return Excel::download(new AbandonCartExport($start_date, $end_date." 23:59:59"), 'abandoncart.xlsx');
+    }
 
         public function filter_userabandoncart(Request $req){
 

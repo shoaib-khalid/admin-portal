@@ -20,7 +20,7 @@
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
                         </div>
-                        <div class="col-2">Stffore</div>
+                        <div class="col-2">Store</div>
                         <div class="col-4">
                         <input type="text" name="storename_chosen" id="storename_chosen" class="form-control" value="{{$storename}}">
                         </div>
@@ -40,14 +40,26 @@
                         <div class="col-4">
                         <input type="text" name="browser_chosen" id="browser_chosen" class="form-control" value="{{$browser}}">
                         </div>
+                        <div class="col-2">Country</div>
+                        <div class="col-4">
+                        <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="col-2" for="dev">Choose:</label>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3"  id="dev">
+                        <option  value="malaysia">Malaysia</option>
+                        <option  value="pakistan">Pakistan</option>
+                        </select>
+                        </div>
                         <div class="col-2">
                             <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-1">
-                
+            <div class="col-1">                
             </div>
             
         </div>

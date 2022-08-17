@@ -90,11 +90,15 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
     Route::post('/export_usersitemap', [ActivityController::class, "export_usersitemap"])->name('export_usersitemap');
 
+    Route::get('/visitchannel', [ActivityController::class, "visitchannel"])->name('visitchannel');
+    Route::post('/filter_visitchannel', [ActivityController::class, "filter_visitchannel"])->name('filter_visitchannel');
+    Route::post('/export_visitchannel', [ActivityController::class, "export_visitchannel"])->name('export_visitchannel');
+
     Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
     Route::post('/filter_useractivitysummary', [ActivityController::class, "filter_useractivitysummary"])->name('filter_useractivitysummary');
     Route::post('/export_useractivitysummary', [ActivityController::class, "export_useractivitysummary"])->name('export_useractivitysummary');
 
-     Route::get('/useractivitysummarydate', [ActivityDateController::class, "useractivitysummarydate"])->name('useractivitysummarydate');
+    Route::get('/useractivitysummarydate', [ActivityDateController::class, "useractivitysummarydate"])->name('useractivitysummarydate');
     Route::post('/filter_useractivitysummarydate', [ActivityDateController::class, "filter_useractivitysummarydate"])->name('filter_useractivitysummarydate');
     Route::post('/export_useractivitysummarydate', [ActivityDateController::class, "export_useractivitysummarydate"])->name('export_useractivitysummarydate');
 
