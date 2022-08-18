@@ -75,8 +75,7 @@
                         <option  value="malaysia">Malaysia</option>
                         <option  value="pakistan">Pakistan</option>
                         </select>
-                        </div>
-                    </div> 
+                    </div>
                     <div class="input-group mb-3">
                         <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
