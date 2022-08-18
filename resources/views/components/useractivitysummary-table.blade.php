@@ -56,6 +56,16 @@
                         </div>                  
                     </div>
                     <div class="input-group mb-3">
+                        <div class="col-2">By Country</div>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3" id="region" name="region">
+                         <option>Choose</option>
+                         <option  value="malaysia">ML</option>
+                         <option  value="pakistan">PK</option>
+                        </select>
+                        </div>                        
+                    </div>              
+                    <div class="input-group mb-3">
                         <div class="col-2">Group By</div>
                         <div class="col-2">
                         <input type="checkbox" name="groupstore" id="groupstore" value="groupstore" <?php if ($groupstore<>"") echo "checked"; ?>>
@@ -76,8 +86,7 @@
                         <div class="col-2">
                         <input type="checkbox" name="grouppage" id="grouppage" value="grouppage" <?php if ($grouppage<>"") echo "checked"; ?>>
                         Page
-                        </div>                      
-                    </div>
+                        </div>   </div>
                     <div class="input-group mb-3">
                         <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
@@ -85,6 +94,8 @@
                         <div class="col-4"><button type="button" class="btn btn-success icon-left btn-icon float-right" onclick="exportToExcel()"><i class="fas fa-file"></i> <span>Export Excel</span>
                             </button>
                         </div>                  
+                    </div>
+                                 
                     </div>
                 </form>
             </div>

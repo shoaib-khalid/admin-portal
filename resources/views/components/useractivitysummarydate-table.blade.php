@@ -76,6 +76,14 @@
                             </button>
                         </div>                  
                     </div>
+                    <div class="input-group mb-3">
+                    <label>Choose:</label>
+                     <select id="region" name="region">
+                     <option>Select here</option>
+                     <option  value="malaysia">ML</option>
+                     <option  value="pakistan">PK</option>
+                    </select>
+                        </div>  
                 </form>
             </div>
             <div class="col-1">
