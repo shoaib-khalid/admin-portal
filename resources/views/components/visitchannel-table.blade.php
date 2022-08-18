@@ -61,10 +61,9 @@
                     @foreach ($datas as $data)
                         <tr class="text-center">                            
                             <td>{{ \Carbon\Carbon::parse($data['startTimestamp'])->format('d/m/Y H:i:s') }}</td>                         
-                            <td>{{ $data['channel'] }}</td>
-                            <td>{{ $data['channel'] }}</td>
-                            <td></td>
-                            <td>          
+                            <td>{{$data->channel}}</td>
+                            <td>{{$data->channel}}</td>
+                            <td>{{$data->channel}}</td>         
                         </tr>
                     @endforeach
 

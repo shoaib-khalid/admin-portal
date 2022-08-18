@@ -69,6 +69,15 @@
                         </div>                      
                     </div>
                     <div class="input-group mb-3">
+                        <label class="col-2" for="dev">Choose:</label>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3"  id="dev">
+                        <option  value="malaysia">Malaysia</option>
+                        <option  value="pakistan">Pakistan</option>
+                        </select>
+                        </div>
+                    </div> 
+                    <div class="input-group mb-3">
                         <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
                         <input type="hidden" name="exportExcel" id="exportExcel" value="0">
@@ -76,14 +85,7 @@
                             </button>
                         </div>                  
                     </div>
-                    <div class="input-group mb-3">
-                    <label>Choose:</label>
-                     <select id="region" name="region">
-                     <option>Select here</option>
-                     <option  value="malaysia">ML</option>
-                     <option  value="pakistan">PK</option>
-                    </select>
-                        </div>  
+                    
                 </form>
             </div>
             <div class="col-1">

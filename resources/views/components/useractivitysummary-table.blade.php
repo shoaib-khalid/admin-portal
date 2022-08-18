@@ -60,8 +60,8 @@
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3" id="region" name="region">
                          <option>Choose</option>
-                         <option  value="malaysia">ML</option>
-                         <option  value="pakistan">PK</option>
+                         <option  value="malaysia">Malaysia</option>
+                         <option  value="pakistan">Pakistan</option>
                         </select>
                         </div>                        
                     </div>              
