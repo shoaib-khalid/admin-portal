@@ -14,16 +14,10 @@
                         {{@csrf_field()}}
                         <div class="input-group mb-3">
                             <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
-                            </div>
-                            <select class="form-select form-select-lg mb-3"  id="dev">
-                            <option  value="malaysia">Malaysia</option>
-                            <option  value="pakistan">Pakistan</option>
-                             </select>
-   
                             <div class="input-group-append">
                                 <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                             </div>
-                        
+                        </div>
                     </form>
                 </div>
                 <div class="col-1">
