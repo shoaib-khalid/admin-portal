@@ -57,8 +57,10 @@ class ActivityDateController extends Controller
         $groupos=null;
         $grouppage=null;
         $groupstore=null;
+        $malaysia=null;
+        $pakistan=null;
 
-        return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage'));        
+        return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));        
     }
    
 
@@ -78,6 +80,18 @@ class ActivityDateController extends Controller
         $end_date = date("Y-m-d", strtotime($end_date));
 
         $groupList="SUM(totalCount) AS total, SUM(totalUniqueUser) AS totalUnique, dt"; 
+
+        $where="";
+        if($req->region == "malaysia"){
+         $where= "AND page like '%dev-my%' ";
+
+        //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+          }
+        if($req->region == "pakistan"){
+            $where = "AND page like '%dev-pk%' ";
+        //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+         }
+
         $groupBy="dt "; 
         if ($req->groupstore<>"") {
             $groupList .= " , storeId";
@@ -117,7 +131,7 @@ class ActivityDateController extends Controller
 
         //query group by sessionId
         $sql="SELECT ".$groupList." FROM customer_activities_summary WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
-        //dd($datas);
+        // dd($sql);
 
 
         if ($req->storename_chosen<>"") {
@@ -142,8 +156,10 @@ class ActivityDateController extends Controller
             $sql .= " AND browser = ".$req->browser_chosen;            
         }
 
+     
+        $sql .= $where;
         $sql .= " GROUP BY ".$groupBy." ORDER BY dt";
-       // dd($sql);
+    // dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
 
         if ($req->groupstore=="" && $req->groupbrowser=="" && $req->groupdevice=="" && $req->groupos=="" && $req->grouppage=="") {
@@ -152,6 +168,7 @@ class ActivityDateController extends Controller
             $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
         }
         
+        // $sql2 = $where;
         $newArray2 = array();   
         foreach ($datas as $data) { 
             if (property_exists($data, 'storeId')) {
@@ -219,15 +236,16 @@ class ActivityDateController extends Controller
         $storename = $req->storename_chosen;
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
+        $malaysia = $req->malaysia;
+        $pakistan = $req->pakistan;
+
 
         if ($req->exportExcel==1) {
              return Excel::download(new UserActivitySummaryExportDate($datas, $req), 'CustomerSummaryByDate.xlsx');
          } else {
-            return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage'));    
+            return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));    
          }
         
     }    
-
-   
 
 }

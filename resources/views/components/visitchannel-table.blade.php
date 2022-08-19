@@ -20,20 +20,32 @@
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
                         </div>
+                        <div class="col-2">Store</div>
                         <div class="col-4">
-                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        <input type="text" name="storename_chosen" id="storename_chosen" class="form-control" value="{{$storename}}">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-2">Customer</div>
+                        <div class="col-4">
+                        <input type="text" name="customer_chosen" id="customer_chosen" class="form-control" value="{{$customername}}">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="col-2">
+                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-1">
-                
+            <div class="col-1">                
             </div>
             
         </div>
+
         <div class="row">
             <div class="col">
-                <form action="export_visitchannel" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="export_useractivitylog" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         
                             <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
@@ -42,28 +54,27 @@
                         
                     </form>
             </div>
-        </div>   
+        </div>    
 
         <div class="table-responsive">
 
             <table id="table-4" class="table table-striped">        
                 <thead>
-                    <tr class="text-center">                        
-                        <th>Date</th>                        
+                    <tr class="text-center">
+                        <th>Timestamp</th>
                         <th>Facebook</th>
                         <th>Google</th>
-                        <th>Organic</th>                        
-                        <th></th>
+                        <th>Organic</th>
                     </tr>
                 </thead>      
                 <tbody>
 
                     @foreach ($datas as $data)
-                        <tr class="text-center">                            
-                            <td>{{ \Carbon\Carbon::parse($data['startTimestamp'])->format('d/m/Y H:i:s') }}</td>                         
-                            <td>{{$data->channel}}</td>
-                            <td>{{$data->channel}}</td>
-                            <td>{{$data->channel}}</td>         
+                        <tr class="text-center">
+                            <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>
+                            <td>{{ $data['channel'] }}</td>
+                            <td>{{ $data['channel'] }}</td>
+                            <td></td>                                        
                         </tr>
                     @endforeach
 
