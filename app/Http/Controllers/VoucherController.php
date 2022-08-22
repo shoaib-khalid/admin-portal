@@ -54,11 +54,29 @@ class VoucherController extends Controller
     }
 
     public function voucherredeem($voucherId){
-        $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
+        //check voucher type
+        $sql="SELECT voucherType FROM voucher WHERE id='".$voucherId."'";
+        $voucherdata = DB::connection('mysql2')->select($sql);
+        $voucherType = "PLATFORM";
+        if (count($voucherdata)>0) {
+            $voucherType = $voucherdata[0]->voucherType;
+        } 
+
+        if ($voucherType=="STORE") {
+             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
+             FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id 
+             INNER JOIN `order` C ON A.voucherId=C.storeVoucherId AND A.customerId=C.customerId
+             WHERE 
+            A.voucherId='".$voucherId."' AND isUsed=1";
+        } else {
+             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
              FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id 
              INNER JOIN `order_group` C ON A.voucherId=C.platformVoucherId AND A.customerId=C.customerId
              WHERE 
             A.voucherId='".$voucherId."' AND isUsed=1";
+        }
+
+       
         $userList = DB::connection('mysql2')->select($sql);
         return view('components.voucherredeem',compact('userList'));
     }
