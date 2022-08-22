@@ -147,11 +147,12 @@ class ActivityController extends Controller
         $query = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
                         ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"])  
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
-        // dd($query);
+        //dd($query);
 
         if($req->region == "malaysia"){
 
-            $query->where('pageVisited', 'like', '%dev-my%')->get();
+            $query->where('pageVisited', 'like', '%dev-my%')
+                  ->orWhere('pageVisited', 'like', '%deliverin.my%')->get();
             // $where= "AND pageVisited like '%dev-my%' ";
 
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
@@ -159,7 +160,8 @@ class ActivityController extends Controller
 
           if($req->region == "pakistan"){
 
-            $query->where('pageVisited', 'like', '%dev-pk%')->get();
+            $query->where('pageVisited', 'like', '%dev-pk%')
+                  ->orWhere('pageVisited', 'like', '%easydukan.co%')->get();
             // $where= "AND pageVisited like '%dev-my%' ";
 
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
@@ -481,17 +483,22 @@ class ActivityController extends Controller
 
         if($req->region == "malaysia"){
 
-            $query->where('pageVisited', 'like', '%dev-my%')->get();
+            $query->where('pageVisited', 'like', '%dev-my%')
+                  ->orWhere('pageVisited', 'like', '%deliverin.my%')->get();
             // $where= "AND pageVisited like '%dev-my%' ";
+
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
 
           if($req->region == "pakistan"){
 
-            $query->where('pageVisited', 'like', '%dev-pk%')->get();
+            $query->where('pageVisited', 'like', '%dev-pk%')
+                  ->orWhere('pageVisited', 'like', '%easydukan.co%')->get();
             // $where= "AND pageVisited like '%dev-my%' ";
+
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
+
 
         if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
@@ -721,13 +728,14 @@ class ActivityController extends Controller
 
         $where="";
         if($req->region == "malaysia"){
-            $where= "AND pageVisited like '%dev-my%' ";
+            $where= "AND pageVisited like '%dev-my%' OR  '%deliverin.my%'";
 
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
+          
 
           if($req->region == "pakistan"){
-            $where = "AND pageVisited like '%dev-pk%' ";
+            $where = "AND pageVisited like '%dev-pk%' OR  '%easydukan.co%' ";
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }  
   
@@ -816,7 +824,7 @@ class ActivityController extends Controller
         $sql .= $where;
         $sql .= " GROUP BY ".$groupBy;
         
-       // dd($sql);
+       //dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
 
         if ($req->groupstore<>"") {
@@ -883,7 +891,7 @@ class ActivityController extends Controller
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                         ->orderBy('customer_activities.created', 'DESC')
                         ->get();
-       
+                        
         $newArray = array();
         $storeList = array();
         $customerList = array();
