@@ -477,23 +477,20 @@ class ActivityController extends Controller
                 ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                 ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"]);
 
-        if($req->region == "malaysia"){
-
-            $query->where('pageVisited', 'like', '%dev-my%')
-                  ->orWhere('pageVisited', 'like', '%deliverin.my%')->get();
-            // $where= "AND pageVisited like '%dev-my%' ";
-
-            // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+         if($req->region == "malaysia"){
+            $query->where(function ($query) {
+                $query->where('pageVisited', 'like', '%dev-my%')
+                ->orWhere('pageVisited', 'like', '%deliverin.my%');
+            });           
           }
 
           if($req->region == "pakistan"){
-
-            $query->where('pageVisited', 'like', '%dev-pk%')
-                  ->orWhere('pageVisited', 'like', '%easydukan.co%')->get();
-            // $where= "AND pageVisited like '%dev-my%' ";
-
-            // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+             $query->where(function ($query) {
+                $query->where('pageVisited', 'like', '%dev-pk%')
+                ->orWhere('pageVisited', 'like', '%easydukan.co%');
+            });              
           }
+
 
 
         if ($req->storename_chosen<>"") {
