@@ -148,7 +148,7 @@ class ActivityController extends Controller
                         ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"])  
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
         //dd($query);
-
+/*
         if($req->region == "malaysia"){
 
             $query->where('pageVisited', 'like', '%dev-my%')
@@ -166,7 +166,7 @@ class ActivityController extends Controller
 
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
-
+*/
 
             if ($req->storename_chosen<>"") {
             $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
