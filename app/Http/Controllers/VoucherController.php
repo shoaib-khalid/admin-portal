@@ -63,17 +63,15 @@ class VoucherController extends Controller
         } 
 
         if ($voucherType=="STORE") {
-             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
-             FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id 
-             INNER JOIN `order` C ON A.voucherId=C.storeVoucherId AND A.customerId=C.customerId
+             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, A.id AS orderId
+             FROM order A INNER JOIN customer B ON A.customerId=B.id 
              WHERE 
-            A.voucherId='".$voucherId."' AND isUsed=1";
+            A.storeVoucherId='".$voucherId."' AND paymentStatus='PAID'";
         } else {
-             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, C.id AS orderId
-             FROM customer_voucher A INNER JOIN customer B ON A.customerId=B.id 
-             INNER JOIN `order_group` C ON A.voucherId=C.platformVoucherId AND A.customerId=C.customerId
+             $sql="SELECT A.*, B.name, B.isActivated, B.channel, B.phoneNumber, B.email, A.id AS orderId
+             FROM order_group A INNER JOIN customer B ON A.customerId=B.id 
              WHERE 
-            A.voucherId='".$voucherId."' AND isUsed=1";
+            A.platformvoucherId='".$voucherId."' AND paymentStatus='PAID'";
         }
 
        
