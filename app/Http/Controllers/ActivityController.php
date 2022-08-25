@@ -922,10 +922,10 @@ class ActivityController extends Controller
         // AND ? GROUP BY CHANNEL, DATE(created)',[$from,$to]);
         
          $sql = 
-        " SELECT DISTINCT DATE(created) as created,
-         count(case WHEN LOWER(channel) = 'GOOGLE' then 1 end) as countG,
-         count(case WHEN LOWER(channel) = 'fb'  then 1 end) as countF,
-         count(case WHEN LOWER(channel) = 'organic'  then 1 end) as countO
+        "SELECT DISTINCT DATE(created) as created,
+         count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
+         count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
+         count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
          from customer_activities
          WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."'
          GROUP BY CHANNEL, DATE(created)";

@@ -37,7 +37,7 @@
                             </div>
                         </div> 
                         <div class="input-group mb-3">  
-                            <div class="col-3">Select Country</div>
+                            <div class="col-3">Select Device</div>
                             <div class="col-7">
                             <select name="selectType" id="selectType" class="form-control">   
                                <option value="DESKTOP">DESKTOP</option>

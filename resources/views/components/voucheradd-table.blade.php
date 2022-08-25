@@ -161,9 +161,9 @@
 
                         <div class="col-3">Limit redeem quantity</div>
                         <div class="col-3">
-                        <input type="radio" id="checkredeem" name="checkTotalRedeem" value="1">
+                        <input type="radio" id="checkredeem" name="checkTotalRedeem" value="1" checked>
                             <label for="checkredeem">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" id="notcheckredeem" name="checkTotalRedeem" value="0">
+                        <input type="radio" id="notcheckredeem" name="checkTotalRedeem" value="0" disabled>
                             <label for="notcheckredeem">No</label>&nbsp;&nbsp;                        
                         </div>                     
                     </div>
@@ -212,6 +212,7 @@
                             </button>
                         </div>                                    
                     </div>
+                    
                 </form>
             </div>
             <div class="col-1">
