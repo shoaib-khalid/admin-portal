@@ -3,7 +3,7 @@
         <h1>Customer Visit Channel</h1>        
     </x-slot>
     <div>
-        <x-visitchannel-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser"></x-visitchannel-table>
+        <x-visitchannel-table :datas="$datas" :datechosen="$datechosen" ></x-visitchannel-table>
     </div>
 </x-app-layout>
 <script>

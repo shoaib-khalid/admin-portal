@@ -1,3 +1,11 @@
+Version 1.11.1
+------------------------
+Date:24-Aug-2022
+
+Update Visit Channel Page
+Change Market Popup Table Attribute
+
+
 Version 1.10.10
 ------------------------
 Date:24-Aug-2022

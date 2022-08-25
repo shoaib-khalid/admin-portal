@@ -875,210 +875,67 @@ class ActivityController extends Controller
 
     public function visitchannel(){
         $to = date("Y-m-d");
-        $date = new DateTime('1 days ago');
+        $date = new DateTime('3 days ago');
         $from = $date->format("Y-m-d");
-
+        // $datas = array();
         // $datas = Client::limit(100)->get();
-        $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
-                        
-        $newArray = array();
-        $storeList = array();
-        $customerList = array();
+        $datas = array();
+        // $datas = DB::select('SELECT COUNT(*), channel, DATE(created)  FROM symplified_analytic.customer_activities 
+        // WHERE  DATE(created) BETWEEN ? 
+        // AND ? GROUP BY CHANNEL, DATE(created)',[$from,$to]);
+        
+        $sql = 
+        " SELECT DISTINCT DATE(created) as created,
+         count(case WHEN LOWER(channel) = 'GOOGLE' then 1 end) as countG,
+         count(case WHEN LOWER(channel) = 'fb'  then 1 end) as countF,
+         count(case WHEN LOWER(channel) = 'organic'  then 1 end) as countO
+         from customer_activities
+         WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' 
+         GROUP BY CHANNEL, DATE(created)";
 
-        //dd($datas);
-        foreach ($datas as $data) {
-
-            $storeName = '';
-            if (! array_key_exists($data['storeId'], $storeList)) {
-                $store_info = Store::where('id', $data['storeId'])
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$data['storeId']] = $store_info[0]['name']; 
-                    $storeName = $storeList[$data['storeId']];
-                }    
-
-            } else {
-                $storeName = $storeList[$data['storeId']];
-            }
-             
-
-            $customerName = '';
-            if (! array_key_exists($data['customerId'], $customerList)) {            
-                $customer_info = Customer::where('id', $data['customerId'])
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$data['customerId']];
-                }  
-                
-            } else {
-                $customerName = $customerList[$data['customerId']];
-            }
-
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];             
-            
-            $object = [
-                'created' => $data['created'],
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'pageVisited' => $data['pageVisited'],
-                'ip' => $data['ip'],
-                'device' => $data['deviceModel'],
-                'os' => $data['os'],
-                'browser' => $data['browserType'],
-                'errorType' => $data['errorType'],
-                'errorOccur' => $data['errorOccur'],
-                'channel' => $data['channel'],
-                'address' => $sessionAddress,
-                'city' => $sessionCity
-            ];
-
-            array_push( 
-                $newArray,
-                $object
-            );
-
-        }
-       
-        $datas = $newArray;
-
+        $datas = DB::connection('mysql3')->select($sql);
+        // $datas = array();
+        // var_dump(datas);
+        // foreach ($datas as $data) {
+        // }
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
-        $storename = '';   
-        $customername = '';
-        $device = '';  
-        $browser = ''; 
-        $malaysia = '';
-        $pakistan = '';
-
-        return view('components.visitchannel', compact('datas','datechosen','storename','customername','device','browser','malaysia','pakistan'));
+        // var_dump(datas);
+        return view('components.visitchannel', compact('datas','datechosen'));
+        
     }
 
 
     public function filter_visitchannel(Request $req){
         
         $data = $req->input();
+
         $dateRange = explode( '-', $req->date_chosen4 );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
 
         $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
+        $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
 
-        //$query = UserActivity::whereBetween('created', [$start_date, $end_date." 23:59:59"]);
-         // $datas = Client::limit(100)->get();
-        $query = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"])  
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
-          
-            if ($req->storename_chosen<>"") {
-            $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
-            $search_storeId_list = array();        
-            if (count($search_store_info) > 0) {
-               foreach ($search_store_info as $storefound) {
-                    array_push($search_storeId_list, $storefound['id']);
-               }
-            }  
-            $query->whereIn('storeId', $search_storeId_list);
-            //dd($query);
-        }
-        if ($req->customer_chosen<>"") {
-            $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
-            if (count($search_customer_info) > 0) {
-               $search_customerId = $search_customer_info[0]['id']; 
-            } else {
-                $search_customerId = "NOT FOUND";
-            }
-            $query->where('customerId', $search_customerId);
-            //dd($query);
-        }
-
-        if ($req->device_chosen<>"") {
-            $query->where('deviceModel', $req->device_chosen);
-        }
-        if ($req->browser_chosen<>"") {
-            $query->where('browserType', $req->browser_chosen);
-        }
-
-        $query->orderBy('created', 'DESC');
-        //dd($query);
-        $datas = $query->get();
-
-        $newArray = array();
-        $storeList = array();
-        $customerList = array();
-
-        foreach ($datas as $data) {
-
-            $storeName = '';
-            if (! array_key_exists($data['storeId'], $storeList)) {
-                $store_info = Store::where('id', $data['storeId'])
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$data['storeId']] = $store_info[0]['name']; 
-                    $storeName = $storeList[$data['storeId']];
-                }    
-
-            } else {
-                $storeName = $storeList[$data['storeId']];
-            }
-             
-
-            $customerName = '';
-            if (! array_key_exists($data['customerId'], $customerList)) {            
-                $customer_info = Customer::where('id', $data['customerId'])
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$data['customerId']];
-                }  
+        $datas = array();
+        // $datas = DB::select('SELECT COUNT(*), channel, DATE(created)  FROM symplified_analytic.customer_activities 
+        // WHERE  DATE(created) BETWEEN ? 
+        // AND ? GROUP BY CHANNEL, DATE(created)',[$from,$to]);
+        
+         $sql = 
+        " SELECT DISTINCT DATE(created) as created,
+         count(case WHEN LOWER(channel) = 'GOOGLE' then 1 end) as countG,
+         count(case WHEN LOWER(channel) = 'fb'  then 1 end) as countF,
+         count(case WHEN LOWER(channel) = 'organic'  then 1 end) as countO
+         from customer_activities
+         WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."'
+         GROUP BY CHANNEL, DATE(created)";
+         
+        $datas = DB::connection('mysql3')->select($sql);
+        // $datas = array();
+        // var_dump(datas);
+        $datechosen = $req->date_chosen4;
                 
-            } else {
-                $customerName = $customerList[$data['customerId']];
-            }
-
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];
-            
-            $object = [
-                'created' => $data['created'],
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'pageVisited' => $data['pageVisited'],
-                'ip' => $data['ip'],
-                'device' => $data['deviceModel'],
-                'os' => $data['os'],
-                'browser' => $data['browserType'],
-                'errorType' => $data['errorType'],
-                'errorOccur' => $data['errorOccur'],
-                'channel' => $data['channel'],
-                'address' => $sessionAddress,
-                'city' => $sessionCity,
-            ];
-
-            array_push( 
-                $newArray,
-                $object
-            );
-
-        }
-       
-        $datas = $newArray;        
-        $datechosen = $req->date_chosen4;                
-        $storename = $req->storename_chosen;
-        $customername = $req->customer_chosen;
-        $device = $req->device_chosen;
-        $browser = $req->browser_chosen;
-        $malaysia= $req->malaysia;
-        $pakistan= $req->pakistan;
-
-        return view('components.visitchannel', compact('datas', 'datechosen', 'storename', 'customername','device','browser','malaysia','pakistan'));
+        return view('components.visitchannel', compact('datas','datechosen'));
 
     }
         
@@ -1098,7 +955,6 @@ class ActivityController extends Controller
                     GROUP BY storeId";
             //dd($sql);
             $datas = DB::connection('mysql2')->select($sql); 
-            
             return view('components.userabandoncartsummary', compact('datas','datechosen','storename'));
     }
 
