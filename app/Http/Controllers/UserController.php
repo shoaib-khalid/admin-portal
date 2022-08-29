@@ -10,6 +10,7 @@ use App\Models\Store;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
@@ -157,6 +158,8 @@ class UserController extends Controller
         //     'user' => User::class
         // ]);
 
+       
+
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/daily_sales?from=2021-06-01&to=2021-08-16')->object();
         $to = date("Y-m-d");
         $date = new DateTime('7 days ago');             
@@ -212,6 +215,9 @@ class UserController extends Controller
     }
 
     public function daily_sales_filter(Request $req){
+
+        //dd($user);
+        //dd(Session::get('selectedCountry'));
 
         $data = $req->input();
 

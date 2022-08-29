@@ -15,7 +15,17 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div>
+
+            <div  class="mt-4">
+                <x-jet-label value="{{ __('Country') }}" />
+                <select name="selectCountry"  class="form-select">
+                <option value="MYS">Malaysia</option>
+                <option value="PAK">Pakistan</option>
+                </select>
+
+            </div>
+
+            <div  class="mt-4">
                 <x-jet-label value="{{ __('Email') }}" />
                 <x-jet-input class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>

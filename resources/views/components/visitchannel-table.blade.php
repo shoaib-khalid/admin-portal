@@ -1,6 +1,8 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
+    echo "selectedCountry:".$selectedCountry;
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -19,6 +21,15 @@
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
                         </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="col-2" for="region">Choose:</label>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3"  id="region" name="region">
+                        <option  value="">All</option>
+                        <option  value="MYS" <?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                        <option  value="PAK" <?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                        </select>
                     </div>
                     <div class="input-group mb-3">
                         <div class="col-2"></div>

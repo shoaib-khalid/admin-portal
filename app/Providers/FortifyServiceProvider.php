@@ -8,6 +8,10 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Requests\LoginRequest;
+use App\Models\User;
+use Hash;
+use Session;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -32,5 +36,16 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        Fortify::authenticateUsing(function (LoginRequest $request) {
+            $user = User::where('email', $request->email)->first();
+            if (
+                $user &&
+                Hash::check($request->password, $user->password)
+            ) {
+                Session::put('selectedCountry', $request->selectCountry);
+                return $user;
+            }
+        });
     }
 }
