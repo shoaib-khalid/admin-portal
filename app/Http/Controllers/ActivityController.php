@@ -731,11 +731,11 @@ class ActivityController extends Controller
           }
 
         if($req->region == "malaysia"){
-            $where= "AND pageVisited like '%dev-my%' OR  '%deliverin.my%'";
+            $where= "AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%')";
           }
 
           if($req->region == "pakistan"){
-            $where = "AND pageVisited like '%dev-pk%' OR  '%easydukan.co%' ";
+            $where = "AND (pageVisited like '%easydukan.co%' OR pageVisited like '%dev-pk%')";
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }  
   
@@ -821,7 +821,7 @@ class ActivityController extends Controller
         $sql .= $where;
         $sql .= " GROUP BY ".$groupBy;
         
-       //dd($sql);
+       
         $datas = DB::connection('mysql3')->select($sql);
 
         if ($req->groupstore<>"") {
@@ -941,11 +941,10 @@ class ActivityController extends Controller
           }
 
         if($req->region == "malaysia"){
-            $where= "AND pageVisited like '%dev-my%' OR  '%deliverin.my%'";
+            $where= "AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%')";
           }
-
           if($req->region == "pakistan"){
-            $where = "AND pageVisited like '%dev-pk%' OR  '%easydukan.co%' ";
+            $where = "AND (pageVisited like '%easydukan.co%' OR  pageVisited like '%dev-pk%') ";
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }  
          
