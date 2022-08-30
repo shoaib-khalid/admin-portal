@@ -821,7 +821,7 @@ class ActivityController extends Controller
         $sql .= $where;
         $sql .= " GROUP BY ".$groupBy;
         
-       //dd($sql);
+        //dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
 
         if ($req->groupstore<>"") {
