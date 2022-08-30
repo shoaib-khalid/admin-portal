@@ -82,6 +82,11 @@ class ActivityDateController extends Controller
         $groupList="SUM(totalCount) AS total, SUM(totalUniqueUser) AS totalUnique, dt"; 
 
         $where="";
+
+        if($req->region == "all"){
+            $where= "AND page IS NOT NULL";
+          }
+
         if($req->region == "malaysia"){
          $where= "AND page like '%dev-my%' OR  '%deliverin.my%' ";
 
@@ -148,6 +153,7 @@ class ActivityDateController extends Controller
             }  
             $sql .= " AND storeId IN (".$commaList.")";
         }
+        
 
         if ($req->device_chosen<>"") {
             $sql .= " AND device = ".$req->device_chosen;            
@@ -162,40 +168,6 @@ class ActivityDateController extends Controller
     // dd($sql);
         $datas = DB::connection('mysql3')->select($sql);
 
-        if ($req->groupstore=="" && $req->groupbrowser=="" && $req->groupdevice=="" && $req->groupos=="" && $req->grouppage=="") {
-            $sql2="SELECT SUM(totalUnique), SUM(totalUniqueGuest), dt FROM total_unique_user_overall WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59' GROUP BY dt";
-        } else {
-            $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
-        }
-        
-        // $sql2 = $where;
-        $newArray2 = array();   
-        foreach ($datas as $data) { 
-            if (property_exists($data, 'storeId')) {
-                 $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt='".$data->dt."' AND storeId='".$data->storeId."'";
-                 $datas2 = DB::connection('mysql3')->select($sql2);
-                 if (count($datas2)>0) {
-                    $data->totalUser =  $datas2[0]->totalUnique;   
-                    $data->totalGuest =  $datas2[0]->totalUniqueGuest;   
-                 }                 
-            } else {
-                $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user_overall WHERE dt='".$data->dt."'";
-                 $datas2 = DB::connection('mysql3')->select($sql2);
-                 if (count($datas2)>0) {
-                    $data->totalUser =  $datas2[0]->totalUnique;
-                    $data->totalGuest =  $datas2[0]->totalUniqueGuest;        
-                 } 
-            }
-            
-            $object = $data;
-
-            array_push( 
-                $newArray2,
-                $object
-            );
-        }
-        $datas = $newArray2;
-        //dd($datas);
         if ($req->groupstore<>"") {
             $storeList=array();
             $newArray = array();        
@@ -224,7 +196,51 @@ class ActivityDateController extends Controller
             }           
 
             $datas = $newArray;
+            //dd($datas);
         }
+
+        if ($req->groupstore=="" && $req->groupbrowser=="" && $req->groupdevice=="" && $req->groupos=="" && $req->grouppage=="") {
+            $sql2="SELECT SUM(totalUnique), SUM(totalUniqueGuest), dt FROM total_unique_user_overall WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59' GROUP BY dt";
+        } else {
+            $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
+        }
+        
+        // $sql2 = $where;
+        $newArray2 = array();   
+        foreach ($datas as $data) { 
+            if (property_exists($data, 'storeId')) {
+                 $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt='".$data->dt."' AND storeId='".$data->storeId."'";
+                 $datas2 = DB::connection('mysql3')->select($sql2);
+                 if (count($datas2)>0) {
+                    $data->totalUser =  $datas2[0]->totalUnique;   
+                    $data->totalGuest =  $datas2[0]->totalUniqueGuest;   
+                 }  else {
+                    $data->totalUser =  0;
+                    $data->totalGuest =  0;
+                 }
+            } else {
+                $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user_overall WHERE dt='".$data->dt."'";
+                 $datas2 = DB::connection('mysql3')->select($sql2);
+                 if (count($datas2)>0) {
+                    $data->totalUser =  $datas2[0]->totalUnique;
+                    $data->totalGuest =  $datas2[0]->totalUniqueGuest;        
+                 } 
+                 else{
+                    $data->totalUser =  0;
+                    $data->totalGuest =  0;
+                 }
+            }
+            
+            $object = $data;
+
+            array_push( 
+                $newArray2,
+                $object
+            );
+        }
+        $datas = $newArray2;
+        //dd($datas);
+       
 
         $groupstore=$req->groupstore;
         $groupbrowser=$req->groupbrowser;

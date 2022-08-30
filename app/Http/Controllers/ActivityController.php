@@ -28,7 +28,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
-// use Session;
+
 use App\Mail\NotifyMail;
 use App\Mail\EmailContent;
 
@@ -149,6 +149,11 @@ class ActivityController extends Controller
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
         //dd($query);
 
+        if($req->region == "all"){
+            $query->where(function($query){
+                $query->whereNotNull("pagevisited");
+            });
+        }
         if($req->region == "malaysia"){
             $query->where(function ($query) {
                 $query->where('pageVisited', 'like', '%dev-my%')
@@ -272,6 +277,7 @@ class ActivityController extends Controller
 
     }
 
+  
     public function export_useractivitylog(Request $req) 
     {
         $data = $req->input();
@@ -719,12 +725,14 @@ class ActivityController extends Controller
         $groupList="COUNT(*) AS total, COUNT(DISTINCT(sessionId)) AS totalUnique"; 
 
         $where="";
+
+        if($req->region == "all"){
+            $where= "AND pageVisited IS NOT NULL";
+          }
+
         if($req->region == "malaysia"){
             $where= "AND pageVisited like '%dev-my%' OR  '%deliverin.my%'";
-
-            // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
-          
 
           if($req->region == "pakistan"){
             $where = "AND pageVisited like '%dev-pk%' OR  '%easydukan.co%' ";
@@ -789,9 +797,6 @@ class ActivityController extends Controller
         }
 
     //    DB::enableQueryLog();
-
-        
-
         // dd($sql);
         // $queries = DB::getQueryLog();
         // dd($queries);
@@ -928,7 +933,23 @@ class ActivityController extends Controller
          from customer_activities
          WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."'
          GROUP BY DATE(created)";
+
+         $where="";
+
+        if($req->region == "all"){
+            $where= "AND pageVisited IS NOT NULL";
+          }
+
+        if($req->region == "malaysia"){
+            $where= "AND pageVisited like '%dev-my%' OR  '%deliverin.my%'";
+          }
+
+          if($req->region == "pakistan"){
+            $where = "AND pageVisited like '%dev-pk%' OR  '%easydukan.co%' ";
+            // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
+          }  
          
+        $sql .= $where;
         $datas = DB::connection('mysql3')->select($sql);
         // $datas = array();
         // var_dump(datas);

@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <script type="text/javascript">
     function exportToExcel() {
@@ -69,11 +70,13 @@
                         </div>                      
                     </div>
                     <div class="input-group mb-3">
-                        <label class="col-2" for="region">Choose:</label>
+                        <label class="col-2" for="region">By Country:</label>
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3"  id="region" name="region">
-                        <option  value="malaysia">Malaysia</option>
-                        <option  value="pakistan">Pakistan</option>
+                        <option  value="" selected >Choose</option>
+                        <option  value="all">All</option>
+                         <option  value="malaysia"<?php if ($selectedCountry=="malaysia") echo "selected"; ?>>Malaysia</option>
+                         <option  value="pakistan"<?php if ($selectedCountry=="pakistan") echo "selected"; ?>>Pakistan</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">

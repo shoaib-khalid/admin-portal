@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <script type="text/javascript">
     function exportToExcel() {
@@ -54,17 +55,7 @@
                         <div class="col-4">
                         <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="{{$device}}">
                         </div>                  
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">By Country</div>
-                        <div class="col-4">
-                        <select class="form-select form-select-lg mb-3" id="region" name="region">
-                         <option>Choose</option>
-                         <option  value="malaysia">Malaysia</option>
-                         <option  value="pakistan">Pakistan</option>
-                        </select>
-                        </div>                        
-                    </div>              
+                    </div>          
                     <div class="input-group mb-3">
                         <div class="col-2">Group By</div>
                         <div class="col-2">
@@ -86,7 +77,18 @@
                         <div class="col-2">
                         <input type="checkbox" name="grouppage" id="grouppage" value="grouppage" <?php if ($grouppage<>"") echo "checked"; ?>>
                         Page
-                        </div>   </div>
+                        </div>   
+                    </div>
+                    <div class="input-group mb-3">
+                     <div class="col-2">By Country</div>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3" id="region" name="region">
+                         <option  value="all">All</option>
+                         <option  value="malaysia"<?php if ($selectedCountry=="malaysia") echo "selected"; ?>>Malaysia</option>
+                         <option  value="pakistan"<?php if ($selectedCountry=="pakistan") echo "selected"; ?>>Pakistan</option>
+                        </select>
+                    </div>                        
+                    </div>    
                     <div class="input-group mb-3">
                         <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>

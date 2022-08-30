@@ -2,7 +2,6 @@
     // var_dump($datas);
     // dd($datas);
     $selectedCountry = Session::get('selectedCountry');
-    echo "selectedCountry:".$selectedCountry;
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -27,8 +26,8 @@
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3"  id="region" name="region">
                         <option  value="">All</option>
-                        <option  value="MYS" <?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                        <option  value="PAK" <?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                        <option  value="malaysia" <?php if ($selectedCountry=="malaysia") echo "selected"; ?>>Malaysia</option>
+                        <option  value="pakistan" <?php if ($selectedCountry=="pakistan") echo "selected"; ?>>Pakistan</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
@@ -41,23 +40,18 @@
                 
                
             </div>
-            <div class="col-1">                
+            <div class="col-1">
+                    
             </div>
-            
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <form action="export_useractivitylog" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}}
-                        
-                            <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
-                            <button type="submit" class="btn btn-success icon-left btn-icon float-right" style="margin-bottom: 1rem!important;"><i class="fas fa-file"></i> <span>Export Excel</span>
+                    <div class="col">
+                        <form action="/export_useractivitylog" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                            {{@csrf_field()}}
+                            <input type="text" name="date_chosen3_copy" id="date_chosen3_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
+                            <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
                             </button>
-                        
-                    </form>
-            </div>
-        </div>    
+                        </form>
+                    </div>
+             </div>  
 
         <div class="table-responsive">
 

@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
                 $user &&
                 Hash::check($request->password, $user->password)
             ) {
-                Session::put('selectedCountry', $request->selectCountry);
+                Session::put('selectedCountry', $request->region);
                 return $user;
             }
         });
