@@ -88,12 +88,12 @@ class ActivityDateController extends Controller
           }
 
         if($req->region == "malaysia"){
-         $where= "AND page like '%dev-my%' OR  '%deliverin.my%' ";
+         $where= "AND (page like '%deliverin.my%' OR page like '%dev-my%') ";
 
         //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
         if($req->region == "pakistan"){
-            $where = "AND page like '%dev-pk%' OR  '%easydukan.co%' ";
+            $where = "AND (page like '%easydukan.co%' OR page like '%dev-pk%') ";
         //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
          }
 
