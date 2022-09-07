@@ -216,11 +216,10 @@ class UserController extends Controller
 
     public function daily_sales_filter(Request $req){
 
-        //dd($user);
-        //dd(Session::get('selectedCountry'));
+        // dd($user);
+        // dd(Session::get('selectedCountry'));
 
         $data = $req->input();
-
         $dateRange = explode( '-', $req->date_chosen );
         $start_date = $dateRange[0];
         $end_date = $dateRange[1];
@@ -243,7 +242,6 @@ class UserController extends Controller
 
         //dd($req->date_chosen);
         $datechosen = $req->date_chosen;
-
         // return $days;
         // die();
         return view('dashboard', compact('days','datechosen'));
@@ -346,14 +344,28 @@ class UserController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('7 days ago');
         $from = $date->format("Y-m-d");
-        
-        $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
-            'from' => $from,
-            'to' => $to,
-            'sortBy' => 'created',            
-            'sortingOrder' => "DESC",
-            'pageSize' => 1000
-        ]); 
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS' || $selectedCountry == 'PAK') 
+        {
+            $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+                'countryCode' => $selectedCountry,
+                'from' => $from,
+                'to' => $to,
+                'sortBy' => 'created',            
+                'sortingOrder' => "DESC",
+                'pageSize' => 1000
+            ]); 
+        }
+        else 
+        {
+            $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+                'from' => $from,
+                'to' => $to,
+                'sortBy' => 'created',            
+                'sortingOrder' => "DESC",
+                'pageSize' => 1000
+            ]); 
+        }
         
         
         if($request->successful()){
@@ -366,6 +378,7 @@ class UserController extends Controller
         
         // return json_decode($datas);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+        $region = '';
         return view('components.daily-group-details', compact('datas','datechosen'));
     }
 
@@ -380,26 +393,37 @@ class UserController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
-            'from' => $start_date,
-            'to' => $end_date,
-            'sortBy' => 'created',            
-            'sortingOrder' => "DESC",
-            'pageSize' => 1000
-        ]); 
-        
+        $selectedCountry = $req->region;
+        if($selectedCountry == 'MYS' || $selectedCountry == 'PAK') 
+        {
+            $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+                'countryCode' => $selectedCountry,
+                'from' => $start_date,
+                'to' => $end_date,
+                'sortBy' => 'created',            
+                'sortingOrder' => "DESC",
+                'pageSize' => 1000
+            ]); 
+        }
+        else 
+        {
+            $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
+                'from' => $start_date,
+                'to' => $end_date,
+                'sortBy' => 'created',            
+                'sortingOrder' => "DESC",
+                'pageSize' => 1000
+            ]); 
+        }
+
         if($request->successful()){
 
             $result = $request['data'];
-
         }
-        //dd($result['content']);
+
         $datas = $result['content'];
-
-        //dd($datas);
-
-        // return $datas;
         $datechosen = $req->date_chosen2;
+        $region = $req->region;
         return view('components.daily-group-details', compact('datas','datechosen'));
     }
 

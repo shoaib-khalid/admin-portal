@@ -5,7 +5,7 @@
 @endphp
 <div class="card section">
     <div class="card-header">
-        <h4>Customer Site Map</h4>
+        <h4>Customer Data</h4>
     </div>
     <div class="card-body">
 
@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 
-            <form action="filter_usersitemap" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+            <form action="filter_userdata" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
                     <div class="input-group mb-3">
                         <div class="col-2">Date</div>
@@ -31,30 +31,16 @@
                         <div class="col-4">
                         <input type="text" name="customer_chosen" id="customer_chosen" class="form-control" value="{{$customername}}">
                         </div>
-                        <div class="col-2">Device</div>
-                        <div class="col-4">
-                        <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="{{$device}}">
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">Browser</div>
-                        <div class="col-4">
-                        <input type="text" name="browser_chosen" id="browser_chosen" class="form-control" value="{{$browser}}">
-                        </div>
-                        <div class="col-2">Country</div>
-                        <div class="col-4">
-                        <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="">
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <label class="col-2" for="region">By Country:</label>
+                        <label class="col-2" for="region">By Country</label>
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3" id="region" name="region">
                         <option  value="all">All</option>
                         <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                         <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                         </select>
                         </div>
+                    </div>
+                    <div class="input-group mb-3">
                         <div class="col-2">
                             <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
@@ -69,7 +55,7 @@
 
         <div class="row">
             <div class="col">
-                <form action="export_usersitemap" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form action="export_userdata" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         
                             <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
@@ -82,53 +68,33 @@
 
         <div class="table-responsive">
 
-            <table id="table-4" class="table table-striped">        
+            <table class="table table-striped" id="table-3">        
                 <thead>
                     <tr class="text-center">                        
-                        <th>Session ID</th>
-                        <th>Location</th>
-                        <th>Customer</th>
-                        <th>Store</th>
-                        <th>Start Timestamp</th>                        
-                        <th>End Timestamp</th>
-                        <th>Time Spent</th>
-                        <th>First Page Visited</th>
-                        <th>Last Page Visited</th>
-                        <th>Item Added</th>                        
-                        <th>Order Created</th>
-                        <th>Order Status</th>
-                        <th></th>
+                        <th colspan="2" rowspan="2">Customer Name</th>
+                        <th colspan="2" rowspan="2">Store Name</th>
+                        <th colspan="2" rowspan="2">Email</th>
+                        <th colspan="2" rowspan="2">Phone No</th>
+                        <th colspan="3">Order History</th>
+                    </tr>
+                    <tr>
+                        <th>Visited Page</th>
+                        <th>Incomplete Order</th>
+                        <th>Completed Order</th>
                     </tr>
                 </thead>      
                 <tbody>
-
                     @foreach ($datas as $data)
                         <tr class="text-center">                            
-                            <td>{{ $data['sessionId'] }}</td>
-                            <td>{{ $data['location'] }}</td>
-                            <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['storeName'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['startTimestamp'])->format('d/m/Y H:i:s') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['endTimestamp'])->format('d/m/Y H:i:s') }}</td>                            
-                            <td>{{ number_format($data['timeSpent'],2) }}</td>
-                            <td>{{ $data['firstPage'] }}</td>
-                            <td>{{ $data['lastPage'] }}</td>
-                            <td>{{ $data['itemAdded'] }}</td>
-                            <td>
-                            <?php if ($data['orderCreated']=="YES") { ?>
-                            <a href="#" class="btn btn-primary view_order" sessionId="{{ $data['sessionId'] }}">
-                            {{ $data['orderCreated'] }}
-                            </a>
-                            <?php } ?>
-                            </td>
-                            <td>{{ $data['orderStatus'] }}</td>
-                            <td>
-                                <a href="#" class="btn btn-primary view_store" clientId="{{ $data['sessionId'] }}">
-                                    <i class="far fa-check-circle"></i>
-                                    Details
-                                </a>
-                            </td>                   
+                            <td  colspan="2" rowspan="2">{{ $data['customerName'] }}</td>
+                            <td  colspan="2" rowspan="2">{{$data['storeName']}}</td>
+                            <td  colspan="2" rowspan="2">{{ $data['email'] }}</td>
+                            <td  colspan="2" rowspan="2">{{ $data['phone'] }}</td>
+                            <td  rowspan="2">{{ $data['Page'] }}</td>
+                            <td  rowspan="2">{{ $data['itemAdded'] }}</td>
+                            <td  rowspan="2"> {{ $data['orderCreated'] }}</td>    
                         </tr>
+                        <tr></tr>
                     @endforeach
 
                 </tbody>

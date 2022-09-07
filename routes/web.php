@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     // return view('welcome');
     if(auth()->user()){
+        // $_SESSION['country']="PAKISTAN";
         return redirect('dashboard');
     }else{
         // return view('auth.login');
@@ -39,6 +40,8 @@ Route::get('/', function () {
 });
 
 Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
+
+    
 
     Route::get('/dashboard', [UserController::class, "daily_sales"])->name('dashboard');
     Route::post('/filter_dashboard', [UserController::class, "daily_sales_filter"])->name('filter_dashboard');
@@ -89,6 +92,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap');
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
     Route::post('/export_usersitemap', [ActivityController::class, "export_usersitemap"])->name('export_usersitemap');
+
+    Route::get('/userdata', [ActivityController::class, "userdata"])->name('userdata');
+    Route::post('/filter_userdata', [ActivityController::class, "filter_userdata"])->name('filter_userdata');
+    Route::post('/export_userdata', [ActivityController::class, "export_userdata"])->name('export_userdata');
 
     Route::get('/visitchannel', [ActivityController::class, "visitchannel"])->name('visitchannel');
     Route::post('/filter_visitchannel', [ActivityController::class, "filter_visitchannel"])->name('filter_visitchannel');

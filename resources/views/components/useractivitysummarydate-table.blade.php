@@ -75,8 +75,8 @@
                         <select class="form-select form-select-lg mb-3"  id="region" name="region">
                         <option  value="" selected >Choose</option>
                         <option  value="all">All</option>
-                         <option  value="malaysia"<?php if ($selectedCountry=="malaysia") echo "selected"; ?>>Malaysia</option>
-                         <option  value="pakistan"<?php if ($selectedCountry=="pakistan") echo "selected"; ?>>Pakistan</option>
+                         <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                         <option  value="PAK"<?php if ($selectedCountry=="pak") echo "selected"; ?>>Pakistan</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">

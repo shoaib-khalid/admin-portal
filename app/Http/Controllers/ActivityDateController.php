@@ -57,10 +57,10 @@ class ActivityDateController extends Controller
         $groupos=null;
         $grouppage=null;
         $groupstore=null;
-        $malaysia=null;
-        $pakistan=null;
+        $MYS=null;
+        $PAK=null;
 
-        return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));        
+        return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser', 'groupstore','groupbrowser','groupdevice','groupos','grouppage','MYS','PAK'));        
     }
    
 
@@ -87,12 +87,12 @@ class ActivityDateController extends Controller
             $where= "AND page IS NOT NULL";
           }
 
-        if($req->region == "malaysia"){
+        if($req->region == "MYS"){
          $where= "AND (page like '%deliverin.my%' OR page like '%dev-my%') ";
 
         //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }
-        if($req->region == "pakistan"){
+        if($req->region == "PAK"){
             $where = "AND (page like '%easydukan.co%' OR page like '%dev-pk%') ";
         //     // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
          }
@@ -252,14 +252,14 @@ class ActivityDateController extends Controller
         $storename = $req->storename_chosen;
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
-        $malaysia = $req->malaysia;
-        $pakistan = $req->pakistan;
+        $MYS = $req->MYS;
+        $PAK = $req->PAK;
 
 
         if ($req->exportExcel==1) {
              return Excel::download(new UserActivitySummaryExportDate($datas, $req), 'CustomerSummaryByDate.xlsx');
          } else {
-            return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage','malaysia','pakistan'));    
+            return view('components.useractivitysummarydate', compact('datas','datechosen','storename','device','browser','groupstore','groupbrowser','groupdevice','groupos','grouppage','MYS','PAK'));    
          }
         
     }    

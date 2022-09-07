@@ -1,4 +1,8 @@
-
+@php
+    // var_dump($datas);
+    // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
+@endphp
 <div class="card section">
     <div class="card-header">
         <h4>Daily Detail Sales</h4>
@@ -13,13 +17,27 @@
                     <form action="/filter_groupsales" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         <div class="input-group mb-3">
-                            <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                            </div>
+                        <div class="col-2">Date</div>
+                        <div class="col-4">
+                        <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
                         </div>
+</div>
+                        <div class="input-group mb-3">
+                        <label class="col-2" for="region">By Country</label>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3" id="region" name="region">
+                        <option  value="ALL">All</option>
+                        <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                        </select>
+                        
+                        <div class="input-group mb-3">
+                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button></div>
+                        </div>
+                        </div>
+                        
                     </form>
-                </div>
+                
                 <div class="col-1">
                     
                 </div>
@@ -34,6 +52,7 @@
             </div>
             
         </div>
+ 
 
         <div class="table-responsive">
             <table class="table table-md table-hover table-borderless" id="table-2">
@@ -55,6 +74,7 @@
                     <th>Total</th>   
                     <th>Payment Status</th> 
                     <th>Order Status</th> 
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,6 +135,12 @@
                                         @endif
                             </td>
                             <td>{{ $orderStatus }}</td>
+                            <td>
+                                <a href="#" class="btn btn-primary view_store">
+                                    <i class="far fa-check-circle"></i>
+                                    Details
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                     
