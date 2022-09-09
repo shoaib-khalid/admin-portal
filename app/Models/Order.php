@@ -18,7 +18,11 @@ class Order extends Model
     protected $fillable = ['id', 
                             'invoiceId', 
                             'customerId', 
-                            'completionStatus', 
+                            'completionStatus',
+                            'paymentStatus', 
+                            'storeId',
+                            'total',
+                            'paymentType',
                             'created'
                         ];
 }

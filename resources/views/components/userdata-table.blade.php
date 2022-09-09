@@ -78,21 +78,21 @@
                         <th colspan="3">Order History</th>
                     </tr>
                     <tr>
-                        <th>Visited Page</th>
-                        <th>Incomplete Order</th>
+                        <th>Abandon Cart</th>
                         <th>Completed Order</th>
+                        <th>Incompleted Order</th>
                     </tr>
                 </thead>      
                 <tbody>
                     @foreach ($datas as $data)
                         <tr class="text-center">                            
-                            <td  colspan="2" rowspan="2">{{ $data['customerName'] }}</td>
+                            <td  colspan="2" rowspan="2">{{ $data['name'] }}</td>
                             <td  colspan="2" rowspan="2">{{$data['storeName']}}</td>
                             <td  colspan="2" rowspan="2">{{ $data['email'] }}</td>
-                            <td  colspan="2" rowspan="2">{{ $data['phone'] }}</td>
-                            <td  rowspan="2">{{ $data['Page'] }}</td>
-                            <td  rowspan="2">{{ $data['itemAdded'] }}</td>
-                            <td  rowspan="2"> {{ $data['orderCreated'] }}</td>    
+                            <td  colspan="2" rowspan="2">{{ $data['phoneNumber'] }}</td>
+                            <td  rowspan="2">{{ $data['itemCart'] }}</td>
+                            <td  rowspan="2">{{ $data['orderCompleted'] }}</td>
+                            <td  rowspan="2">{{ $data['orderIncomplete'] }}</td>
                         </tr>
                         <tr></tr>
                     @endforeach

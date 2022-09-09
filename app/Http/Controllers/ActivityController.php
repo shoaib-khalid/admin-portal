@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Order;
 use App\Models\Cart;
 use App\Models\PaymentDetail as Payment;
 use App\Models\Store;
@@ -693,134 +694,68 @@ class ActivityController extends Controller
         $date = new DateTime('1 days ago');
         $from = $date->format("Y-m-d");
         
-        //query group by sessionId
-        $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-                        ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
+        //query by Customer
+        $datas = Customer::select('customer.*')
+                            ->whereBetween('customer.created', [$from, $to." 23:59:59"])  
+                            ->orderBy('customer.created', 'DESC')
+                            ->get();
         //dd($datas);
         $newArray = array();
         $storeList = array();
-        $customerList = array();
-        $emailList = array();
-        $phoneList = array();
         //dd($datas);
         
         foreach ($datas as $data) {
-        
-            //get pageVisited
-            $sql="SELECT created, pageVisited, storeId, customerId FROM customer_activities WHERE sessionId='".$data['sessionId']."' GROUP BY customerId";
-            $rsstart = DB::connection('mysql3')->select($sql);
-            $Page = $rsstart[0]->pageVisited;
-            $storeId = $rsstart[0]->storeId;
-            $customerId = $rsstart[0]->customerId;
-            if(count($rsstart)>0){
-                $Page = "YES";
-            } else {
-                $Page="NO";
-            }
-
-            //registered user
-            // $sql="SELECT isActivated FROM customer";
-            // $rsregister = DB::connection('mysql2')->select($sql);
-            // $activate = $rsregister[0]->isActivated;
-            // if(count($rsregister)>0){
-            //     $activate = "Registered";
-            // } else {
-            //     $activate="Guest";
-            // }
-        
-            //check if any item in cart
-            $sql="SELECT * FROM cart_item WHERE cartId='".$data['sessionId']."'";
-            $rsitem = DB::connection('mysql2')->select($sql);
-            if (count($rsitem)>0) {
-                $itemAdded="YES";
-            } else {
-                $itemAdded="NO";
-            }
-        
-            //check if any order created 
-            $sql="SELECT A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
-            ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."' GROUP BY customerName";
-            $rsorder = DB::connection('mysql2')->select($sql);
-            if (count($rsorder)>0) {
-                $orderCreated="YES";
-                $orderId = $rsorder[0]->id;
-                $orderDetails  = [
-                        'orderId' => $rsorder[0]->id,
-                        'invoiceNo' => $rsorder[0]->invoiceId,
-                        'created' => $rsorder[0]->created,
-                        'storeName' => $rsorder[0]->storeName,
-                        'customerName' => $rsorder[0]->customerName,
-                    ];
-            } else {
-                $orderCreated="NO";
-                $orderId = "";
-                $orderDetails  = null;
-        
-            }
-        
+                
             $storeName = '';
-            if (! array_key_exists($storeId, $storeList)) {
-                $store_info = Store::where('id', $storeId)->get();
-                if (count($store_info) > 0) {
-                    $storeList[$storeId] = $store_info[0]['name']; 
-                    $storeName = $storeList[$storeId];
-                }    
-        
-            } else {
-                $storeName = $storeList[$storeId];
-            }
-             
-        
-            $customerName = '';
-            if (! array_key_exists($customerId, $customerList)) {            
-                $customer_info = Customer::where('id', $customerId)->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$customerId] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$customerId];
-                }  
-                
-            } else {
-                $customerName = $customerList[$customerId];
-            }  
-            
-            $email = '';
-            if (! array_key_exists($customerId, $emailList)) {            
-                $email_info = Customer::where('id', $customerId)->get();
-                if (count($email_info) > 0) {
-                    $emailList[$customerId] = $email_info[0]['email']; 
-                    $email = $emailList[$customerId];
-                }  
-                
-            } else {
-                $email = $emailList[$customerId];
-            }  
-        
-            $phone = '';
-            if (! array_key_exists($customerId, $phoneList)) {            
-                $phone_info = Customer::where('id', $customerId)->get();
-                if (count($phone_info) > 0) {
-                    $phoneList[$customerId] = $phone_info[0]['phoneNumber']; 
-                    $phone = $phoneList[$customerId];
-                }  
-                
-            } else {
-                $phone = $phoneList[$customerId];
-            } 
+                if (! array_key_exists($data['storeId'], $storeList)) {
+                    $store_info = Store::where('id', $data['storeId'])
+                                        ->get();
+                    if (count($store_info) > 0) {
+                        $storeList[$data['storeId']] = $store_info[0]['name']; 
+                        $storeName = $storeList[$data['storeId']];
+                    }    
+
+                } else {
+                    $storeName = $storeList[$data['storeId']];
+                }
+
+                //check for Abandon cart
+                $sql="SELECT*FROM cart WHERE customerId='".$data['id']."'";
+                $rsitem = DB::connection('mysql2')->select($sql);
+                if (count($rsitem)>0) {
+                    $itemCart="YES";
+                } else {
+                    $itemCart="NO";
+                }
+
+                //check for Order Completed
+                $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+                $rsordercomplete = DB::connection('mysql2')->select($sql);
+                if (count($rsordercomplete)>0) {
+                    $orderCompleted="YES";
+                } else {
+                    $orderCompleted="NO";
+                }
+
+                //check for Order Incompleted
+                $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+                $rsorderIncomplete = DB::connection('mysql2')->select($sql);
+                if (count($rsorderIncomplete)>0) {
+                    $orderIncomplete="YES";
+                } else {
+                    $orderIncomplete="NO";
+                }
+
             
             $object = [
                 'storeName' => $storeName,
-                'customerName' => $customerName,
-                'email' => $email,
-                'phone' => $phone,
-                'sessionId' => $data['sessionId'],
-                'Page' => $Page,
-                'itemAdded' => $itemAdded,
-                'orderCreated' => $orderCreated,
-                'order_details' => $orderDetails,
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phoneNumber' => $data['phoneNumber'],
+                'id' => $data['id'],
+                'itemCart' => $itemCart,
+                'orderCompleted' => $orderCompleted,
+                'orderIncomplete' => $orderIncomplete,
             ];
         
             
@@ -843,7 +778,6 @@ class ActivityController extends Controller
         return view('components.userdata', compact('datas','datechosen','storename','customername','device','browser'));
         }
 
-
         public function filter_userdata(Request $req){
 
         $data = $req->input();
@@ -855,183 +789,88 @@ class ActivityController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        //query group by sessionId
-        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId')->distinct()
-                ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"]);
+        //queryby id
+        $query = Customer::select('customer.*')
+                            ->whereBetween('customer.created', [$start_date, $end_date." 23:59:59"]);  
 
-         if($req->region == "MYS"){
+        if($req->region == "all"){
             $query->where(function ($query) {
-                $query->where('pageVisited', 'like', '%dev-my%')
-                ->orWhere('pageVisited', 'like', '%deliverin.my%');
+                $query->whereNotNull("countryId");
             });           
           }
 
-          if($req->region == "PAK"){
-             $query->where(function ($query) {
-                $query->where('pageVisited', 'like', '%dev-pk%')
-                ->orWhere('pageVisited', 'like', '%easydukan.co%');
-            });              
+        if($req->region == "MYS"){
+            $query->where(function ($query) {
+                $query->where('countryId', '=', 'MYS');
+            });           
           }
 
+        if($req->region == "PAK"){
+            $query->where(function ($query) {
+                $query->where('countryId', '=', 'PAK');
+            });           
+          }
 
-        if ($req->storename_chosen<>"") {
-            $search_store_info = Store::where('name', 'like',  '%'.$req->storename_chosen.'%' )->get(); 
-            $search_storeId_list = array();        
-            if (count($search_store_info) > 0) {
-               foreach ($search_store_info as $storefound) {
-                    array_push($search_storeId_list, $storefound['id']);
-               }
-            }  
-            $query->whereIn('storeId', $search_storeId_list);
-            //dd($query);
-        }
-
-        if ($req->customer_chosen<>"") {
-            $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
-            if (count($search_customer_info) > 0) {
-               $search_customerId = $search_customer_info[0]['id']; 
-            } else {
-                $search_customerId = "NOT FOUND";
-            }
-            $query->where('customerId', $search_customerId);
-            //dd($query);
-        }
-        if ($req->device_chosen<>"") {
-            $query->where('deviceModel', $req->device_chosen);
-        }
-        if ($req->browser_chosen<>"") {
-            $query->where('browserType', $req->browser_chosen);
-        }
-
-        $query->orderBy('customer_activities.created', 'DESC');
+        $query->orderBy('customer.created', 'DESC');
         $datas = $query->get();
-
+        //dd($datas);
         $newArray = array();
         $storeList = array();
-        $customerList = array();
-        $emailList = array();
-        $phoneList = array();
-
         //dd($datas);
+        
 
         foreach ($datas as $data) {
-        
-            //get pageVisited
-            $sql="SELECT  pageVisited, storeId, customerId FROM customer_activities WHERE sessionId='".$data['sessionId']."' GROUP BY customerId";
-            $rsstart = DB::connection('mysql3')->select($sql);
-            $Page = $rsstart[0]->pageVisited;
-            $storeId = $rsstart[0]->storeId;
-            $customerId = $rsstart[0]->customerId;
-            if(count($rsstart)>0){
-                $Page = "YES";
-            } else {
-                $Page="NO";
-            }
-            
-            //get guest/registered user
-            // $sql="SELECT isActivated FROM customer";
-            // $rsregister = DB::connection('mysql2')->select($sql);
-            // $activate = $rsregister[0]->isActivated;
-            // if(count($rsregister)<=0){
-            //     $activate = "Guest";
-            // } else {
-            //     $activate="RG";
-            // }
-        
-            //check for item in cart
-            $sql="SELECT * FROM cart_item WHERE cartId='".$data['sessionId']."'";
-            $rsitem = DB::connection('mysql2')->select($sql);
-            if (count($rsitem)>0) {
-                $itemAdded="YES";
-            } else {
-                $itemAdded="NO";
-            }
-        
-            //check for order created 
-            $sql="SELECT A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
-            ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."' GROUP BY customerName";
-            $rsorder = DB::connection('mysql2')->select($sql);
-            if (count($rsorder)>0) {
-                $orderCreated="YES";
-                $orderId = $rsorder[0]->id;
-                $orderDetails  = [
-                        'orderId' => $rsorder[0]->id,
-                        'invoiceNo' => $rsorder[0]->invoiceId,
-                        'created' => $rsorder[0]->created,
-                        'storeName' => $rsorder[0]->storeName,
-                        'customerName' => $rsorder[0]->customerName,
-                    ];
-            } else {
-                $orderCreated="NO";
-                $orderId = "";
-                $orderDetails  = null;
-        
-            }
-        
-            //Store data
+                
             $storeName = '';
-            if (! array_key_exists($storeId, $storeList)) {
-                $store_info = Store::where('id', $storeId)->get();
-                if (count($store_info) > 0) {
-                    $storeList[$storeId] = $store_info[0]['name']; 
-                    $storeName = $storeList[$storeId];
-                }    
-        
-            } else {
-                $storeName = $storeList[$storeId];
-            }
-             
-            //Customer data
-            $customerName = '';
-            if (! array_key_exists($customerId, $customerList)) {            
-                $customer_info = Customer::where('id', $customerId)->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$customerId] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$customerId];
-                }  
-                
-            } else {
-                $customerName = $customerList[$customerId];
-            }  
-            
-            //Email data
-            $email = '';
-            if (! array_key_exists($customerId, $emailList)) {            
-                $email_info = Customer::where('id', $customerId)->groupBy()->get();
-                if (count($email_info) > 0) {
-                    $emailList[$customerId] = $email_info[0]['email']; 
-                    $email = $emailList[$customerId];
-                }  
-                
-            } else {
-                $email = $emailList[$customerId];
-            }  
-        
-            //Phone Number data
-            $phone = '';
-            if (! array_key_exists($customerId, $phoneList)) {            
-                $phone_info = Customer::where('id', $customerId)->get();
-                if (count($phone_info) > 0) {
-                    $phoneList[$customerId] = $phone_info[0]['phoneNumber']; 
-                    $phone = $phoneList[$customerId];
-                }  
-                
-            } else {
-                $phone = $phoneList[$customerId];
-            } 
+                if (! array_key_exists($data['storeId'], $storeList)) {
+                    $store_info = Store::where('id', $data['storeId'])
+                                        ->get();
+                    if (count($store_info) > 0) {
+                        $storeList[$data['storeId']] = $store_info[0]['name']; 
+                        $storeName = $storeList[$data['storeId']];
+                    }    
+
+                } else {
+                    $storeName = $storeList[$data['storeId']];
+                }
+
+                //check for Abandon cart
+                $sql="SELECT*FROM cart WHERE customerId='".$data['id']."'";
+                $rsitem = DB::connection('mysql2')->select($sql);
+                if (count($rsitem)>0) {
+                    $itemCart="YES";
+                } else {
+                    $itemCart="NO";
+                }
+
+                //check for Order Completed
+                $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+                $rsordercomplete = DB::connection('mysql2')->select($sql);
+                if (count($rsordercomplete)>0) {
+                    $orderCompleted="YES";
+                } else {
+                    $orderCompleted="NO";
+                }
+
+                //check for Order Incompleted
+                $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+                $rsorderIncomplete = DB::connection('mysql2')->select($sql);
+                if (count($rsorderIncomplete)>0) {
+                    $orderIncomplete="YES";
+                } else {
+                    $orderIncomplete="NO";
+                }
+
             
             $object = [
                 'storeName' => $storeName,
-                'customerName' => $customerName,
-                'email' => $email,
-                'phone' => $phone,
-                // 'activate' => $activate,
-                'sessionId' => $data['sessionId'],
-                'Page' => $Page,
-                'itemAdded' => $itemAdded,
-                'orderCreated' => $orderCreated,
-                'order_details' => $orderDetails,
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phoneNumber' => $data['phoneNumber'],
+                'id' => $data['id'],
+                'itemCart' => $itemCart,
+                'orderCompleted' => $orderCompleted,
+                'orderIncomplete' => $orderIncomplete,
             ];
         
             
@@ -1041,10 +880,11 @@ class ActivityController extends Controller
             );
         
         }
-       
+        
         $datas = $newArray;
-
-        $datechosen = $req->date_chosen4;   
+        
+        $datas = $newArray;        
+        $datechosen = $req->date_chosen4;                
         $storename = $req->storename_chosen;
         $customername = $req->customer_chosen;
         $device = $req->device_chosen;
@@ -1526,5 +1366,4 @@ class ActivityController extends Controller
             return view('components.userabandoncart', compact('datas','datechosen','storename','customername'));
 
         }
-
 }
