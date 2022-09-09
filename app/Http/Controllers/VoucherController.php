@@ -124,7 +124,9 @@ class VoucherController extends Controller
         $voucher->minimumSpend = $request->minimumSpend;
         $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
         $voucher->requireToClaim = $request->requireToClaim;        
-        
+        $voucher->created_at = date("Y-m-d H:i:s");
+        $voucher->created_by = auth()->user()->email;
+        $voucher->save();
 
         if ($voucher->voucherType=="STORE") {
             foreach ($request->addStoreList as $storeId) {
@@ -144,9 +146,7 @@ class VoucherController extends Controller
             $vcode->save();
         }
 
-        $voucher->created_at = date("Y-m-d H:i:s");
-        $voucher->created_by = auth()->user()->email;
-        $voucher->save();
+
 
         $termList = explode(PHP_EOL, $request->terms);
         foreach ($termList as $term) {
