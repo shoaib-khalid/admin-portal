@@ -119,6 +119,7 @@ class RefundController extends Controller
             }            
 
             $refund = Refund::find($request->refund_id);
+             //dd($request->refund_id); 
             $refund->remarks = $request->remarks;
             $refund->refundStatus = "COMPLETED";
             $refund->updated = date("Y-m-d H:i:s");
@@ -129,23 +130,29 @@ class RefundController extends Controller
 
             //get customer email from order
             $orderData = Refund::select('order_refund.id','order_refund.created','order_refund.orderId',                
-                'store.name AS storeName', 'store.address AS storeAddress', 'customer.name AS customerName', 'customer.email AS customerEmail', 'store_asset.logoUrl AS storeLogo', 
+                'store.name AS storeName', 'store.address AS storeAddress', 'customer.name AS customerName', 'customer.email AS customerEmail', 
                 'refundType','refundAmount','refundStatus','remarks', 
-                'order.total', 'order.subTotal', 'order.appliedDiscount','order.total','order.invoiceId',
+                'order.total', 'order.subTotal', 'order.appliedDiscount','order.total','order.invoiceId', 'order.orderGroupId',
                 'order.storeServiceCharges', 'order.deliveryCharges', 'order.deliveryDiscount',
-                'shipment.address AS shipmentAddress', 'shipment.city AS shipmentCity',
-                'payment.paymentChannel','payment.createdDate AS paymentDate'
+                'shipment.address AS shipmentAddress', 'shipment.city AS shipmentCity'                
                 )
                         ->join('order as order', 'order_refund.orderId', '=', 'order.id')
                         ->join('customer as customer', 'order.customerId', '=', 'customer.id')
-                        ->join('store as store', 'order.storeId', '=', 'store.id')
-                        ->join('store_asset as store_asset', 'store.id', '=', 'store_asset.storeId')
+                        ->join('store as store', 'order.storeId', '=', 'store.id')               
                         ->join('order_shipment_detail as shipment', 'order.id', '=', 'shipment.orderId')
-                        ->join('payment_orders as payment', 'order.id', '=', 'payment.clientTransactionId')
                         ->where('order_refund.id', $request->refund_id)
                         ->get();
             //dd($orderData);          
             $orderId = $orderData[0]['orderId'];
+            $orderGroupId = $orderData[0]['orderGroupId'];
+
+            //get payment channel
+            $sql="SELECT paymentChannel, createdDate FROM payment_orders WHERE clientTransactionId='".$orderGroupId."'";
+            $paymentdetails = DB::connection('mysql2')->select($sql);
+            if (count($paymentdetails)>0) {
+                $orderData[0]['paymentChannel']=paymentdetails[0]['paymentChannel'];
+                $orderData[0]['paymentDate']=paymentdetails[0]['createdDate'];
+            } 
 
             //get order item from order
             $orderItems = DB::connection('mysql2')->table('order_item')
