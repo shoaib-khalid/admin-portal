@@ -28,7 +28,7 @@
 <div style="background-color: #F8F8F8; padding: 5px; margin: 2;">
     <div>
         <span>
-            We're glad to inform you that we have completed the refund process for your  canceled item(s) listed below. The amount has been transferred to the bank account based on the information provided to us. It may take 1 to 2 working days before it is reflected in your account.
+            We're glad to inform you that we have completed the refund process for your  canceled item(s) listed below. 
         </span>
     </div>
 </div>
