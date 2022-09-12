@@ -204,22 +204,22 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label class="text-primary">Remarks</label>
-                        <input type="text" class="form-control font-weight-bold" id="remarks" name="remarks">
+                        <label class="text-primary">Remarks<span style="color:red" class="required">*</span></label>
+                        <input type="text" class="form-control font-weight-bold" required="" id="remarks" name="remarks" required>
                     </div>
                 </div>
 
 
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label class="text-primary">Upload Refund Proof</label>
-                        <input type="file" class="form-control font-weight-bold" id="proof" name="proof">
+                        <label class="text-primary">Upload Refund Proof<span style="color:red" class="required">*</span></label>
+                        <input type="file" class="form-control font-weight-bold" required="" id="proof" name="proof" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <button id="btnComplete" type="submit" class="btn btn-success float-left" onClick="this.form.submit(); this.disabled=true;">Refund Completed</button>  
+                        <button id="btnComplete" name="submit" type="submit" class="btn btn-success float-left" onClick="this.form.submit(); this.disabled=true;">Refund Completed</button>  
                     </div>
                     <div class="form-group col-md-6">
                         <button type="button" class="btn btn-danger float-right" data-dismiss="modal">Close</button>

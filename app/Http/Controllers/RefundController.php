@@ -31,10 +31,12 @@ class RefundController extends Controller
 
     protected $url;
     protected $token;
+    protected $storelogo;
 
     function __construct() {
             $this->url = config('services.report_svc.url');
             $this->token = config('services.report_svc.token');
+            $this->storeLogo = config('services.logo_svc.storeLogo');
     }
 
     public function pendingrefund(){
@@ -130,7 +132,7 @@ class RefundController extends Controller
 
             //get customer email from order
             $orderData = Refund::select('order_refund.id','order_refund.created','order_refund.orderId',                
-                'store.name AS storeName', 'store.address AS storeAddress', 'customer.name AS customerName', 'customer.email AS customerEmail', 
+                'store.name AS storeName', 'store.id AS storeId', 'store.address AS storeAddress', 'customer.name AS customerName', 'customer.email AS customerEmail', 
                 'refundType','refundAmount','refundStatus','remarks', 
                 'order.total', 'order.subTotal', 'order.appliedDiscount','order.total','order.invoiceId', 'order.orderGroupId',
                 'order.storeServiceCharges', 'order.deliveryCharges', 'order.deliveryDiscount',
@@ -145,13 +147,20 @@ class RefundController extends Controller
             //dd($orderData);          
             $orderId = $orderData[0]['orderId'];
             $orderGroupId = $orderData[0]['orderGroupId'];
+            $storeId = $orderData[0]['storeId'];
 
             //get payment channel
-            $sql="SELECT paymentChannel, createdDate FROM payment_orders WHERE clientTransactionId='".$orderGroupId."'";
+            $sql="SELECT paymentChannel, createdDate FROM payment_orders WHERE clientTransactionId='G".$orderGroupId."'";
             $paymentdetails = DB::connection('mysql2')->select($sql);
             if (count($paymentdetails)>0) {
-                $orderData[0]['paymentChannel']=paymentdetails[0]['paymentChannel'];
-                $orderData[0]['paymentDate']=paymentdetails[0]['createdDate'];
+                $orderData[0]['paymentChannel']=$paymentdetails[0]->paymentChannel;
+                $orderData[0]['paymentDate']=$paymentdetails[0]->createdDate;
+            } 
+
+            $sql="SELECT storeId, assetUrl, assetType FROM store_assets WHERE assetType = 'LogoUrl' AND storeId ='".$storeId."'";
+            $logodetails = DB::connection('mysql2')->select($sql);
+            if (count($logodetails)>0) {
+                $orderData[0]['storeLogo']=$this->storeLogo.$logodetails[0]->assetUrl;
             } 
 
             //get order item from order
@@ -169,8 +178,6 @@ class RefundController extends Controller
                 $item->subItems = $orderSubItems;
             }
 
-            //if (count($item->subItems)>0) { echo "got subitem"; } else { echo "no subitem"; }
-            //dd($item->subItems);
 
             $invoiceNo = $orderData[0]['invoiceId'];
             $customerEmail = $orderData[0]['customerEmail'];

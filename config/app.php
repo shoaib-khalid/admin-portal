@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'storeLogo' => env('APP_LOGO', 'https://assets.symplified.it'),
+
     'asset_url' => env('ASSET_URL', null),
 
     /*

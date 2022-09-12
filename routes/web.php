@@ -73,7 +73,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/merchant', [UserController::class, "merchant"])->name('merchant');
     Route::post('/filter_merchant', [UserController::class, "filter_merchant"])->name('filter_merchant');
     Route::post('/export_merchant', [UserController::class, "export_merchant"])->name('export_merchant');
-    
+
     Route::get('/pendingrefund', [RefundController::class, "pendingrefund"])->name('pendingrefund');
     Route::post('/filter_pendingrefund', [RefundController::class, "filter_pendingrefund"])->name('filter_pendingrefund');
     Route::post('/export_pendingrefund', [RefundController::class, "export_pendingrefund"])->name('export_pendingrefund');
@@ -100,6 +100,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/visitchannel', [ActivityController::class, "visitchannel"])->name('visitchannel');
     Route::post('/filter_visitchannel', [ActivityController::class, "filter_visitchannel"])->name('filter_visitchannel');
     Route::post('/export_visitchannel', [ActivityController::class, "export_visitchannel"])->name('export_visitchannel');
+
+    Route::get('/userincompleteorder', [ActivityController::class, "userincompleteorder"])->name('userincompleteorder');
+    Route::post('/filter_userincompleteorder', [ActivityController::class, "filter_userincompleteorder"])->name('filter_userincompleteorder');
+    Route::post('/export_userincompleteorder', [ActivityController::class, "export_userincompleteorder"])->name('export_userincompleteorder');
 
     Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
     Route::post('/filter_useractivitysummary', [ActivityController::class, "filter_useractivitysummary"])->name('filter_useractivitysummary');

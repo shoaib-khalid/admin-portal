@@ -35,6 +35,10 @@ return [
         'token' => env('TOKEN_REPORT_SERVICE'),
     ],
 
+    'logo_svc' => [
+        'storeLogo' => env('URL_LOGO'),
+    ],
+    
     'banner_svc' => [
         'url' => env('MARKETPLACE_BANNER_BASEURL'),
         'path' => env('MARKETPLACE_BANNER_PATH'),

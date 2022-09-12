@@ -53,7 +53,7 @@ class UserActivitySummaryExportDate implements FromCollection, ShouldAutoSize, W
 
             array_push( $cur_item,$data->total);
             array_push( $cur_item,$data->totalUser);
-          
+            array_push( $cur_item,$data->totalGuest);
             $newArray[] = $cur_item;
 
         }
@@ -98,6 +98,7 @@ class UserActivitySummaryExportDate implements FromCollection, ShouldAutoSize, W
             array_push( $headers,  'Store Unique User by Store');
         } else {
             array_push( $headers, 'Total Unique User');
+            array_push( $headers, 'Total Unique Guest');
         }
         
         return $headers;

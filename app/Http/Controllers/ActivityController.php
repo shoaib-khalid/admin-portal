@@ -24,6 +24,7 @@ use App\Exports\MerchantExport;
 use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
 use App\Exports\UserActivitySummaryExport;
+use App\Exports\UserIncompleteOrderExport;
 use App\Exports\UserActivityExport;
 use App\Exports\AbandonCartExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1365,5 +1366,82 @@ class ActivityController extends Controller
 
             return view('components.userabandoncart', compact('datas','datechosen','storename','customername'));
 
+        }
+
+
+        public function userincompleteorder(){
+            $to = date("Y-m-d");
+            $date = new DateTime('30 days ago');
+            $from = $date->format("Y-m-d");
+            $datas = array();
+            
+            $sql = 
+            "SELECT A.*, B.name AS storeName, C.name AS customerName
+            FROM `order` A
+            INNER JOIN store B ON A.storeId=B.id
+            INNER JOIN customer C ON A.customerId=C.id
+            WHERE (completionStatus='RECEIVED_AT_STORE' AND paymentStatus<>'PAID' AND A.paymentType='ONLINEPAYMENT'
+            AND A.created  BETWEEN '".$from."' AND '".$to."')
+            UNION
+            SELECT A.*, B.name AS storeName, C.name AS customerName
+            FROM `order` A
+            INNER JOIN store B ON A.storeId=B.id
+            INNER JOIN customer C ON A.customerId=C.id
+            WHERE (completionStatus='PAYMENT_FAILED'
+            AND A.created BETWEEN '".$from."' AND '".$to."')";
+            
+            $datas = DB::connection('mysql2')->select($sql);
+             //dd($sql);
+
+            
+            $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
+            return view('components.userincompleteorder', compact('datas','datechosen'));
+    
+        }
+    
+        public function filter_userincompleteorder(Request $req){
+    
+            $date = new DateTime('7 days ago');
+    
+            $data = $req->input();
+    
+            $dateRange = explode( '-', $req->date_chosen4 );
+            $start_date = $dateRange[0];
+            $end_date = $dateRange[1];
+    
+            $start_date = date("Y-m-d", strtotime($start_date));
+            $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
+    
+            $sql = 
+            "SELECT A.*, B.name AS storeName, C.name AS customerName
+            FROM `order` A
+            INNER JOIN store B ON A.storeId=B.id
+            INNER JOIN customer C ON A.customerId=C.id
+            WHERE (completionStatus='RECEIVED_AT_STORE' AND paymentStatus<>'PAID' AND A.paymentType='ONLINEPAYMENT'
+            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')
+            UNION
+            SELECT A.*, B.name AS storeName, C.name AS customerName
+            FROM `order` A
+            INNER JOIN store B ON A.storeId=B.id
+            INNER JOIN customer C ON A.customerId=C.id
+            WHERE (completionStatus='PAYMENT_FAILED'
+            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')";
+            $datas = DB::connection('mysql2')->select($sql);
+    
+            $datechosen = $req->date_chosen4;            
+            return view('components.userincompleteorder', compact('datas','datechosen'));
+        }
+
+        public function export_userincompleteorder(Request $req){
+
+            $data = $req->input();
+    
+            $dateRange = explode( '-', $req->date_chosen4_copy );
+            $start_date = $dateRange[0];
+            $end_date = $dateRange[1];
+    
+            $start_date = date("Y-m-d", strtotime($start_date));
+            $end_date = date("Y-m-d", strtotime($end_date));
+            return Excel::download(new UserIncompleteOrderExport($start_date, $end_date." 23:59:59"), 'UserIncompleteOrder.xlsx');
         }
 }
