@@ -29,6 +29,7 @@ class Voucher extends Model
                             'voucherCode',
                             'totalQuantity',
                             'totalRedeem',
+                            'allowMultipleRedeem',
                             'created_by',
                             'deleteReason',
                             'currencyLabel',

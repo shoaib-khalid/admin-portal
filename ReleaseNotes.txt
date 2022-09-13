@@ -1,3 +1,12 @@
+Version 1.12.0
+------------------------
+Date:13-Sep-2022
+
+Add allow multiple redeem section in Voucher Add/Edit page
+Add Merchant App Activity page
+Add Merchant Status section in sidebar
+
+
 Version 1.11.9
 ------------------------
 Date:13-Sep-2022

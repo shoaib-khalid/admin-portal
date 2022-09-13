@@ -94,6 +94,7 @@ class VoucherController extends Controller
             'maxDiscountAmount' => 'required',
             'isNewUserVoucher' => 'required',
             'checkTotalRedeem' => 'required',
+            'allowMultipleRedeem' => 'required',
             'minimumSpend' => 'required',
             'allowDoubleDiscount' => 'required'
         ]);
@@ -121,6 +122,7 @@ class VoucherController extends Controller
         $voucher->currencyLabel = $request->currencyLabel;
         $voucher->isNewUserVoucher = $request->isNewUserVoucher;
         $voucher->checkTotalRedeem = $request->checkTotalRedeem;
+        $voucher->allowMultipleRedeem = $request->allowMultipleRedeem;
         $voucher->minimumSpend = $request->minimumSpend;
         $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
         $voucher->requireToClaim = $request->requireToClaim;        
@@ -350,6 +352,7 @@ class VoucherController extends Controller
             $voucher->currencyLabel = $request->currencyLabel;
             $voucher->isNewUserVoucher = $request->isNewUserVoucher;
             $voucher->checkTotalRedeem = $request->checkTotalRedeem;
+            $voucher->allowMultipleRedeem = $request->allowMultipleRedeem;        
             $voucher->minimumSpend = $request->minimumSpend;
             $voucher->allowDoubleDiscount = $request->allowDoubleDiscount;
             $voucher->editReason = $request->reason;

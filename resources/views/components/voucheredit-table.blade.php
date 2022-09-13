@@ -180,6 +180,16 @@
                         </div>                    
                     </div>
 
+                    <div class="input-group mb-3">
+                        <div class="col-3">Allow Multiple Redeem</div>
+                        <div class="col-3">
+                        <input type="radio" id="allowredeem" name="allowMultipleRedeem" value="1" <?php if ($voucher->allowMultipleRedeem=="1") echo "checked"; ?> <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
+                            <label for="allowredeem">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" id="notallowredeem" name="allowMultipleRedeem" value="0" <?php if ($voucher->allowMultipleRedeem=="0") echo "checked"; ?> <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>>
+                            <label for="notallowredeem">No</label>&nbsp;&nbsp;                        
+                        </div>                    
+                    </div>
+
                      <div class="input-group mb-3">
                         <div class="col-3">Registered User Only</div>
                         <div class="col-3">

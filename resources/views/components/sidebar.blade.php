@@ -67,6 +67,12 @@ $navigation_links = array_to_object($links);
                 <a class="nav-link" href="{{ route('merchant') }}"><i class="fas fa-store"></i><span>Merchant</span></a>
             </li>
 
+            <li class="menu-header">Merchant Status</li>
+
+            <li class="{{ Request::routeIs('merchantappactivity') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('merchantappactivity') }}"><i class="fas fa-store"></i><span>Merchant App Activity</span></a>
+            </li>
+
             <li class="menu-header">Refund</li>
 
             <li class="{{ Request::routeIs('pendingrefund') ? 'active' : '' }}">
@@ -102,7 +108,7 @@ $navigation_links = array_to_object($links);
             </li>
             <li class="{{ Request::routeIs('userincompleteorder') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('userincompleteorder') }}"><i class="fas fa-exclamation-circle"></i><span>Incomplete Order</span></a>
-            </li>          
+            </li>
 
             <li class="menu-header">Voucher</li>
 

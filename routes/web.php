@@ -74,6 +74,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_merchant', [UserController::class, "filter_merchant"])->name('filter_merchant');
     Route::post('/export_merchant', [UserController::class, "export_merchant"])->name('export_merchant');
 
+    Route::get('/merchantappactivity', [UserController::class, "merchantappactivity"])->name('merchantappactivity');
+    Route::post('/filter_merchantappactivity', [UserController::class, "filter_merchantappactivity"])->name('filter_merchantappactivity');
+    Route::post('/export_merchantappactivity', [UserController::class, "export_merchantappactivity"])->name('export_merchantappactivity');
+
     Route::get('/pendingrefund', [RefundController::class, "pendingrefund"])->name('pendingrefund');
     Route::post('/filter_pendingrefund', [RefundController::class, "filter_pendingrefund"])->name('filter_pendingrefund');
     Route::post('/export_pendingrefund', [RefundController::class, "export_pendingrefund"])->name('export_pendingrefund');
