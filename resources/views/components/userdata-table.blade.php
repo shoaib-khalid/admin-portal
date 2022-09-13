@@ -70,11 +70,11 @@
 
             <table class="table table-striped" id="table-3">        
                 <thead>
-                    <tr class="text-center">                        
+                    <tr class="text-center">                       
                         <th colspan="2" rowspan="2">Customer Name</th>
-                        <th colspan="2" rowspan="2">Store Name</th>
                         <th colspan="2" rowspan="2">Email</th>
                         <th colspan="2" rowspan="2">Phone No</th>
+                        <th colspan="2" rowspan="2">Created Date</th> 
                         <th colspan="3">Order History</th>
                     </tr>
                     <tr>
@@ -87,9 +87,9 @@
                     @foreach ($datas as $data)
                         <tr class="text-center">                            
                             <td  colspan="2" rowspan="2">{{ $data['name'] }}</td>
-                            <td  colspan="2" rowspan="2">{{$data['storeName']}}</td>
                             <td  colspan="2" rowspan="2">{{ $data['email'] }}</td>
                             <td  colspan="2" rowspan="2">{{ $data['phoneNumber'] }}</td>
+                            <td  colspan="2" rowspan="2">{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
                             <td  rowspan="2">{{ $data['itemCart'] }}</td>
                             <td  rowspan="2">{{ $data['orderCompleted'] }}</td>
                             <td  rowspan="2">{{ $data['orderIncomplete'] }}</td>

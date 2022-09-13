@@ -753,6 +753,7 @@ class ActivityController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phoneNumber' => $data['phoneNumber'],
+                'created' => $data['created'],
                 'id' => $data['id'],
                 'itemCart' => $itemCart,
                 'orderCompleted' => $orderCompleted,
@@ -868,6 +869,7 @@ class ActivityController extends Controller
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phoneNumber' => $data['phoneNumber'],
+                'created' => $data['created'],
                 'id' => $data['id'],
                 'itemCart' => $itemCart,
                 'orderCompleted' => $orderCompleted,
@@ -1388,7 +1390,8 @@ class ActivityController extends Controller
             INNER JOIN store B ON A.storeId=B.id
             INNER JOIN customer C ON A.customerId=C.id
             WHERE (completionStatus='PAYMENT_FAILED'
-            AND A.created BETWEEN '".$from."' AND '".$to."')";
+            AND A.created BETWEEN '".$from."' AND '".$to."')
+            ORDER BY created DESC";
             
             $datas = DB::connection('mysql2')->select($sql);
              //dd($sql);
@@ -1425,7 +1428,8 @@ class ActivityController extends Controller
             INNER JOIN store B ON A.storeId=B.id
             INNER JOIN customer C ON A.customerId=C.id
             WHERE (completionStatus='PAYMENT_FAILED'
-            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')";
+            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')
+            ORDER BY created DESC";
             $datas = DB::connection('mysql2')->select($sql);
     
             $datechosen = $req->date_chosen4;            
