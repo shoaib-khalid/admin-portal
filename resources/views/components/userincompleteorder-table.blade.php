@@ -20,9 +20,6 @@
                         <div class="col-4">
                         <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
                         </div>
-                    </div>
-            
-                    <div class="input-group mb-3">
                         <div class="col-2">
                             <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
@@ -103,7 +100,7 @@
                     </nav>
                 </div>
             </div> --}}
-            
+            {!! $datas->appends(request()->except('page'))->links("pagination::bootstrap-4") !!}
         </div>
     </div>
 </div>

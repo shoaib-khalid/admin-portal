@@ -16,7 +16,6 @@ use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
 
-use App\Exports\UsersExport;
 use App\Exports\UserdataExport;
 use App\Exports\DetailsExport;
 use App\Exports\SettlementsExport;
@@ -690,224 +689,119 @@ class ActivityController extends Controller
     }
 
     public function userdata(){
-
-        $to = date("Y-m-d");
-        $date = new DateTime('1 days ago');
-        $from = $date->format("Y-m-d");
-        
         //query by Customer
-        $datas = Customer::select('customer.*')
-                            ->whereBetween('customer.created', [$from, $to." 23:59:59"])  
-                            ->orderBy('customer.created', 'DESC')
-                            ->get();
+        $datas = Customer::paginate(10);
         //dd($datas);
-        $newArray = array();
-        $storeList = array();
-        //dd($datas);
-        
         foreach ($datas as $data) {
-                
-            $storeName = '';
-                if (! array_key_exists($data['storeId'], $storeList)) {
-                    $store_info = Store::where('id', $data['storeId'])
-                                        ->get();
-                    if (count($store_info) > 0) {
-                        $storeList[$data['storeId']] = $store_info[0]['name']; 
-                        $storeName = $storeList[$data['storeId']];
-                    }    
 
-                } else {
-                    $storeName = $storeList[$data['storeId']];
-                }
-
-                //check for Abandon cart
-                $sql="SELECT*FROM cart WHERE customerId='".$data['id']."'";
+        //check for Abandon cart
+                $sql="SELECT*FROM cart WHERE customerId='".$data->id."'";
                 $rsitem = DB::connection('mysql2')->select($sql);
                 if (count($rsitem)>0) {
                     $itemCart="YES";
                 } else {
                     $itemCart="NO";
                 }
+                $data->abandonCart = $itemCart;
 
-                //check for Order Completed
-                $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+        //check for Order Completed
+                $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data->id."'";
                 $rsordercomplete = DB::connection('mysql2')->select($sql);
                 if (count($rsordercomplete)>0) {
                     $orderCompleted="YES";
                 } else {
                     $orderCompleted="NO";
                 }
+                $data->Completed = $orderCompleted;
 
-                //check for Order Incompleted
-                $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+        //check for Order Incompleted
+                $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data->id."'";
                 $rsorderIncomplete = DB::connection('mysql2')->select($sql);
                 if (count($rsorderIncomplete)>0) {
                     $orderIncomplete="YES";
                 } else {
                     $orderIncomplete="NO";
                 }
+                $data->Incomplete = $orderIncomplete;
+            }     
+        $custnamechosen='';
+        return view('components.userdata', compact('datas','custnamechosen'));
+        }
 
-            
-            $object = [
-                'storeName' => $storeName,
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phoneNumber' => $data['phoneNumber'],
-                'created' => $data['created'],
-                'id' => $data['id'],
-                'itemCart' => $itemCart,
-                'orderCompleted' => $orderCompleted,
-                'orderIncomplete' => $orderIncomplete,
-            ];
-        
-            
-            array_push( 
-                $newArray,
-                $object
-            );
-        
-        }
-        
-        $datas = $newArray;
-        
-        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
-        $storename = '';   
-        $customername = '';
-        $device = '';  
-        $browser = ''; 
-        
-        
-        return view('components.userdata', compact('datas','datechosen','storename','customername','device','browser'));
-        }
 
         public function filter_userdata(Request $req){
 
-        $data = $req->input();
-
-        $dateRange = explode( '-', $req->date_chosen4 );
-        $start_date = $dateRange[0];
-        $end_date = $dateRange[1];
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
-
         //queryby id
-        $query = Customer::select('customer.*')
-                            ->whereBetween('customer.created', [$start_date, $end_date." 23:59:59"]);  
-
-        if($req->region == "all"){
-            $query->where(function ($query) {
-                $query->whereNotNull("countryId");
-            });           
-          }
-
+        $data = $req->input();
+        $query = Customer::select('customer.*');
+        
         if($req->region == "MYS"){
-            $query->where(function ($query) {
-                $query->where('countryId', '=', 'MYS');
-            });           
-          }
+            $query->where('countryId', '=', 'MYS');       
+        }
 
         if($req->region == "PAK"){
-            $query->where(function ($query) {
-                $query->where('countryId', '=', 'PAK');
-            });           
-          }
+                $query->where('countryId', '=', 'PAK');            
+        }
 
-        $query->orderBy('customer.created', 'DESC');
-        $datas = $query->get();
-        //dd($datas);
-        $newArray = array();
-        $storeList = array();
-        //dd($datas);
-        
+        if ($req->custname_chosen<>"") {
+            $query->where('name', 'like', '%'.$req->custname_chosen.'%');
+        }
+
+        $datas = $query->paginate(10);
 
         foreach ($datas as $data) {
-                
-            $storeName = '';
-                if (! array_key_exists($data['storeId'], $storeList)) {
-                    $store_info = Store::where('id', $data['storeId'])
-                                        ->get();
-                    if (count($store_info) > 0) {
-                        $storeList[$data['storeId']] = $store_info[0]['name']; 
-                        $storeName = $storeList[$data['storeId']];
-                    }    
-
-                } else {
-                    $storeName = $storeList[$data['storeId']];
-                }
-
-                //check for Abandon cart
-                $sql="SELECT*FROM cart WHERE customerId='".$data['id']."'";
-                $rsitem = DB::connection('mysql2')->select($sql);
-                if (count($rsitem)>0) {
-                    $itemCart="YES";
-                } else {
-                    $itemCart="NO";
-                }
-
-                //check for Order Completed
-                $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
-                $rsordercomplete = DB::connection('mysql2')->select($sql);
-                if (count($rsordercomplete)>0) {
-                    $orderCompleted="YES";
-                } else {
-                    $orderCompleted="NO";
-                }
-
-                //check for Order Incompleted
-                $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
-                $rsorderIncomplete = DB::connection('mysql2')->select($sql);
-                if (count($rsorderIncomplete)>0) {
-                    $orderIncomplete="YES";
-                } else {
-                    $orderIncomplete="NO";
-                }
-
-            
-            $object = [
-                'storeName' => $storeName,
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phoneNumber' => $data['phoneNumber'],
-                'created' => $data['created'],
-                'id' => $data['id'],
-                'itemCart' => $itemCart,
-                'orderCompleted' => $orderCompleted,
-                'orderIncomplete' => $orderIncomplete,
-            ];
         
-            
-            array_push( 
-                $newArray,
-                $object
-            );
-        
-        }
-        
-        $datas = $newArray;
-        
-        $datas = $newArray;        
-        $datechosen = $req->date_chosen4;                
-        $storename = $req->storename_chosen;
-        $customername = $req->customer_chosen;
-        $device = $req->device_chosen;
-        $browser = $req->browser_chosen;
+        if ($req->customer_chosen<>"") {
+                $search_customer_info = Customer::where('name', 'like', '%'.$req->customer_chosen.'%')->get();
+                if (count($search_customer_info) > 0) {
+                   $search_customerId = $search_customer_info[0]['id']; 
+                } else {
+                    $search_customerId = "NOT FOUND";
+                }
+                $sql .= " AND customerId = '".$search_customerId."'";
+                //dd($query);
+            }
 
-        return view('components.userdata', compact('datas','datechosen','storename','customername','device','browser'));
+
+        //check for Abandon cart
+        $sql="SELECT*FROM cart WHERE customerId='".$data->id."'";
+        $rsitem = DB::connection('mysql2')->select($sql);
+            if (count($rsitem)>0) {
+                $itemCart="YES";
+            } else {
+                $itemCart="NO";
+            }
+            $data->abandonCart = $itemCart;
+
+        //check for Order Completed
+        $sql="SELECT*FROM `order` WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+        $rsordercomplete = DB::connection('mysql2')->select($sql);
+            if (count($rsordercomplete)>0) {
+                $orderCompleted="YES";
+            } else {
+                $orderCompleted="NO";
+            }
+            $data->Completed = $orderCompleted;
+
+        //check for Order Incompleted
+        $sql="SELECT*FROM `order` WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$data['id']."'";
+        $rsorderIncomplete = DB::connection('mysql2')->select($sql);
+            if (count($rsorderIncomplete)>0) {
+                $orderIncomplete="YES";
+            } else {
+                $orderIncomplete="NO";
+            }
+            $data->Incomplete = $orderIncomplete;
+    }        
+    $custnamechosen = $req->custname_chosen;
+    return view('components.userdata', compact('datas','custnamechosen'));
     }
+
 
     public function export_userdata(Request $req) 
     {
         $data = $req->input();
-
-        $dateRange = explode( '-', $req->date_chosen4_copy );
-        $start_date = $dateRange[0];
-        $end_date = $dateRange[1];
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
-
-        return Excel::download(new UserdataExport($start_date, $end_date." 23:59:59"), 'userdata.xlsx');
+        return Excel::download(new UserdataExport, 'userdata.xlsx');
     }
 
 
@@ -1155,20 +1049,19 @@ class ActivityController extends Controller
          count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
          count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
          from customer_activities
-         WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."'
-         GROUP BY DATE(created)";
+         WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."' ";
 
          $where="";
 
         if($req->region == "all"){
-            $where= "AND pageVisited IS NOT NULL";
+            $where= "AND pageVisited IS NOT NULL GROUP BY DATE(created) ";
           }
 
         if($req->region == "MYS"){
-            $where= "AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%')";
+            $where= "AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%') GROUP BY DATE(created) ";
           }
           if($req->region == "PAK"){
-            $where = "AND (pageVisited like '%easydukan.co%' OR  pageVisited like '%dev-pk%') ";
+            $where = "AND (pageVisited like '%easydukan.co%' OR  pageVisited like '%dev-pk%') GROUP BY DATE(created) ";
             // $where = UserActivity::where('pageVisited', 'like', '%dev-my%')->get();
           }  
          
@@ -1241,7 +1134,7 @@ class ActivityController extends Controller
         return Excel::download(new AbandonCartExport($start_date, $end_date." 23:59:59"), 'abandoncart.xlsx');
     }
 
-        public function filter_userabandoncart(Request $req){
+    public function filter_userabandoncart(Request $req){
 
             $data = $req->input();
 
@@ -1356,7 +1249,7 @@ class ActivityController extends Controller
 
                 }
 
-            }
+        }
            
             $datas = $newArray;
             //dd($datas);
@@ -1375,29 +1268,29 @@ class ActivityController extends Controller
             $to = date("Y-m-d");
             $date = new DateTime('30 days ago');
             $from = $date->format("Y-m-d");
-            $datas = array();
             
-            $sql = 
-            "SELECT A.*, B.name AS storeName, C.name AS customerName
-            FROM `order` A
-            INNER JOIN store B ON A.storeId=B.id
-            INNER JOIN customer C ON A.customerId=C.id
-            WHERE (completionStatus='RECEIVED_AT_STORE' AND paymentStatus<>'PAID' AND A.paymentType='ONLINEPAYMENT'
-            AND A.created  BETWEEN '".$from."' AND '".$to."')
-            UNION
-            SELECT A.*, B.name AS storeName, C.name AS customerName
-            FROM `order` A
-            INNER JOIN store B ON A.storeId=B.id
-            INNER JOIN customer C ON A.customerId=C.id
-            WHERE (completionStatus='PAYMENT_FAILED'
-            AND A.created BETWEEN '".$from."' AND '".$to."')
-            ORDER BY created DESC";
-            
-            $datas = DB::connection('mysql2')->select($sql);
+            $datas1 = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
+                        ->join('store AS store', 'order.storeId', 'store.id')
+                        ->join('customer AS customer', 'order.customerId', 'customer.id')
+                        ->where([
+                            ['completionStatus','=','RECEIVED_AT_STORE'],
+                            ['paymentStatus','<>','PAID'],
+                            ['order.paymentType','=','ONLINEPAYMENT']
+                        ])
+                        ->whereBetween('order.created', [$from, $to." 23:59:59"]);
+
+            $datas = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
+                            ->join('store AS store', 'order.storeId', 'store.id')
+                            ->join('customer AS customer', 'order.customerId', 'customer.id')
+                            ->where([
+                                ['completionStatus','=','PAYMENT_FAILED'],
+                            ])
+                            ->whereBetween('order.created', [$from, $to." 23:59:59"])
+                            ->union($datas1)
+                            ->paginate(10);
              //dd($sql);
 
-            
-            $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
+            $datechosen = $date->format('F d, Y')." - ".date('F d, Y'); 
             return view('components.userincompleteorder', compact('datas','datechosen'));
     
         }
@@ -1415,24 +1308,28 @@ class ActivityController extends Controller
             $start_date = date("Y-m-d", strtotime($start_date));
             $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
     
-            $sql = 
-            "SELECT A.*, B.name AS storeName, C.name AS customerName
-            FROM `order` A
-            INNER JOIN store B ON A.storeId=B.id
-            INNER JOIN customer C ON A.customerId=C.id
-            WHERE (completionStatus='RECEIVED_AT_STORE' AND paymentStatus<>'PAID' AND A.paymentType='ONLINEPAYMENT'
-            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')
-            UNION
-            SELECT A.*, B.name AS storeName, C.name AS customerName
-            FROM `order` A
-            INNER JOIN store B ON A.storeId=B.id
-            INNER JOIN customer C ON A.customerId=C.id
-            WHERE (completionStatus='PAYMENT_FAILED'
-            AND A.created  BETWEEN '".$start_date."' AND '".$end_date."')
-            ORDER BY created DESC";
-            $datas = DB::connection('mysql2')->select($sql);
+            $query1 = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
+                ->join('store AS store', 'order.storeId', 'store.id')
+                ->join('customer AS customer', 'order.customerId', 'customer.id')
+                ->where([
+                    ['completionStatus','=','RECEIVED_AT_STORE'],
+                    ['paymentStatus','<>','PAID'],
+                    ['order.paymentType','=','ONLINEPAYMENT']
+                ])
+                ->whereBetween('order.created', [$start_date, $end_date." 23:59:59"]);
+
+            $query = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
+                ->join('store AS store', 'order.storeId', 'store.id')
+                ->join('customer AS customer', 'order.customerId', 'customer.id')
+                ->where([
+                    ['completionStatus','=','PAYMENT_FAILED'],
+                ])
+                ->whereBetween('order.created', [$start_date, $end_date." 23:59:59"])
+                ->union($query1);
+                
+            $datas = $query->paginate(10);
     
-            $datechosen = $req->date_chosen4;            
+            $datechosen = $req->date_chosen4;          
             return view('components.userincompleteorder', compact('datas','datechosen'));
         }
 
@@ -1448,4 +1345,5 @@ class ActivityController extends Controller
             $end_date = date("Y-m-d", strtotime($end_date));
             return Excel::download(new UserIncompleteOrderExport($start_date, $end_date." 23:59:59"), 'UserIncompleteOrder.xlsx');
         }
+
 }

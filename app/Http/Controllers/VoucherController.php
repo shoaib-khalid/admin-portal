@@ -197,6 +197,7 @@ class VoucherController extends Controller
         return view('components.voucherlist', compact('datas','datechosen','codechosen','totalClaim'));
     }
 
+
     
     public function filter_voucherlist(Request $req){
 
@@ -212,6 +213,17 @@ class VoucherController extends Controller
         $query = Voucher::select('voucher.*','store.name AS storeName')
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')
                         ->whereBetween('created_at', [$start_date, $end_date." 23:59:59"]);
+
+        if($req->region == "MYS" ){
+            $query->where(function ($query) {
+             $query->where('currencyLabel', '=', 'RM');
+             });              
+                 }
+        if($req->region == "PAK" ){
+            $query->where(function ($query) {
+             $query->where('currencyLabel', '=', 'Rs.');
+             });              
+                 }
 
         if ($req->code_chosen<>"") {
             $query->where('voucherCode', 'like', '%'.$req->code_chosen.'%');

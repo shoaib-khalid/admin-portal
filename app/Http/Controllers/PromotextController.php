@@ -40,6 +40,39 @@ class PromotextController extends Controller
         return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
     }
 
+    public function filter_promotext(Request $request){
+        
+        $data = $request->input();
+        $query = Promotext::select('promo_text.*');
+        //dd($query);
+
+        if($request->region == "MYS" ){
+            $query->where(function ($query) {
+               $query->where('verticalCode', '=', 'FnB')
+               ->orWhere('verticalCode', '=', 'E-Commerce');
+
+           });              
+         }
+
+         if($request->region == "PAK" ){
+            $query->where(function ($query) {
+               $query->where('verticalCode', '=', 'FnB_PK')
+               ->orWhere('verticalCode', '=', 'ECommerce_PK');
+
+           });              
+         }
+
+        $datas = $query->get();
+        $eventlist=array('guest-checkout','customer-checkout');
+        $promodata=null;
+
+        $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+
+        return view('components.promotext', compact('datas','eventlist','promodata','verticallist'));
+    }
+
+
 
     public function add_promotext(Request $request){
         $promo = new Promotext();

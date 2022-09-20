@@ -142,6 +142,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/edit_promotext', [PromotextController::class, "edit_promotext"])->name('edit_promotext');
     Route::post('/delete_promotext', [PromotextController::class, "delete_promotext"])->name('delete_promotext');
     Route::post('/post_editpromotext', [PromotextController::class, "post_editpromotext"])->name('post_editpromotext');
+    Route::post('/filter_promotext', [PromotextController::class, "filter_promotext"])->name('filter_promotext');
 
     Route::get('/featuredstore', [FeaturedStoreController::class, "index"])->name('featuredstore');
     Route::post('/filter_store', [FeaturedStoreController::class, "filter_store"])->name('filter_store');
@@ -167,9 +168,10 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/edit_featuredlocation', [FeaturedLocationController::class, "edit_featuredlocation"])->name('edit_featuredlocation');
 
     Route::get('/citylocation', [CityRegionController::class, "citylocation"])->name('citylocation');
+    Route::post('/filter_citylocation', [CityRegionController::class, "filter_citylocation"])->name('filter_citylocation');
     Route::post('/add_location', [CityRegionController::class, "add_location"])->name('add_location');
     Route::post('/delete_location', [CityRegionController::class, "delete_location"])->name('delete_location');
-     Route::post('/edit_location', [CityRegionController::class, "edit_location"])->name('edit_location');
+    Route::post('/edit_location', [CityRegionController::class, "edit_location"])->name('edit_location');
 
     Route::get('/cityregion', [CityRegionController::class, "index"])->name('cityregion');            
     Route::post('/filterCity', [CityRegionController::class, "filterCity"])->name('filterCity');
@@ -179,25 +181,27 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/delete_cityregion', [CityRegionController::class, "delete_cityregion"])->name('delete_cityregion');
     
     Route::get('/parentcategory', [ParentCategoryController::class, "index"])->name('parentcategory');
+    Route::post('/filter_parentcategory', [ParentCategoryController::class, "filter_parentcategory"])->name('filter_parentcategory');
     Route::post('/add_parentcategory', [ParentCategoryController::class, "add_parentcategory"])->name('add_location');
     Route::post('/delete_parentcategory', [ParentCategoryController::class, "delete_parentcategory"])->name('delete_location');
     Route::post('/edit_parentcategory', [ParentCategoryController::class, "edit_parentcategory"])->name('edit_location');
 
     Route::get('/featuredcategory', [FeaturedCategoryController::class, "index"])->name('featuredcategory');   
-    
     Route::post('/searchByVertical', [FeaturedCategoryController::class, "searchByVertical"])->name('searchByVertical');        
     Route::post('/searchCityCategory', [FeaturedCategoryController::class, "searchCityCategory"])->name('searchCityCategory');        
-    Route::post('/filter_featuredcategory', [FeaturedCategoryController::class, "filter_featuredcategoryn"])->name('filter_featuredcategory');
+    Route::post('/filter_featuredcategory', [FeaturedCategoryController::class, "filter_featuredcategory"])->name('filter_featuredcategory');
     Route::post('/add_featuredcategory', [FeaturedCategoryController::class, "add_featuredcategory"])->name('add_featuredcategory');
     Route::post('/edit_featuredcategory', [FeaturedCategoryController::class, "edit_featuredcategory"])->name('edit_featuredcategory');
     Route::post('/delete_featuredcategory', [FeaturedCategoryController::class, "delete_featuredcategory"])->name('delete_featuredcategory');  
 
     Route::get('/marketbanner', [MarketBannerController::class, "index"])->name('marketbanner');    
-    Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');  
+    Route::post('/filter_marketbanner', [MarketBannerController::class, "filter_marketbanner"])->name('filter_marketbanner');
+    Route::post('/add_marketbanner', [MarketBannerController::class, "add_marketbanner"])->name('add_marketbanner');   
     Route::post('/edit_marketbanner', [MarketBannerController::class, "edit_marketbanner"])->name('edit_marketbanner');
     Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner'); 
 
-    Route::get('/marketpopup', [MarketPopupController::class, "index"])->name('marketpopup');    
+    Route::get('/marketpopup', [MarketPopupController::class, "index"])->name('marketpopup');
+    Route::post('/filter_marketpopup', [MarketBannerController::class, "filter_marketpopup"])->name('filter_marketpopup');    
     Route::post('/add_marketpopup', [MarketPopupController::class, "add_marketpopup"])->name('add_marketpopup');  
     Route::post('/edit_marketpopup', [MarketPopupController::class, "edit_marketpopup"])->name('edit_marketpopup');
     Route::post('/delete_marketpopup', [MarketPopupController::class, "delete_marketpopup"])->name('delete_marketpopup'); 

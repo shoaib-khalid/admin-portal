@@ -56,6 +56,51 @@ class FeaturedCategoryController extends Controller
         return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
     }
 
+    public function filter_featuredcategory(Request $request){     
+        
+        $data = $request->input();
+        $query = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
+                ->whereRaw('verticalCode IS NOT NULL');
+        
+         if($request->region == "MYS" ){
+           $query->where(function ($query) {
+            $query->where('verticalCode', '=', 'FnB')
+                ->orWhere('verticalCode', '=', 'E-Commerce');
+            });              
+                }
+            
+        if($request->region == "PAK" ){
+            $query->where(function ($query) {
+             $query->where('verticalCode', '=', 'FnB_PK')
+                ->orWhere('verticalCode', '=', 'ECommerce_PK');
+            });              
+                }
+
+        $query->orderBy('verticalCode', 'ASC')->orderBy('displaySequence', 'ASC');
+        //dd($query);
+        $datas = $query->get();
+    
+        //dd($datas);       
+        $citySelected = "";
+        $stateSelected = "";
+        $categorySelected = "";
+        $verticalSelected = "";
+
+        $sql="SELECT id, name, regionStateId FROM region_city ORDER BY regionStateId, name";
+        $cityList = DB::connection('mysql2')->select($sql);
+
+        $sql="SELECT id, name, regionCountryId FROM region_country_state ORDER BY regionCountryId, name";
+        $stateList = DB::connection('mysql2')->select($sql);
+
+        $sql="SELECT id, name, verticalCode FROM store_category WHERE verticalCode IS NOT NULL ORDER BY verticalCode, name";
+        $categoryList = DB::connection('mysql2')->select($sql);
+        
+        $sql="SELECT * FROM region_vertical";
+        $verticalList = DB::connection('mysql2')->select($sql);
+
+        return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
+    }
+
     public function searchByVertical(Request $request) {    
       $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw("verticalCode = '".$request->vertical."'")

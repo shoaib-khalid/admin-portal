@@ -24,7 +24,17 @@
                         <div class="col-4">
                         <input type="text" name="code_chosen" id="code_chosen" class="form-control" value="{{$codechosen}}">
                         </div>
-                    </div>                   
+                    </div>
+                    <div class="input-group mb-3">
+                    <div class="col-2">Select By Country</div>
+                        <div class="col-4">
+                        <select class="form-control" id="region" name="region">
+                            <option  value="all">All</option>
+                            <option  value="MYS">Malaysia</option>
+                            <option  value="PAK">Pakistan</option>
+                        </select>
+                       </div> 
+                    </div>                    
                     <div class="input-group mb-3">                        
                         <div class="col-2">
                             <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>

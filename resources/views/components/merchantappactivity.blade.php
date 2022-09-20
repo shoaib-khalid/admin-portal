@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-merchantappactivity-table :datas="$datas" :datechosen="$datechosen"></x-merchantappactivity-table>
+        <x-merchantappactivity-table :datas="$datas" :namechosen="$namechosen"></x-merchantappactivity-table>
     </div>
 </x-app-layout>
 

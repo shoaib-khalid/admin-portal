@@ -1,3 +1,16 @@
+Version 1.12.1
+------------------------
+Date:20-Sep-2022
+
+Modify Merchant App Activity Page
+Add Merchant App Export 
+Add Userdata Export
+Add filter country in UserData, Merchant App Status, Promo Text, Parent Category, Category Sequence, Locations, City Region, Marketplace Banner, Marketplace Popup, Available Voucher
+Add Column in Featured Store
+Modify Visit Channel sql query
+Add pagination in Userdata page & Merchant App Actvitiy Page
+
+
 Version 1.12.0
 ------------------------
 Date:13-Sep-2022

@@ -38,6 +38,30 @@ class MarketPopupController extends Controller
         return view('components.marketpopup', compact('datas','countryList', 'basepreviewurl'));
     }
 
+    public function filter_marketpopup(){        
+        
+        $datas = MarketPopup::select('marketplace_popup_config.*');
+        if($request->region == "MYS" ){
+            $query->where(function ($query) {
+             $query->where('regionCountryId', '=', 'MYS');
+             });              
+                 }
+             
+         if($request->region == "PAK" ){
+             $query->where(function ($query) {
+              $query->where('regionCountryId', '=', 'PAK');
+             });              
+                 }
+
+        $query->orderBy('sequence', 'ASC');
+        $datas = $query->get();
+
+        $sql="SELECT id, name FROM region_country";
+        $countryList = DB::connection('mysql2')->select($sql);
+        $basepreviewurl = $this->basepreviewurl;
+        return view('components.marketpopup', compact('datas','countryList', 'basepreviewurl'));
+    }
+
 
     public function add_marketpopup(Request $request){
         //copy file to folder

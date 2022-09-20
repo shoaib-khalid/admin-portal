@@ -17,6 +17,7 @@ use App\Exports\DetailsExport;
 use App\Exports\VoucherRedemptionExport;
 use App\Exports\SettlementsExport;
 use App\Exports\MerchantExport;
+use App\Exports\MerchantAppActivityExport;
 use App\Exports\GroupSalesExport;
 use App\Exports\VoucherListExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -778,191 +779,129 @@ class UserController extends Controller
 
     public function merchantappactivity(){
 
-        $to = date("Y-m-d")." 23:59:59";
-        $date = new DateTime('30 days ago');
-        $from = $date->format("Y-m-d");
-
         // $datas = Client::limit(100)->get();
-        $datas = Client::whereBetween('created', [$from, $to])
+        $datas = Client::select('client.*')
                         ->where('roleId', 'STORE_OWNER')
-                        ->orderBy('created', 'DESC')
-                        ->get();  
+                        ->whereNotNull('mobilePingLastResponse')
+                        ->paginate(10);  
         //dd($datas);                 
-       
-        $newArray = array();
 
         foreach ($datas as $data) {
 
             //Get merchant app's status
-            $sql="SELECT id, mobilePingLastResponse, mobilePingTxnId FROM client WHERE id='".$data['id']."'ORDER BY created DESC LIMIT 1";
+            $sql="SELECT id, mobilePingLastResponse, mobilePingTxnId FROM client WHERE id='".$data->id."'ORDER BY created DESC LIMIT 1";
             $appstatus = DB::connection('mysql2')->select($sql);
             $lastseen = $appstatus[0]->mobilePingLastResponse;
             $pingtxn = $appstatus[0]->mobilePingTxnId;
             // If mobile ping last is more than 60 mins
             $pingtime = strtotime($lastseen);
-            if($pingtime<60 && $pingtime>1){
+            if($pingtime<60){
                 $merchantstatus="Online";
             }else {
                 $merchantstatus="Offline";
             }
+            $data->AppStatus = $merchantstatus;
+            $data->LastSeen = $lastseen;
 
 
             //Get store closing time
-            $sql="SELECT B.*, A.id FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE isOff='1' AND clientId = '".$data['id']."'";
+            $sql="SELECT A.id, GROUP_CONCAT(day) AS day, clientId FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE isOff='1' AND clientId = '".$data->id."' GROUP BY storeId";
             $closingtime = DB::connection('mysql2')->select($sql);
+            //dd($sql);
             if (count($closingtime) > 0) {
                 $closing=$closingtime[0]->day;
             } else{
                 $closing= "";
             }
-            
+            $data->CloseTime = $closing;
+
 
             //Get store opening hours
-            $sql="SELECT A.clientId,B.storeId,B.day, B.openTime, B.breakStartTime, B.breakEndTime,
-             B.closeTime,A.id FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE clientId = '".$data['id']."'";
-            $openinghours = DB::connection('mysql2')->select($sql);
-            //dd($sql);
-            if (count($openinghours) > 0) {
-                 $opentime=$openinghours[0]->openTime;
-                 $closetime=$openinghours[0]->closeTime;
-                 $breakstarttime=$openinghours[0]->breakStartTime;
-                 $breakendtime=$openinghours[0]->breakEndTime;
-            } else{
-                 $opentime= "";
-                 $closetime="";
-                 $breakstarttime="";
-                 $breakendtime="";
-            }
-
-
-            $object = [
-                'id' => $data['id'],
-                'username' => $data['username'],
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'storeId' => $data['storeId'],
-                'created' => $data['created'],
-                'merchantstatus' => $merchantstatus,
-                'closing' => $closing,
-                'opentime' => $opentime,
-                'closetime' => $closetime,
-                'breakstarttime' => $breakstarttime,
-                'breakendtime' => $breakendtime,
-                'lastseen' => $lastseen
-            ];
-
-            array_push( 
-                $newArray,
-                $object
-            );
+            // $sql="SELECT A.clientId,B.storeId,B.day, B.openTime, B.breakStartTime, B.breakEndTime,
+            //  B.closeTime,A.id FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE clientId = '".$data->id."'";
+            // $openinghours = DB::connection('mysql2')->select($sql);
+            // //dd($sql);
+            // if (count($openinghours) > 0) {
+            //      $opentime=$openinghours[0]->openTime;
+            //      $closetime=$openinghours[0]->closeTime;
+            //      $breakstarttime=$openinghours[0]->breakStartTime;
+            //      $breakendtime=$openinghours[0]->breakEndTime;
+            // } else{
+            //      $opentime= "";
+            //      $closetime="";
+            //      $breakstarttime="";
+            //      $breakendtime="";
+            // }
+            // $data->OpenHour = $opentime;
+            // $data->CloseHour = $closetime;
 
         }
-       
-
-        $datas = $newArray;
-
-        // return $datas;
-        // die();
-        
-        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
-        return view('components.merchantappactivity', compact('datas','datechosen'));
+        $namechosen='';
+        return view('components.merchantappactivity', compact('datas','namechosen'));
     }
 
     public function filter_merchantappactivity(Request $req){
 
         $data = $req->input();
 
-        $dateRange = explode( '-', $req->date_chosen4 );
-        $start_date = $dateRange[0];
-        $end_date = $dateRange[1];
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
-
-        // $datas = Client::limit(100)->get();
-        $datas = Client::whereBetween('created', [$start_date, $end_date])
+        $query = Client::select('client.*')
                         ->where('roleId', 'STORE_OWNER')
-                        ->orderBy('created', 'DESC')
-                        ->get();  
-        //dd($datas);                 
-       
-        $newArray = array();
+                        ->whereNotNull('mobilePingLastResponse'); 
+        //dd($query);
+          if($req->region == "MYS"){
+                $query->where('countryId', '=', 'MYS');       
+          }
+
+          if($req->region == "PAK"){
+                $query->where('countryId', '=', 'PAK');            
+          }
+
+          if ($req->name_chosen<>"") {
+            $query->where('name', 'like', '%'.$req->name_chosen.'%');
+        }
+
+        $datas = $query->paginate(10);
 
         foreach ($datas as $data) {
 
             //Get merchant app's status
-            $sql="SELECT id, mobilePingLastResponse, mobilePingTxnId FROM client WHERE id='".$data['id']."'ORDER BY created DESC LIMIT 1";
+            $sql="SELECT id, mobilePingLastResponse, mobilePingTxnId FROM client WHERE id='".$data->id."'ORDER BY created DESC LIMIT 1";
             $appstatus = DB::connection('mysql2')->select($sql);
             $lastseen = $appstatus[0]->mobilePingLastResponse;
             $pingtxn = $appstatus[0]->mobilePingTxnId;
             // If mobile ping last is more than 60 mins
             $pingtime = strtotime($lastseen);
-            if($pingtime<60 && $pingtime>0){
+            if($pingtime<60){
                 $merchantstatus="Online";
             }else {
                 $merchantstatus="Offline";
             }
+            $data->AppStatus = $merchantstatus;
+            $data->LastSeen = $lastseen;
 
 
             //Get store closing time
-            $sql="SELECT B.*, A.id FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE isOff='1' AND clientId = '".$data['id']."'";
+            $sql="SELECT A.id, GROUP_CONCAT(day) AS day, clientId FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE isOff='1' AND clientId = '".$data->id."' GROUP BY storeId";
             $closingtime = DB::connection('mysql2')->select($sql);
+            //dd($sql);
             if (count($closingtime) > 0) {
                 $closing=$closingtime[0]->day;
             } else{
                 $closing= "";
             }
-
-
-            //Get store opening hours
-            $sql="SELECT A.clientId,B.storeId,B.day, B.openTime, B.breakStartTime, B.breakEndTime,
-             B.closeTime,A.id FROM store A INNER JOIN store_timing B ON A.id=B.storeId WHERE clientId = '".$data['id']."'";
-            $openinghours = DB::connection('mysql2')->select($sql);
-            //dd($sql);
-            if (count($openinghours) > 0) {
-                 $opentime=$openinghours[0]->openTime;
-                 $closetime=$openinghours[0]->closeTime;
-                 $breakstarttime=$openinghours[0]->breakStartTime;
-                 $breakendtime=$openinghours[0]->breakEndTime;
-            } else{
-                 $opentime= "";
-                 $closetime="";
-                 $breakstarttime="";
-                 $breakendtime="";
-            }
-
-
-            $object = [
-                'id' => $data['id'],
-                'username' => $data['username'],
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'storeId' => $data['storeId'],
-                'created' => $data['created'],
-                'merchantstatus' => $merchantstatus,
-                'closing' => $closing,
-                'opentime' => $opentime,
-                'closetime' => $closetime,
-                'breakstarttime' => $breakstarttime,
-                'breakendtime' => $breakendtime,
-                'lastseen' => $lastseen
-            ];
-
-            array_push( 
-                $newArray,
-                $object
-            );
+            $data->CloseTime = $closing;
 
         }
-       
-
-        $datas = $newArray;
-
-        // return $datas;
-        // die();
-        $datechosen = $req->date_chosen4;
-        return view('components.merchantappactivity', compact('datas','datechosen'));
+        $namechosen = $req->name_chosen;
+        return view('components.merchantappactivity', compact('datas','namechosen'));
     }
+
+    public function export_merchantappactivity(Request $req){
+
+        $data = $req->input();
+        return Excel::download(new MerchantAppActivityExport, 'MerchantAppActivity.xlsx');
+    }
+
 
     public function convert_to_user_date($date, $format = 'Y-m-d H:i:s', $userTimeZone = 'Asia/Kuala_Lumpur', $serverTimeZone = 'UTC')
     {
@@ -974,4 +913,6 @@ class UserController extends Controller
             return '';
         }
     }
+
+    
 }

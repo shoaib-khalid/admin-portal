@@ -3,72 +3,97 @@
     // dd($datas);
     $selectedCountry = Session::get('selectedCountry');
 @endphp
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        function showMov(val) {
+        sessionStorage.setItem('SelectedRegion', val);
+
+            switch (val) {
+                case 'MYS':
+                {
+                    $('#PAK_form').hide();
+                    $('#MYS_form').show();
+                    $('#moveform').attr('action', 'userdata-table.blade.php');
+                    break;
+                }
+                case 'PAK':
+                {
+                    $('#MYS_form').hide();
+                    $('#PAK_form').show();
+                    $('#moveform').attr('action', 'userdata-table.blade.php');
+                    break;
+                }
+            }
+        }
+
+        $(function() {
+            var selMovType = document.getElementById('region');
+            var selectedRegion = sessionStorage.getItem('SelectedRegion');
+
+                if (selectedRegion) {
+                selMovType.value = selectedRegion;
+            }
+
+            var btnSubmit = document.getElementById('submit');
+
+            btnSubmit.addEventListener('click', function() {
+                window.location.reload();
+            });
+        });
+
+    </script>
 <div class="card section">
     <div class="card-header">
         <h4>Customer Data</h4>
     </div>
     <div class="card-body">
+    <div class="form-group">
 
-       <div class="form-group">
-
-        <div class="row">
-            <div class="col-12">
-                
+    <div class="row">
+        <div class="col">
+        
             <form action="filter_userdata" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                    {{@csrf_field()}}
-                    <div class="input-group mb-3">
-                        <div class="col-2">Date</div>
-                        <div class="col-4">
-                        <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
-                        </div>
-                        <div class="col-2">Store</div>
-                        <div class="col-4">
-                        <input type="text" name="storename_chosen" id="storename_chosen" class="form-control" value="{{$storename}}">
-                        </div>
+                {{@csrf_field()}}
+             <div class="input-group mb-3">
+                <div class="col-2">Customer Name</div>
+                    <div class="col-4">
+                        <input type="text" name="custname_chosen" id="custname_chosen" class="form-control" value="{{$custnamechosen}}">
                     </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">Customer</div>
-                        <div class="col-4">
-                        <input type="text" name="customer_chosen" id="customer_chosen" class="form-control" value="{{$customername}}">
-                        </div>
-                        <label class="col-2" for="region">By Country</label>
-                        <div class="col-4">
-                        <select class="form-select form-select-lg mb-3" id="region" name="region">
-                        <option  value="all">All</option>
-                        <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
-                        </select>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="col-2">
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                        </div>
-                    </div>
-                </form>
+                </div>  
+            <div class="input-group mb-3">
+            <div class="col-2">By Country</div>
+                <div class="col-4">
+                <select class="form-select form-select-lg mb-3" id="region" name="region" onchange="showMov(this.value);">
+                    <option  value="MYS" <?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                    <option  value="PAK" <?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                </select>
+            </div>   
+                <div class="input-group mb-3">
+                <div class="col-2"></div>
+                <div class="col-4">
+                <button class="btn btn-danger" id="submit" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                </div>                       
             </div>
-            <div class="col-1">
-                
-            </div>
+            </form>
+        </div>
+        <div class="col-1">
             
         </div>
+        <div class="col">
+            <form action="export_userdata" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                {{@csrf_field()}}
+                <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
+                </button>
+            </form>
+        </div>
+    </div>
 
-        <div class="row">
-            <div class="col">
-                <form action="export_userdata" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}}
-                        
-                            <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
-                            <button type="submit" class="btn btn-success icon-left btn-icon float-right" style="margin-bottom: 1rem!important;"><i class="fas fa-file"></i> <span>Export Excel</span>
-                            </button>
-                        
-                    </form>
-            </div>
-        </div>    
+    </div>
 
         <div class="table-responsive">
 
-            <table class="table table-striped" id="table-3">        
+           
+        <table class="table table-striped" id="table-3">        
                 <thead>
                     <tr class="text-center">                       
                         <th colspan="2" rowspan="2">Customer Name</th>
@@ -85,21 +110,20 @@
                 </thead>      
                 <tbody>
                     @foreach ($datas as $data)
-                        <tr class="text-center">                            
+                        <tr class="text-center">
                             <td  colspan="2" rowspan="2">{{ $data['name'] }}</td>
                             <td  colspan="2" rowspan="2">{{ $data['email'] }}</td>
                             <td  colspan="2" rowspan="2">{{ $data['phoneNumber'] }}</td>
                             <td  colspan="2" rowspan="2">{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
-                            <td  rowspan="2">{{ $data['itemCart'] }}</td>
-                            <td  rowspan="2">{{ $data['orderCompleted'] }}</td>
-                            <td  rowspan="2">{{ $data['orderIncomplete'] }}</td>
+                            <td  rowspan="2">{{ $data['abandonCart'] }}</td>
+                            <td  rowspan="2">{{ $data['Completed'] }}</td>
+                            <td  rowspan="2">{{ $data['Incomplete'] }}</td>
                         </tr>
                         <tr></tr>
                     @endforeach
 
                 </tbody>
             </table>
-
             {{-- <div class="row" style="margin-top: 5px;">
                 <div class="col">
                     <span>Showing 1 to 1 of 1 entries</span>
@@ -126,7 +150,7 @@
                     </nav>
                 </div>
             </div> --}}
-            
+            {!! $datas->appends(request()->except('page'))->links("pagination::bootstrap-4") !!}            
         </div>
     </div>
 </div>

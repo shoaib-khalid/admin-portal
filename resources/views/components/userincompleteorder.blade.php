@@ -3,7 +3,7 @@
         <h1>Customer Incomplete Order</h1>        
     </x-slot>
     <div>
-        <x-userincompleteorder-table :datas="$datas" :datechosen="$datechosen" ></x-userincompleteorder-table>
+        <x-userincompleteorder-table :datas="$datas" :datechosen="$datechosen"></x-userincompleteorder-table>
     </div>
 </x-app-layout>
 <script>

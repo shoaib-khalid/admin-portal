@@ -15,21 +15,35 @@
                     
                     <form action="filter_merchantappactivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
-                        <div class="input-group mb-3">
-                            <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                            </div>
+                    <div class="input-group mb-3">
+                    <div class="col-2">Client Name</div>
+                        <div class="col-4">
+                        <input type="text" name="name_chosen" id="name_chosen" class="form-control" value="{{$namechosen}}">
                         </div>
+                    </div>   
+                    <div class="input-group mb-3">
+                      <div class="col-2">By Country</div>
+                        <div class="col-4">
+                        <select class="form-select form-select-lg mb-3" id="region" name="region">
+                         <option  value="all">All</option>
+                         <option  value="MYS">Malaysia</option>
+                         <option  value="PAK">Pakistan</option>
+                        </select>
+                      </div>   
+                        <div class="input-group mb-3">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                         <button class="btn btn-danger" id="submit" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        </div>                       
+                    </div>
                     </form>
                 </div>
                 <div class="col-1">
                     
                 </div>
                 <div class="col">
-                    <form action="export_merchant" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    <form action="export_merchantappactivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
-                        <input type="text" name="date_chosen4_copy" id="date_chosen4_copy" class="form-control daterange-btn4" value="{{$datechosen}}" hidden>
                         <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
                         </button>
                     </form>
@@ -43,11 +57,9 @@
             <table id="table-4" class="table table-striped">
                 <thead>
                     <tr class="text-center">
-                        <th>Created</th>
-                        <th>Store Name</th>
-                        <th>App Status</th>
+                        <th>Registered Date</th>
+                        <th>Client Name</th>
                         <th>Last Seen</th>
-                        <th>Store Operating Hour</th>
                         <th>Close</th>
                     </tr>
                 </thead>
@@ -58,14 +70,13 @@
                         <tr class="text-center">
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>
                             <td>{{ $data['name'] }}</td>
-                            <td>{{ $data['merchantstatus'] }}</td>
-                            <td>{{ $data['lastseen'] }}</td>
-                            <td>{{ $data['opentime'] }}-{{ $data['closetime'] }}</td>
-                            <td>{{ $data['closing'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data['LastSeen'])->format('d/m/Y H:i:s') }}</td>
+                            <td>{{ $data['CloseTime']}}</td>
                         </tr>
                     @endforeach
 
                 </tbody>
+
             </table>
             {{-- <div class="row" style="margin-top: 5px;">
                 <div class="col">
@@ -93,7 +104,7 @@
                     </nav>
                 </div>
             </div> --}}
-            
+            {!! $datas->appends(request()->except('page'))->links("pagination::bootstrap-4") !!}      
         </div>
     </div>
 </div>

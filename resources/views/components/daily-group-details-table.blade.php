@@ -3,6 +3,45 @@
     // dd($datas);
     $selectedCountry = Session::get('selectedCountry');
 @endphp
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        function showMov(val) {
+        sessionStorage.setItem('SelectedRegion', val);
+
+            switch (val) {
+                case 'MYS':
+                {
+                    $('#PAK_form').hide();
+                    $('#MYS_form').show();
+                    $('#moveform').attr('action', 'userdata-table.blade.php');
+                    break;
+                }
+                case 'PAK':
+                {
+                    $('#MYS_form').hide();
+                    $('#PAK_form').show();
+                    $('#moveform').attr('action', 'userdata-table.blade.php');
+                    break;
+                }
+            }
+        }
+
+        $(function() {
+            var selMovType = document.getElementById('region');
+            var selectedRegion = sessionStorage.getItem('SelectedRegion');
+
+                if (selectedRegion) {
+                selMovType.value = selectedRegion;
+            }
+
+            var btnSubmit = document.getElementById('submit');
+
+            btnSubmit.addEventListener('click', function() {
+                window.location.reload();
+            });
+        });
+
+    </script>
 <div class="card section">
     <div class="card-header">
         <h4>Daily Detail Sales</h4>
@@ -16,31 +55,28 @@
                     
                     <form action="/filter_groupsales" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
-                        <div class="input-group mb-3">
+                    <div class="input-group mb-3">
                         <div class="col-2">Date</div>
                         <div class="col-4">
                         <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
                         </div>
-</div>
-                        <div class="input-group mb-3">
-                        <label class="col-2" for="region">By Country</label>
+
+                        <label class="col-2" for="region">Select By Country</label>
                         <div class="col-4">
-                        <select class="form-select form-select-lg mb-3" id="region" name="region">
+                        <select class="form-control" id="region" name="region" onchange="showMov(this.value);">
                         <option  value="ALL">All</option>
                         <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
                         <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                         </select>
-                        
+                    </div>
                         <div class="input-group mb-3">
-                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button></div>
+                        <div class="col-4">
+                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
-                        </div>
-                        
+                    </div>
                     </form>
-                
-                <div class="col-1">
-                    
                 </div>
+                <div class="col-1"></div>
                 <div class="col">
                     <form action="/export_groupsales" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}

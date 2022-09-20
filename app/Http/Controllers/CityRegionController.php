@@ -68,6 +68,55 @@ class CityRegionController extends Controller
         return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
     }
 
+    public function filter_citylocation(Request $request){    
+        
+        $data = $request->input();
+        $query = Locations::select('location_config.*', 'city.regionStateId')
+                    ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->join('region_country_state as state', 'city.regionStateId', '=', 'state.id');
+       
+        if($request->region=="MYS"){
+            $query->where(function ($query) {
+                $query->where('regionCountryId', '=', 'MYS');
+                });              
+        }
+        //dd($query);
+        if($request->region=="PAK"){
+            $query->where(function ($query) {
+                $query->where('regionCountryId', '=', 'PAK');
+                });              
+        }
+                    
+        $query->orderBy('sequence', 'ASC');
+        $datas = $query->get();  
+           
+        $citySelected = "";
+        $stateSelected = "";
+        
+        $sql="SELECT id, name, regionStateId FROM region_city ORDER BY regionStateId, name";
+        $cityList = DB::connection('mysql2')->select($sql);
+
+        $sql="SELECT id, name, regionCountryId FROM region_country_state ORDER BY regionCountryId, name";
+        $stateList = DB::connection('mysql2')->select($sql);
+
+        $regionCityList=array();
+        $regionList = CityRegion::select('location_area.*','usercity.name AS userCityName', 
+                    'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
+                    ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
+                    ->join('region_city as storecity', 'storeCityId', '=', 'storecity.id')
+                    ->orderBy('usercity.regionStateId', 'ASC')
+                    ->orderBy('usercity.name', 'ASC')->get();  
+        foreach ($regionList as $region) {
+            if (array_key_exists($region['userLocationCityId'],  $regionCityList))
+                $regionCityList[$region['userLocationCityId']]=$regionCityList[$region['userLocationCityId']].", ".$region['storeCityId'];
+            else
+                $regionCityList[$region['userLocationCityId']]=$region['storeCityId'];
+        }
+        $basepreviewurl = $this->basepreviewurl;
+
+        return view('components.locations', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'regionCityList', 'basepreviewurl'));
+    }
+
     public function add_location(Request $request){
         //copy file to folder
         $file = $request->file('selectFile');
@@ -248,20 +297,40 @@ class CityRegionController extends Controller
    }
   
     public function filter_cityregion(Request $req){
+
+        $data = $req->input();
         
-        $datas = CityRegion::select('location_area.*','usercity.name AS userCityName', 
-                    'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
-                    ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
-                    ->join('region_city as storecity', 'storeCityId', '=', 'storecity.id')
-                    ->where('location_area.userLocationCityId', $req->selectCity)
-                    ->orderBy('usercity.regionStateId', 'ASC')
-                    ->orderBy('usercity.name', 'ASC')->get();        
-        $citySelected = $req->selectCity;
+        $query = CityRegion::select('location_area.*','usercity.name AS userCityName', 
+                                    'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
+                            ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
+                            ->join('region_city as storecity', 'storeCityId', '=', 'storecity.id')
+                            ->join('region_country_state as state', 'usercity.regionStateId', '=', 'state.id');
+
+        if($req->region=="MYS"){
+            $query->where(function ($query) {
+                $query->where('regionCountryId', '=', 'MYS');
+                });              
+        }
+        //dd($query);
+        if($req->region=="PAK"){
+            $query->where(function ($query) {
+                $query->where('regionCountryId', '=', 'PAK');
+                });              
+        }
+
+        $query->orderBy('usercity.regionStateId', 'ASC')->orderBy('usercity.name', 'ASC');
+        $datas = $query->get(); 
+     
+        $citySelected = "";
+        $stateSelected = "";
         
         $sql="SELECT id, name, regionStateId FROM region_city ORDER BY regionStateId, name";
         $cityList = DB::connection('mysql2')->select($sql);
 
-        return view('components.cityregion', compact('datas','cityList','citySelected'));
+        $sql="SELECT id, name, regionCountryId FROM region_country_state ORDER BY regionCountryId, name";
+        $stateList = DB::connection('mysql2')->select($sql);
+
+        return view('components.cityregion', compact('datas','cityList','citySelected', 'stateList', 'stateSelected'));
 
     }
 

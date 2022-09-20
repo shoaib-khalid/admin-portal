@@ -30,7 +30,7 @@ class FeaturedStoreController extends Controller
 
     public function index(){
         
-        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity')
+        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $storename = "";
         $searchresult=array();
@@ -56,9 +56,11 @@ class FeaturedStoreController extends Controller
         $sql=" SELECT DISTINCT(A.id),
             A.name AS storeName,
             A.city AS storeCity,
+            A.isDelivery AS storeDelivery,
             B.sequence, B.mainLevelSequence FROM store A 
             LEFT JOIN store_display_config B ON B.storeId=A.id
              WHERE A.id IS NOT NULL ";
+
         if ($req->store_name<>"") {
             $sql .= "AND A.name like '%".$req->store_name."%'";    
         }
@@ -86,14 +88,21 @@ class FeaturedStoreController extends Controller
         $f->save();
 
         $query = FeaturedStore::select('store_display_config.*',
-                'store.name AS storeName', 'store.city AS storeCity')
+                'store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                 ->join('store as store', 'storeId', '=', 'store.id');
-                
+
+        if ($request->delivery=="TRUE")
+            $query->where('isDelivery',1);
+
+        if ($request->delivery=="FALSE")
+            $query->where('isDelivery',0);
+
         if ($request->locationId=="main") {
             $query->where('isMainLevel',1);
         } elseif ($request->locationId<>"") {
             $query->where('store.city',$request->locationId);                
         }
+        
         $datas = $query->orderBy('sequence', 'ASC')->get(); 
 
         return response()->json(array('storeList'=> $datas), 200);
@@ -102,7 +111,7 @@ class FeaturedStoreController extends Controller
 
      public function delete_featuredstore(Request $request){
         DB::connection('mysql2')->delete("DELETE FROM store_display_config WHERE id='".$request->id."'");
-        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity')
+        $datas = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                     ->join('store as store', 'storeId', '=', 'store.id')->orderBy('sequence', 'ASC')->get();        
         $storename=null;
         $searchresult=array();
@@ -126,7 +135,7 @@ class FeaturedStoreController extends Controller
         }
         
         $query = FeaturedStore::select('store_display_config.*',
-                'store.name AS storeName', 'store.city AS storeCity')
+                'store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                 ->join('store as store', 'storeId', '=', 'store.id');
                 
         if ($request->locationId=="main") {
@@ -153,7 +162,7 @@ class FeaturedStoreController extends Controller
         $data->save();
         
         $query = FeaturedStore::select('store_display_config.*',
-                'store.name AS storeName', 'store.city AS storeCity')
+                'store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                 ->join('store as store', 'storeId', '=', 'store.id');
                 
         if ($request->locationId=="main") {
@@ -169,7 +178,7 @@ class FeaturedStoreController extends Controller
 
     public function storeSearchByLocation(Request $request) {   
 
-        $query = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity')
+        $query = FeaturedStore::select('store_display_config.*','store.name AS storeName', 'store.city AS storeCity','store.isDelivery AS storeDelivery')
                     ->join('store as store', 'storeId', '=', 'store.id');
 
         if ($request->locationId=="main") {

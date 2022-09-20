@@ -38,6 +38,32 @@ class MarketBannerController extends Controller
         return view('components.marketbanner', compact('datas','countryList', 'basepreviewurl'));
     }
 
+    public function filter_marketbanner(Request $request){
+        
+        $data = $request->input();
+        $query = MarketBanner::select('marketplace_banner_config.*');
+
+        if($request->region == "MYS" ){
+            $query->where(function ($query) {
+             $query->where('regionCountryId', '=', 'MYS');
+             });              
+                 }
+             
+         if($request->region == "PAK" ){
+             $query->where(function ($query) {
+              $query->where('regionCountryId', '=', 'PAK');
+             });              
+                 }
+
+        $query->orderBy('sequence', 'ASC');
+        $datas = $query->get();
+
+        $sql="SELECT id, name FROM region_country";
+        $countryList = DB::connection('mysql2')->select($sql);
+        $basepreviewurl = $this->basepreviewurl;
+        return view('components.marketbanner', compact('datas','countryList', 'basepreviewurl'));
+    }
+
 
     public function add_marketbanner(Request $request){
         //copy file to folder

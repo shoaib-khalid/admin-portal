@@ -37,5 +37,6 @@ class Store extends Model
                             'regionCountryStateId',
                             'serviceChargesPercentage',
                             'paymentType',
+                            'isDelivery',
                         ];
 }

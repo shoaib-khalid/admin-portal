@@ -45,12 +45,10 @@
                             <div class="col-7">
                              <textarea name="displayText" id="displayText" class="form-control" value="" style="height:100px !important">{{$promodata->displayText}}</textarea>
                             </div>
-                        </div>                                  
-                        <div class="input-group mb-3">                        
-                            <div class="col-2">
-                                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                        </div>                                                       
+                            <div class="col-10">
+                                <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
                             </div>
-                        </div>
                     </form>
                 <?php } else { ?>
                         <form action="add_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>                                        
@@ -82,14 +80,30 @@
                             <div class="col-7">
                              <textarea name="displayText" id="displayText" class="form-control" value="" style="height:100px !important"></textarea>
                             </div>
-                        </div>                                  
-                        <div class="input-group mb-3">                        
-                            <div class="col-2">
-                                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                        </div>                                                       
+                            <div class="col-10">
+                                <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
                             </div>
-                        </div>
                     </form>
-                <?php } ?>
+                    <?php } ?>
+                    <div class="input-group mb-3">  
+                            <div class="col-5"></div>
+                        </div>     
+                    <form action="filter_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    {{@csrf_field()}}  
+                    <div class="input-group mb-3">
+                       <div class="col-3">Select By Country</div>
+                            <div class="col-2">
+                                <select class="form-control" id="region" name="region">
+                                <option  value="MYS">Malaysia</option>
+                                <option  value="PAK">Pakistan</option>
+                                </select>
+                            </div>
+                        <div class="input-group-append">
+                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        </div>  
+                    </div>                   
+                   </form>
             </div>
             <div class="col-1">
                 

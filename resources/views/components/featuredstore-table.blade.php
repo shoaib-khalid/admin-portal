@@ -32,7 +32,7 @@
            //var selectCategory = document.getElementById('selectCategory').value;
            var storeName = document.getElementById('storeName').value;
            console.log(storeName);
-
+           
             $.ajax({
                type:'POST',
                url:'/filter_store',
@@ -43,7 +43,7 @@
                data:{
                     locationId : locationId,
                    // selectCategory : selectCategory,
-                    store_name : storeName,                    
+                    store_name : storeName,                   
                 },
                success:function(data) {
                   $("#msg").html(data.storeList);
@@ -63,7 +63,11 @@
                 bodyData+='<form name="saveSeq_'+row.id+'" id="'+row.id+'" method="post" enctype="multipart/form-data" accept-charset=\'UTF-8\'>{{@csrf_field()}}';
                 
                 bodyData+='<tr class="text-center">';
-                    bodyData+='<td>'+row.storeName+'</td>';                    
+                    bodyData+='<td>'+row.storeName+'</td>';
+                    if (row.storeDelivery == 1)
+                        bodyData+='<td>True</td>'; 
+                    else
+                        bodyData+='<td>False</td>'; 
                     bodyData+='<td>'+row.storeCity+'</td>';                                                
                     
                             bodyData+='<input type="hidden" id="saveSeq_id_'+row.id+'" value="'+row.id+'">';
@@ -99,6 +103,12 @@
 
                 bodyData+='<tr class="text-center">';                         
                         bodyData+='<td style="padding: 0">'+row.storeName+'</td>';
+                        if (row.storeDelivery == 1){
+                        bodyData+='<td style="padding: 0">True</td>'; 
+                        }
+                        else{
+                        bodyData+='<td style="padding: 0">False</td>'; 
+                        }
                         bodyData+='<td style="padding: 0">'+row.storeCity+'</td>';
                         if (row.sequence) {
                             bodyData+='<td style="padding: 0"><input type="text" name="sequence" id="addStore_sequence_'+row.id+'" class="form-control" value="'+row.sequence+'"></td>';
@@ -144,6 +154,7 @@
             } else {
                 mainPage=0;
             }
+
             $.ajax({
                type:'POST',
                url:'/add_featuredstore',
@@ -159,6 +170,7 @@
                     mainLevelSequence : mainLevelSequence
                 },
                success:function(data) {
+
                   $("#msg").html(data.storeList);
                   //console.log(data);
                   var resultData = data.storeList;
@@ -235,6 +247,7 @@
                   //console.log(data);
                   var resultData = data.storeList;
                   showData(resultData);
+                  alert('Store Updated!');
                }
             });
         }
@@ -300,6 +313,7 @@
                 <thead>
                     <tr class="text-center">
                         <th style="width: 20%;">Store Name</th>
+                        <th style="width: 10%;">Delivery</th>
                         <th style="width: 20%;">City</th>
                         <th style="width: 10%;">Sequence</th>    
                         <th style="width: 10%;">Main Page</th> 
@@ -319,6 +333,7 @@
                 <thead>
                     <tr class="text-center">
                         <th style="width: 30%;">Store</th>
+                        <th style="width: 10%;">Delivery</th>
                         <th style="width: 30%;">Location</th>
                         <th style="width: 10%;">Sequence</th>     
                         <th style="width: 10%;">Main Page</th>

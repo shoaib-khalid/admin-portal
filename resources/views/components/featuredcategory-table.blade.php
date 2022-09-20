@@ -189,6 +189,24 @@
                     </div>
                                
                 </form>
+                <div class="input-group mb-3">  
+                            <div class="col-5"></div>
+                        </div>     
+                    <form action="filter_featuredcategory" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    {{@csrf_field()}}  
+                    <div class="input-group mb-3">
+                       <div class="col-3">Select By Country</div>
+                            <div class="col-2">
+                                <select class="form-control" id="region" name="region">
+                                <option  value="MYS">Malaysia</option>
+                                <option  value="PAK">Pakistan</option>
+                                </select>
+                            </div>
+                        <div class="input-group-append">
+                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        </div>  
+                    </div>                   
+                   </form>
             </div>
           
         </div>

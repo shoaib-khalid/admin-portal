@@ -40,10 +40,42 @@ class ParentCategoryController extends Controller
                     ->whereRaw('verticalCode IS NOT NULL')
                     ->orderBy('verticalCode', 'ASC')
                     ->orderBy('name', 'ASC')
-                    ->get();        
+                    ->get();   
+
         $sql="SELECT code FROM region_vertical";
         $verticallist = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;
+        $MYS = '';
+        return view('components.parentcategory', compact('datas','basepreviewurl','verticallist','MYS'));
+    }
+
+    public function filter_parentcategory(Request $request){   
+        
+        $data = $request->input();
+        $query = StoreCategory::select('store_category.*')
+                    ->whereRaw('verticalCode IS NOT NULL');
+                    
+        if($request->region == "MYS" ){
+           $query->where(function ($query) {
+            $query->where('verticalCode', '=', 'FnB')
+                ->orWhere('verticalCode', '=', 'E-Commerce');
+            });              
+                }
+            
+        if($request->region == "PAK" ){
+            $query->where(function ($query) {
+             $query->where('verticalCode', '=', 'FnB_PK')
+                ->orWhere('verticalCode', '=', 'ECommerce_PK');
+            });              
+                }
+         
+        $query->orderBy('name', 'ASC');
+        $datas = $query->get();
+
+        $sql="SELECT code FROM region_vertical";
+        $verticallist = DB::connection('mysql2')->select($sql);
+        $basepreviewurl = $this->basepreviewurl;
+        // $MYS= $request->MYS;
         return view('components.parentcategory', compact('datas','basepreviewurl','verticallist'));
     }
 
