@@ -31,7 +31,15 @@ class MarketPopupController extends Controller
 
 
     public function index(){        
-        $datas = MarketPopup::orderBy('sequence', 'ASC')->get(); 
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
+            $datas = MarketPopup::where('regionCountryId', '=', 'MYS')
+                               ->orderBy('sequence', 'ASC')->get(); 
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = MarketPopup::where('regionCountryId', '=', 'PAK')
+                                   ->orderBy('sequence', 'ASC')->get(); 
+        }
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;

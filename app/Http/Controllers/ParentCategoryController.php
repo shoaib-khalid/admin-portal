@@ -36,13 +36,26 @@ class ParentCategoryController extends Controller
     }
 
 
-    public function index(){        
+    public function index(){  
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
         $datas = StoreCategory::select('store_category.*')
                     ->whereRaw('verticalCode IS NOT NULL')
+                    ->where('verticalCode', '=', 'FnB')
+                    ->orWhere('verticalCode', '=', 'E-Commerce')
                     ->orderBy('verticalCode', 'ASC')
                     ->orderBy('name', 'ASC')
                     ->get();   
-
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = StoreCategory::select('store_category.*')
+                        ->whereRaw('verticalCode IS NOT NULL')
+                        ->where('verticalCode', '=', 'FnB_PK')
+                        ->orWhere('verticalCode', '=', 'ECommerce_PK')
+                        ->orderBy('verticalCode', 'ASC')
+                        ->orderBy('name', 'ASC')
+                        ->get();   
+        }
         $sql="SELECT code FROM region_vertical";
         $verticallist = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;

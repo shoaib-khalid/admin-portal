@@ -50,14 +50,26 @@ class ActivityController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('1 days ago');
         $from = $date->format("Y-m-d");
-
-        // $datas = Client::limit(100)->get();
-        $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+        $selectedCountry = Session::get('selectedCountry');
+        //query group by sessionId
+        if($selectedCountry == 'MYS') {
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
                         ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->where('pageVisited', 'like', '%dev-my%')
+                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
                         ->orderBy('customer_activities.created', 'DESC')
                         ->get();
-       
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                            ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                            ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                            ->where('pageVisited', 'like', '%dev-pk%')
+                            ->orWhere('pageVisited', 'like', '%easydukan.co%')
+                            ->orderBy('customer_activities.created', 'DESC')
+                            ->get();
+        }
         
         $newArray = array();
         $storeList = array();
@@ -311,14 +323,28 @@ class ActivityController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('1 days ago');
         $from = $date->format("Y-m-d");
-
+        $selectedCountry = Session::get('selectedCountry');
         //query group by sessionId
-        $datas = UserActivity::select('sessionId')->distinct()
+        if($selectedCountry == 'MYS') {
+            $datas = UserActivity::select('sessionId')->distinct()
                         ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                         ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->where('pageVisited', 'like', '%dev-my%')
+                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
                         ->orderBy('customer_activities.created', 'DESC')
                         ->get();
+        }
+        if($selectedCountry == 'PAK'){
+            $datas = UserActivity::select('sessionId')->distinct()
+                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->where('pageVisited', 'like', '%dev-pk%')
+                        ->orWhere('pageVisited', 'like', '%easydukan.co%')
+                        ->orderBy('customer_activities.created', 'DESC')
+                        ->get();
+        }
         //dd($datas);
 
         $newArray = array();
@@ -696,7 +722,14 @@ class ActivityController extends Controller
 
     public function userdata(){
         //query by Customer
-        $datas = Customer::paginate(10);
+        $selectedCountry = Session::get('selectedCountry');
+        
+        if($selectedCountry == 'MYS') {
+            $datas = Customer::where('countryId', '=', 'MYS')->paginate(10);
+        }
+        if($selectedCountry == 'PAK'){
+            $datas = Customer::where('countryId', '=', 'PAK')->paginate(10);
+        }
         //dd($datas);
         foreach ($datas as $data) {
 
@@ -818,7 +851,8 @@ class ActivityController extends Controller
 
         $datas=array();
         $date = new DateTime('7 days ago');
-        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y'); 
+        $selectedCountry = Session::get('selectedCountry'); 
         $storename=null;
         $customername=null;
         $device=null;
@@ -1011,21 +1045,33 @@ class ActivityController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('3 days ago');
         $from = $date->format("Y-m-d");
+        $selectedCountry = Session::get('selectedCountry'); 
         // $datas = array();
         // $datas = Client::limit(100)->get();
         $datas = array();
         // $datas = DB::select('SELECT COUNT(*), channel, DATE(created)  FROM symplified_analytic.customer_activities 
         // WHERE  DATE(created) BETWEEN ? 
         // AND ? GROUP BY CHANNEL, DATE(created)',[$from,$to]);
-        
+        if($selectedCountry == 'MYS'){
         $sql = 
         " SELECT DATE(created) as created,
          count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
          count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
          count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
          from customer_activities
-         WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' 
+         WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%') 
          GROUP BY DATE(created)";
+        }
+        if($selectedCountry == 'PAK'){
+            $sql = 
+            " SELECT DATE(created) as created,
+             count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
+             count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
+             count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
+             from customer_activities
+             WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' AND (pageVisited like '%easydukan.co%' OR  pageVisited like '%dev-pk%') 
+             GROUP BY DATE(created)";
+        }
 
         $datas = DB::connection('mysql3')->select($sql);
         // $datas = array();
@@ -1067,10 +1113,6 @@ class ActivityController extends Controller
          WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."' ";
 
          $where="";
-
-        if($req->region == "all"){
-            $where= "AND pageVisited IS NOT NULL GROUP BY DATE(created) ";
-          }
 
         if($req->region == "MYS"){
             $where= "AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%') GROUP BY DATE(created) ";

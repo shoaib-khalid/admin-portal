@@ -30,8 +30,17 @@ class PromotextController extends Controller
 
 
     public function index(){
-        
-        $datas = Promotext::get();
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
+           $datas = Promotext::where('verticalCode', '=', 'FnB')
+                               ->orWhere('verticalCode', '=', 'E-Commerce')
+                               ->get();
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = Promotext::where('verticalCode', '=', 'FnB_PK')
+                                ->orWhere('verticalCode', '=', 'ECommerce_PK')
+                                ->get();
+        }
         $eventlist=array('guest-checkout','customer-checkout');
         $promodata=null;
 

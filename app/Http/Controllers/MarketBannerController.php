@@ -31,8 +31,16 @@ class MarketBannerController extends Controller
     }
 
 
-    public function index(){        
-        $datas = MarketBanner::orderBy('sequence', 'ASC')->get(); 
+    public function index(){   
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
+            $datas = MarketBanner::where('regionCountryId', '=', 'MYS')
+                               ->orderBy('sequence', 'ASC')->get(); 
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = MarketBanner::where('regionCountryId', '=', 'PAK')
+                                   ->orderBy('sequence', 'ASC')->get(); 
+        }
         $sql="SELECT id, name FROM region_country";
         $countryList = DB::connection('mysql2')->select($sql);
         $basepreviewurl = $this->basepreviewurl;

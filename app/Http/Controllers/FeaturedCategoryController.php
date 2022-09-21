@@ -30,12 +30,26 @@ class FeaturedCategoryController extends Controller
     }
 
 
-    public function index(){        
-        $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
+    public function index(){   
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
+            $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw('verticalCode IS NOT NULL')
+                ->where('verticalCode', '=', 'FnB')
+                ->orWhere('verticalCode', '=', 'E-Commerce')
                 ->orderBy('verticalCode', 'ASC')
                 ->orderBy('displaySequence', 'ASC')
                 ->get(); 
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
+                    ->whereRaw('verticalCode IS NOT NULL')
+                    ->where('verticalCode', '=', 'FnB_PK')
+                    ->orWhere('verticalCode', '=', 'ECommerce_PK')
+                    ->orderBy('verticalCode', 'ASC')
+                    ->orderBy('displaySequence', 'ASC')
+                    ->get(); 
+        }
         //dd($datas);       
         $citySelected = "";
         $stateSelected = "";

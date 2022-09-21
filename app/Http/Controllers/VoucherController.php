@@ -176,13 +176,25 @@ class VoucherController extends Controller
         $date = new DateTime('1 months ago');
         $from = $date->format("Y-m-d");
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
-
-        $datas = Voucher::select('voucher.*','store.name AS storeName')
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
+           $datas = Voucher::select('voucher.*','store.name AS storeName')
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')
                         ->orderBy('created_at', 'DESC')
                         ->where('status','ACTIVE')
+                        ->where('currencyLabel', '=', 'RM')
                         ->whereRaw("endDate > '".date("Y-m-d H:i:s")."'")
                         ->get();
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = Voucher::select('voucher.*','store.name AS storeName')
+                            ->leftJoin('store as store', 'storeId', '=', 'store.id')
+                            ->orderBy('created_at', 'DESC')
+                            ->where('status','ACTIVE')
+                            ->where('currencyLabel', '=', 'Rs.')
+                            ->whereRaw("endDate > '".date("Y-m-d H:i:s")."'")
+                            ->get();
+        }
         $totalClaim=array();
         foreach ($datas as $data) {
             //get total claim

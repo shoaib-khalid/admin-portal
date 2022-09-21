@@ -37,11 +37,25 @@ class CityRegionController extends Controller
     }
 
 
-    public function citylocation(){        
+    public function citylocation(){       
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') { 
         $datas = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
+                    ->join('region_country_state as state', 'city.regionStateId', '=', 'state.id')
+                    ->where('regionCountryId', '=', 'MYS')
                     ->orderBy('sequence', 'ASC')
-                    ->get();        
+                    ->get();   
+        }     
+        if($selectedCountry == 'PAK') { 
+            $datas = Locations::select('location_config.*', 'city.regionStateId')
+                        ->join('region_city as city', 'cityId', '=', 'city.id')
+                        ->join('region_country_state as state', 'city.regionStateId', '=', 'state.id')
+                        ->where('regionCountryId', '=', 'PAK')
+                        ->orderBy('sequence', 'ASC')
+                        ->get();   
+        }     
+
         $citySelected = "";
         $stateSelected = "";
         
@@ -263,12 +277,27 @@ class CityRegionController extends Controller
 
 
     public function index(){        
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') { 
         $datas = CityRegion::select('location_area.*','usercity.name AS userCityName', 
                     'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
                     ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
                     ->join('region_city as storecity', 'storeCityId', '=', 'storecity.id')
+                    ->join('region_country_state as state', 'usercity.regionStateId', '=', 'state.id')
+                    ->where('regionCountryId', '=', 'MYS')
                     ->orderBy('usercity.regionStateId', 'ASC')
-                    ->orderBy('usercity.name', 'ASC')->get();        
+                    ->orderBy('usercity.name', 'ASC')->get();     
+        } 
+        if($selectedCountry == 'PAK') { 
+            $datas = CityRegion::select('location_area.*','usercity.name AS userCityName', 
+                        'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
+                        ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')
+                        ->join('region_city as storecity', 'storeCityId', '=', 'storecity.id')
+                        ->join('region_country_state as state', 'usercity.regionStateId', '=', 'state.id')
+                        ->where('regionCountryId', '=', 'PAK')
+                        ->orderBy('usercity.regionStateId', 'ASC')
+                        ->orderBy('usercity.name', 'ASC')->get();     
+        }   
         $citySelected = "";
         $stateSelected = "";
         

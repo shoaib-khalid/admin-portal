@@ -75,6 +75,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/export_merchant', [UserController::class, "export_merchant"])->name('export_merchant');
 
     Route::get('/merchantappactivity', [UserController::class, "merchantappactivity"])->name('merchantappactivity');
+    Route::get('/filter_merchantappactivity', [UserController::class, "filter_merchantappactivity"])->name('filter_merchantappactivity');
     Route::post('/filter_merchantappactivity', [UserController::class, "filter_merchantappactivity"])->name('filter_merchantappactivity');
     Route::post('/export_merchantappactivity', [UserController::class, "export_merchantappactivity"])->name('export_merchantappactivity');
 
@@ -98,6 +99,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/export_usersitemap', [ActivityController::class, "export_usersitemap"])->name('export_usersitemap');
 
     Route::get('/userdata', [ActivityController::class, "userdata"])->name('userdata');
+    Route::get('/filter_userdata', [ActivityController::class, "filter_userdata"])->name('filter_userdata');
     Route::post('/filter_userdata', [ActivityController::class, "filter_userdata"])->name('filter_userdata');
     Route::post('/export_userdata', [ActivityController::class, "export_userdata"])->name('export_userdata');
 

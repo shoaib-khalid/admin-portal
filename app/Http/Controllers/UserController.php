@@ -235,6 +235,7 @@ class UserController extends Controller
             'sortingOrder' => "DESC",
             'pageSize' => 1000
         ]);
+        
 
         if($request->successful()){
 
@@ -368,8 +369,7 @@ class UserController extends Controller
                 'pageSize' => 1000
             ]); 
         }
-        
-        
+
         if($request->successful()){
 
             $result = $request['data'];
@@ -419,6 +419,7 @@ class UserController extends Controller
                 'pageSize' => 1000
             ]); 
         }
+
 
         if($request->successful()){
 
@@ -782,10 +783,21 @@ class UserController extends Controller
     public function merchantappactivity(){
 
         // $datas = Client::limit(100)->get();
+        $selectedCountry = Session::get('selectedCountry');
+        if($selectedCountry == 'MYS') {
         $datas = Client::select('client.*')
                         ->where('roleId', 'STORE_OWNER')
+                        ->where('countryId', '=', 'MYS')
                         ->whereNotNull('mobilePingLastResponse')
                         ->paginate(10);  
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = Client::select('client.*')
+                            ->where('roleId', 'STORE_OWNER')
+                            ->where('countryId', '=', 'PAK')
+                            ->whereNotNull('mobilePingLastResponse')
+                            ->paginate(10);  
+        }
         //dd($datas);                 
 
         foreach ($datas as $data) {
