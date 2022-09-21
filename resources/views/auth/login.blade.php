@@ -11,20 +11,20 @@
                 {{ session('status') }}
             </div>
         @endif
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!--<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript">
             function setCountry() {
                 var val = document.getElementById("selectCountry").value;
-                sessionStorage.setItem('SelectedRegion', val);
+                sessionStorage.setItem('SelectedRegion', val);               
             }
-        </script>
+        </script>!-->
         <form method="POST" action="{{ route('login') }}" onsubmit="setCountry()">
             @csrf
 
 
             <div  class="mt-4">
                 <x-jet-label value="{{ __('Country') }}" />
-                <select name="region"  class="form-select">
+                <select name="region"  class="form-select" id="selectCountry">
                 <option value="MYS">Malaysia</option>
                 <option value="PAK">Pakistan</option>
                 </select>

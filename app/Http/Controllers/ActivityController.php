@@ -30,6 +30,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
+use Session;
 
 use App\Mail\NotifyMail;
 use App\Mail\EmailContent;
@@ -143,6 +144,8 @@ class ActivityController extends Controller
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
+
+        Session::put('selectedCountry', $req->region);
 
         //$query = UserActivity::whereBetween('created', [$start_date, $end_date." 23:59:59"]);
          // $datas = Client::limit(100)->get();

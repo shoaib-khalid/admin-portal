@@ -3,7 +3,7 @@
     // dd($datas);
     $selectedCountry = Session::get('selectedCountry');
 @endphp
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<!--<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script>
         function showMov(val) {
         sessionStorage.setItem('SelectedRegion', val);
@@ -41,7 +41,7 @@
             });
         });
 
-    </script>
+    </script>!-->
 <div class="card section">
     <div class="card-header">
         <h4>Daily Detail Sales</h4>
