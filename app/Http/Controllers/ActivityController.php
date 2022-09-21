@@ -1302,8 +1302,9 @@ class ActivityController extends Controller
                             ])
                             ->whereBetween('order.created', [$from, $to." 23:59:59"])
                             ->union($datas1)
+                            ->orderBy('created','DESC')
                             ->paginate(10);
-             //dd($sql);
+            // dd($datas);
 
             $datechosen = $date->format('F d, Y')." - ".date('F d, Y'); 
             return view('components.userincompleteorder', compact('datas','datechosen'));
@@ -1342,7 +1343,7 @@ class ActivityController extends Controller
                 ->whereBetween('order.created', [$start_date, $end_date." 23:59:59"])
                 ->union($query1);
                 
-            $datas = $query->paginate(10);
+            $datas = $query->orderBy('created','DESC')->paginate(10);
     
             $datechosen = $req->date_chosen4;          
             return view('components.userincompleteorder', compact('datas','datechosen'));

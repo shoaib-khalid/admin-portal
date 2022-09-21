@@ -107,6 +107,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/userincompleteorder', [ActivityController::class, "userincompleteorder"])->name('userincompleteorder');
     Route::post('/filter_userincompleteorder', [ActivityController::class, "filter_userincompleteorder"])->name('filter_userincompleteorder');
+    Route::get('/filter_userincompleteorder', [ActivityController::class, "filter_userincompleteorder"])->name('filter_userincompleteorder');
     Route::post('/export_userincompleteorder', [ActivityController::class, "export_userincompleteorder"])->name('export_userincompleteorder');
 
     Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
