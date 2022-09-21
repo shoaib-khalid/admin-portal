@@ -11,6 +11,7 @@ use App\Models\Store;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use App\Exports\VoucherListExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -209,6 +210,9 @@ class VoucherController extends Controller
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
+
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
 
         $query = Voucher::select('voucher.*','store.name AS storeName')
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')

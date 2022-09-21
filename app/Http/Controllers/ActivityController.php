@@ -484,6 +484,9 @@ class ActivityController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
+
         //query group by sessionId
         $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId')->distinct()
                 ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
@@ -737,6 +740,9 @@ class ActivityController extends Controller
         //queryby id
         $data = $req->input();
         $query = Customer::select('customer.*');
+
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
         
         if($req->region == "MYS"){
             $query->where('countryId', '=', 'MYS');       
@@ -843,6 +849,9 @@ class ActivityController extends Controller
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
+
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
 
         $groupList="COUNT(*) AS total, COUNT(DISTINCT(sessionId)) AS totalUnique"; 
 
@@ -1040,6 +1049,9 @@ class ActivityController extends Controller
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date))." 23:59:59";
+
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
 
         $datas = array();
         // $datas = DB::select('SELECT COUNT(*), channel, DATE(created)  FROM symplified_analytic.customer_activities 

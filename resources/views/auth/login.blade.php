@@ -24,7 +24,8 @@
 
             <div  class="mt-4">
                 <x-jet-label value="{{ __('Country') }}" />
-                <select name="region"  class="form-select" id="selectCountry">
+                <select name="region"  class="form-select" id="selectCountry" required>
+                <option value="" >Choose a country</option>
                 <option value="MYS">Malaysia</option>
                 <option value="PAK">Pakistan</option>
                 </select>

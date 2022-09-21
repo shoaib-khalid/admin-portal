@@ -62,9 +62,8 @@
                         </div>
 
                         <label class="col-2" for="region">Select By Country</label>
-                        <div class="col-4">
-                        <select class="form-control" id="region" name="region" onchange="showMov(this.value);">
-                        <option  value="ALL">All</option>
+                        <div class="col-2">
+                        <select class="form-control" id="region" name="region">
                         <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
                         <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                         </select>

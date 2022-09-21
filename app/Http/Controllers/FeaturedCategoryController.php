@@ -7,6 +7,7 @@ use App\Models\FeaturedCategory;
 use App\Models\StoreCategory;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -59,6 +60,8 @@ class FeaturedCategoryController extends Controller
     public function filter_featuredcategory(Request $request){     
         
         $data = $request->input();
+        $selectedCountry = $request->region;
+        Session::put('selectedCountry', $selectedCountry);
         $query = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw('verticalCode IS NOT NULL');
         

@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       

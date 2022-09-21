@@ -22,18 +22,18 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <label class="col-2" for="region">Choose:</label>
+                        <label class="col-2" for="region">Select By Country</label>
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3"  id="region" name="region">
-                        <option  value="">All</option>
-                        <option  value="MYS" <?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                        <option  value="PAK" <?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                        <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                         </select>
+
                     </div>
                     <div class="input-group mb-3">
                         <div class="col-2"></div>
                         <div class="col-4">
-                         <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                         <button class="btn btn-danger" id="submit" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>                       
                     </div>
                 </form>

@@ -61,9 +61,9 @@
                     </div>
                 </div>  
             <div class="input-group mb-3">
-            <div class="col-2">By Country</div>
+            <div class="col-2">Select By Country</div>
                 <div class="col-4">
-                <select class="form-select form-select-lg mb-3" id="region" name="region" onchange="showMov(this.value);">
+                <select class="form-select form-select-lg mb-3" id="region" name="region">
                     <option  value="MYS" <?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
                     <option  value="PAK" <?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                 </select>

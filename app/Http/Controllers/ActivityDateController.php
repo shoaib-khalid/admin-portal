@@ -14,6 +14,7 @@ use App\Models\UserActivity;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
@@ -79,11 +80,14 @@ class ActivityDateController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
+
         $groupList="SUM(totalCount) AS total, SUM(totalUniqueUser) AS totalUnique, dt"; 
 
         $where="";
 
-        if($req->region == "all"){
+        if($req->region == "ALL"){
             $where= "AND page IS NOT NULL";
           }
 
@@ -136,7 +140,7 @@ class ActivityDateController extends Controller
 
         //query group by sessionId
         $sql="SELECT ".$groupList." FROM customer_activities_summary WHERE dt BETWEEN '".$start_date."' AND '".$end_date." 23:59:59'";
-        // dd($sql);
+        //dd($sql);
 
 
         if ($req->storename_chosen<>"") {

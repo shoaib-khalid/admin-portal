@@ -846,6 +846,8 @@ class UserController extends Controller
 
         $data = $req->input();
 
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
         $query = Client::select('client.*')
                         ->where('roleId', 'STORE_OWNER')
                         ->whereNotNull('mobilePingLastResponse'); 

@@ -201,7 +201,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/delete_marketbanner', [MarketBannerController::class, "delete_marketbanner"])->name('delete_marketbanner'); 
 
     Route::get('/marketpopup', [MarketPopupController::class, "index"])->name('marketpopup');
-    Route::post('/filter_marketpopup', [MarketBannerController::class, "filter_marketpopup"])->name('filter_marketpopup');    
+    Route::post('/filter_marketpopup', [MarketPopupController::class, "filter_marketpopup"])->name('filter_marketpopup');    
     Route::post('/add_marketpopup', [MarketPopupController::class, "add_marketpopup"])->name('add_marketpopup');  
     Route::post('/edit_marketpopup', [MarketPopupController::class, "edit_marketpopup"])->name('edit_marketpopup');
     Route::post('/delete_marketpopup', [MarketPopupController::class, "delete_marketpopup"])->name('delete_marketpopup'); 

@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -198,8 +199,8 @@
                        <div class="col-3">Select By Country</div>
                             <div class="col-2">
                                 <select class="form-control" id="region" name="region">
-                                <option  value="MYS">Malaysia</option>
-                                <option  value="PAK">Pakistan</option>
+                                <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                                <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                                 </select>
                             </div>
                         <div class="input-group-append">

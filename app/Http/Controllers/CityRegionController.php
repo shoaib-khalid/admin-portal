@@ -7,6 +7,7 @@ use App\Models\CityRegion;
 use App\Models\Locations;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -71,6 +72,8 @@ class CityRegionController extends Controller
     public function filter_citylocation(Request $request){    
         
         $data = $request->input();
+        $selectedCountry = $request->region;
+        Session::put('selectedCountry', $selectedCountry);
         $query = Locations::select('location_config.*', 'city.regionStateId')
                     ->join('region_city as city', 'cityId', '=', 'city.id')
                     ->join('region_country_state as state', 'city.regionStateId', '=', 'state.id');
@@ -299,7 +302,8 @@ class CityRegionController extends Controller
     public function filter_cityregion(Request $req){
 
         $data = $req->input();
-        
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
         $query = CityRegion::select('location_area.*','usercity.name AS userCityName', 
                                     'storecity.name AS storeCityName','usercity.regionStateId AS stateId')
                             ->join('region_city as usercity', 'userLocationCityId', '=', 'usercity.id')

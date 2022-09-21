@@ -70,17 +70,15 @@
                         </div>                      
                     </div>
                     <div class="input-group mb-3">
-                        <label class="col-2" for="region">By Country:</label>
+                        <label class="col-2" for="region">Select By Country:</label>
                         <div class="col-4">
                         <select class="form-select form-select-lg mb-3"  id="region" name="region">
-                        <option  value="" selected >Choose</option>
-                        <option  value="all">All</option>
                          <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                         <option  value="PAK"<?php if ($selectedCountry=="pak") echo "selected"; ?>>Pakistan</option>
+                         <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
-                        <div class="col-4"><button class="btn btn-danger" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
+                        <div class="col-4"><button class="btn btn-danger" value="submit" type="button" onclick="viewReport()"><i class="fas fa-search"></i> <span>Search</span></button>
                         </div>
                         <input type="hidden" name="exportExcel" id="exportExcel" value="0">
                         <div class="col-4"><button type="button" class="btn btn-success icon-left btn-icon float-right" onclick="exportToExcel()"><i class="fas fa-file"></i> <span>Export Excel</span>

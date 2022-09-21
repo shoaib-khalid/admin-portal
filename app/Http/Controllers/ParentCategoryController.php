@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\StoreCategory;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -52,6 +53,10 @@ class ParentCategoryController extends Controller
     public function filter_parentcategory(Request $request){   
         
         $data = $request->input();
+
+        $selectedCountry = $request->region;
+        Session::put('selectedCountry', $selectedCountry);
+
         $query = StoreCategory::select('store_category.*')
                     ->whereRaw('verticalCode IS NOT NULL');
                     

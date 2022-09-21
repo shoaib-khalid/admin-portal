@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -95,8 +96,8 @@
                        <div class="col-3">Select By Country</div>
                             <div class="col-2">
                                 <select class="form-control" id="region" name="region">
-                                <option  value="MYS">Malaysia</option>
-                                <option  value="PAK">Pakistan</option>
+                                <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                                <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
                                 </select>
                             </div>
                         <div class="input-group-append">

@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -16,25 +17,21 @@
                     <form action="filter_merchantappactivity" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                     <div class="input-group mb-3">
-                    <div class="col-2">Client Name</div>
+                     <div class="col-2">Client Name</div>
                         <div class="col-4">
                         <input type="text" name="name_chosen" id="name_chosen" class="form-control" value="{{$namechosen}}">
-                        </div>
-                    </div>   
-                    <div class="input-group mb-3">
-                      <div class="col-2">By Country</div>
-                        <div class="col-4">
-                        <select class="form-select form-select-lg mb-3" id="region" name="region">
-                         <option  value="all">All</option>
-                         <option  value="MYS">Malaysia</option>
-                         <option  value="PAK">Pakistan</option>
-                        </select>
-                      </div>   
+                        </div>  
+                            <div class="col-2">Select By Country</div>
+                            <div class="col-2">
+                                <select class="form-control" id="region" name="region">
+                                <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                                <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                                </select>
+                            </div>   
                         <div class="input-group mb-3">
-                        <div class="col-2"></div>
                         <div class="col-4">
-                         <button class="btn btn-danger" id="submit" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
-                        </div>                       
+                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        </div>
                     </div>
                     </form>
                 </div>

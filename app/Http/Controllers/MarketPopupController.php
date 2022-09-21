@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\MarketPopup;
 use Carbon\Carbon;
 use DateTime;
-
+use Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,9 +38,12 @@ class MarketPopupController extends Controller
         return view('components.marketpopup', compact('datas','countryList', 'basepreviewurl'));
     }
 
-    public function filter_marketpopup(){        
+    public function filter_marketpopup(Request $request){        
         
-        $datas = MarketPopup::select('marketplace_popup_config.*');
+        $data = $request->input();
+        $selectedCountry = $request->region;
+        Session::put('selectedCountry', $selectedCountry);
+        $query = MarketPopup::select('marketplace_popup_config.*');
         if($request->region == "MYS" ){
             $query->where(function ($query) {
              $query->where('regionCountryId', '=', 'MYS');
