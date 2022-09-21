@@ -213,7 +213,13 @@ class ActivityDateController extends Controller
         $newArray2 = array();   
         foreach ($datas as $data) { 
             if (property_exists($data, 'storeId')) {
+
                  $sql2="SELECT totalUnique, totalUniqueGuest, storeId, dt FROM total_unique_user WHERE dt='".$data->dt."' AND storeId='".$data->storeId."'";
+                 if($req->region == "MYS"){
+                    $sql2 .= " AND country='MYS' ";
+                 } else {
+                    $sql2 .= " AND country='PAK' ";
+                 }
                  $datas2 = DB::connection('mysql3')->select($sql2);
                  if (count($datas2)>0) {
                     $data->totalUser =  $datas2[0]->totalUnique;   
@@ -223,7 +229,12 @@ class ActivityDateController extends Controller
                     $data->totalGuest =  0;
                  }
             } else {
-                $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user_overall WHERE dt='".$data->dt."'";
+                 $sql2="SELECT SUM(totalUnique) AS totalUnique, SUM(totalUniqueGuest) AS totalUniqueGuest FROM total_unique_user_overall WHERE dt='".$data->dt."'";
+                 if($req->region == "MYS"){
+                    $sql2 .= " AND country='MYS' ";
+                 } else {
+                    $sql2 .= " AND country='PAK' ";
+                 }
                  $datas2 = DB::connection('mysql3')->select($sql2);
                  if (count($datas2)>0) {
                     $data->totalUser =  $datas2[0]->totalUnique;
