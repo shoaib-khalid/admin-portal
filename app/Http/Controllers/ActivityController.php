@@ -156,7 +156,7 @@ class ActivityController extends Controller
         $browser = ''; 
         $pageVisited = '';
 
-        return view('components.useractivity',compact('datas','datechosen','storename','customername','device','browser','MYS','PAK'));
+        return view('components.useractivity',compact('datas','datechosen','storename','customername','device','browser'));
     }
  
     public function filter_useractivitylog(Request $req){
