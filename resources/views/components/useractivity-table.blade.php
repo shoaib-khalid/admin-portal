@@ -99,16 +99,16 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center">
-                            <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>
-                            <td>{{ $data['storeName'] }}</td>
-                            <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['address'] }} {{ $data['city'] }}</td>
-                            <td>{{ $data['pageVisited'] }}</td>
-                            <td>{{ $data['ip'] }}</td>
-                            <td>{{ $data['device'] }}</td>
-                            <td>{{ $data['os'] }}</td>
-                            <td>{{ $data['browser'] }}</td>                            
-                            <td>{{ $data['errorType'] }}</td>                            
+                            <td>{{ \Carbon\Carbon::parse($data->created)->format('d/m/Y H:i:s')  }}</td>
+                            <td>{{ $data->storeName}}</td>
+                            <td>{{ $data->customerName }}</td>
+                            <td>{{ $data->sessionAddress}} {{ $data->sessionCity }}</td>
+                            <td>{{ $data->pageVisited }}</td>
+                            <td>{{ $data->ip}}</td>
+                            <td>{{ $data->deviceModel }}</td>
+                            <td>{{ $data->os }}</td>
+                            <td>{{ $data->browserType }}</td>                            
+                            <td>{{ $data->errorType }}</td>                            
                         </tr>
                     @endforeach
 
@@ -141,7 +141,7 @@
                     </nav>
                 </div>
             </div> --}}
-            
+            {!! $datas->appends(request()->except('page'))->links("pagination::bootstrap-4") !!}    
         </div>
     </div>
 </div>

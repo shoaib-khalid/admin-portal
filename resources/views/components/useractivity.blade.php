@@ -22,50 +22,50 @@
 
         
   
-  var table = $('#table-4').DataTable({
-    // 'dom' : 't',
-    // "bPaginate": true,
-    // "bLengthChange": false,
-    // "bFilter": true,
-    // "bInfo": false,
-    // "bAutoWidth": false,
-    'columns': [
-    //   {
-    //     'className': 'details-control',
-    //     'orderable': false,
-    //     'data': null,
-    //     'defaultContent': ''
-    //   },
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-    ],
-    "aaSorting": [],
-    'columnDefs': [
+  // var table = $('#table-4').DataTable({
+  //   // 'dom' : 't',
+  //   // "bPaginate": true,
+  //   // "bLengthChange": false,
+  //   // "bFilter": true,
+  //   // "bInfo": false,
+  //   // "bAutoWidth": false,
+  //   'columns': [
+  //   //   {
+  //   //     'className': 'details-control',
+  //   //     'orderable': false,
+  //   //     'data': null,
+  //   //     'defaultContent': ''
+  //   //   },
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //     null,
+  //   ],
+  //   "aaSorting": [],
+  //   'columnDefs': [
 
-        { "sortable": false, "targets": [0,2,3] },
-      {
-        'targets': [0],
-        'width': 'auto',
-      },
-      {
-        'targets': [1,2],
-        'className' : 'dt-left',
-      },
-      {
-        'targets' : [3,4,5,6],
-        'className' : 'dt-right',
-        'width': '100px',
-      },
-    ]
-  });
+  //       { "sortable": false, "targets": [0,2,3] },
+  //     {
+  //       'targets': [0],
+  //       'width': 'auto',
+  //     },
+  //     {
+  //       'targets': [1,2],
+  //       'className' : 'dt-left',
+  //     },
+  //     {
+  //       'targets' : [3,4,5,6],
+  //       'className' : 'dt-right',
+  //       'width': '100px',
+  //     },
+  //   ]
+  // });
 
 
   // Add event listener for opening and closing details

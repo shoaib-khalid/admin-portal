@@ -59,7 +59,7 @@ class ActivityController extends Controller
                         ->where('pageVisited', 'like', '%dev-my%')
                         ->orWhere('pageVisited', 'like', '%deliverin.my%')
                         ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
+                        ->paginate(15);
         }
         if($selectedCountry == 'PAK') {
             $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
@@ -68,71 +68,87 @@ class ActivityController extends Controller
                             ->where('pageVisited', 'like', '%dev-pk%')
                             ->orWhere('pageVisited', 'like', '%easydukan.co%')
                             ->orderBy('customer_activities.created', 'DESC')
-                            ->get();
+                            ->paginate(15);
         }
         
-        $newArray = array();
-        $storeList = array();
-        $customerList = array();
+        // $newArray = array();
 
         //dd($datas);
         foreach ($datas as $data) {
-
-            $storeName = '';
-            if (! array_key_exists($data['storeId'], $storeList)) {
-                $store_info = Store::where('id', $data['storeId'])
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$data['storeId']] = $store_info[0]['name']; 
-                    $storeName = $storeList[$data['storeId']];
-                }    
-
-            } else {
-                $storeName = $storeList[$data['storeId']];
+            $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
+            $store = DB::connection('mysql2')->select($sql);
+            if (count($store) > 0) {
+                $storename=$store[0]->name;
+            } else{
+                $storename= "";
             }
+            $data->storeName = $storename;
+
+            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $customer = DB::connection('mysql2')->select($sql);
+            if (count($customer) > 0) {
+                $customername=$customer[0]->name;
+            } else{
+                $customername= "";
+            }
+            $data->customerName = $customername;
+
+            $sessionAddress = $data->sessionAddress;
+            $sessionCity = $data->sessionCity;    
+            
+            // $storeName = '';
+            // if (! array_key_exists($data['storeId'], $storeList)) {
+            //     $store_info = Store::where('id', $data['storeId'])
+            //                         ->get();
+            //     if (count($store_info) > 0) {
+            //         $storeList[$data['storeId']] = $store_info[0]['name']; 
+            //         $storeName = $storeList[$data['storeId']];
+            //     }    
+
+            // } else {
+            //     $storeName = $storeList[$data['storeId']];
+            // }
              
 
-            $customerName = '';
-            if (! array_key_exists($data['customerId'], $customerList)) {            
-                $customer_info = Customer::where('id', $data['customerId'])
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$data['customerId']];
-                }  
+            // $customerName = '';
+            // if (! array_key_exists($data['customerId'], $customerList)) {            
+            //     $customer_info = Customer::where('id', $data['customerId'])
+            //                         ->get();
+            //     if (count($customer_info) > 0) {
+            //         $customerList[$data['customerId']] = $customer_info[0]['name']; 
+            //         $customerName = $customerList[$data['customerId']];
+            //     }  
                 
-            } else {
-                $customerName = $customerList[$data['customerId']];
-            }
+            // } else {
+            //     $customerName = $customerList[$data['customerId']];
+            // }
 
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];             
+            // $sessionAddress = $data['sessionAddress'];
+            // $sessionCity = $data['sessionCity'];             
             
-            $object = [
-                'created' => $data['created'],
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'pageVisited' => $data['pageVisited'],
-                'ip' => $data['ip'],
-                'device' => $data['deviceModel'],
-                'os' => $data['os'],
-                'browser' => $data['browserType'],
-                'errorType' => $data['errorType'],
-                'errorOccur' => $data['errorOccur'],
-                'address' => $sessionAddress,
-                'city' => $sessionCity
-            ];
+            // $object = [
+            //     'created' => $data['created'],
+            //     'storeName' => $storeName,
+            //     'customerName' => $customerName,
+            //     'sessionId' => $data['sessionId'],
+            //     'pageVisited' => $data['pageVisited'],
+            //     'ip' => $data['ip'],
+            //     'device' => $data['deviceModel'],
+            //     'os' => $data['os'],
+            //     'browser' => $data['browserType'],
+            //     'errorType' => $data['errorType'],
+            //     'errorOccur' => $data['errorOccur'],
+            //     'address' => $sessionAddress,
+            //     'city' => $sessionCity
+            // ];
 
-            array_push( 
-                $newArray,
-                $object
-            );
+            // array_push( 
+            //     $newArray,
+            //     $object
+            // );
 
         }
-       
-
-        $datas = $newArray;
+    
 
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
         $storename = '';   
@@ -218,69 +234,90 @@ class ActivityController extends Controller
 //dd($query);
         $query->orderBy('created', 'DESC');
         //dd($query);
-        $datas = $query->get();
+        $datas = $query->paginate(15);;
 
-        $newArray = array();
-        $storeList = array();
-        $customerList = array();
+        // $newArray = array();
+        // $storeList = array();
+        // $customerList = array();
 
         foreach ($datas as $data) {
 
-            $storeName = '';
-            if (! array_key_exists($data['storeId'], $storeList)) {
-                $store_info = Store::where('id', $data['storeId'])
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$data['storeId']] = $store_info[0]['name']; 
-                    $storeName = $storeList[$data['storeId']];
-                }    
-
-            } else {
-                $storeName = $storeList[$data['storeId']];
+            $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
+            $store = DB::connection('mysql2')->select($sql);
+            if (count($store) > 0) {
+                $storename=$store[0]->name;
+            } else{
+                $storename= "";
             }
+            $data->storeName = $storename;
+
+            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $customer = DB::connection('mysql2')->select($sql);
+            if (count($customer) > 0) {
+                $customername=$customer[0]->name;
+            } else{
+                $customername= "";
+            }
+            $data->customerName = $customername;
+
+            $sessionAddress = $data->sessionAddress;
+            $sessionCity = $data->sessionCity;    
+
+            // $storeName = '';
+            // if (! array_key_exists($data['storeId'], $storeList)) {
+            //     $store_info = Store::where('id', $data['storeId'])
+            //                         ->get();
+            //     if (count($store_info) > 0) {
+            //         $storeList[$data['storeId']] = $store_info[0]['name']; 
+            //         $storeName = $storeList[$data['storeId']];
+            //     }    
+
+            // } else {
+            //     $storeName = $storeList[$data['storeId']];
+            // }
              
 
-            $customerName = '';
-            if (! array_key_exists($data['customerId'], $customerList)) {            
-                $customer_info = Customer::where('id', $data['customerId'])
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$data['customerId']];
-                }  
+            // $customerName = '';
+            // if (! array_key_exists($data['customerId'], $customerList)) {            
+            //     $customer_info = Customer::where('id', $data['customerId'])
+            //                         ->get();
+            //     if (count($customer_info) > 0) {
+            //         $customerList[$data['customerId']] = $customer_info[0]['name']; 
+            //         $customerName = $customerList[$data['customerId']];
+            //     }  
                 
-            } else {
-                $customerName = $customerList[$data['customerId']];
-            }
+            // } else {
+            //     $customerName = $customerList[$data['customerId']];
+            // }
 
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];
+            // $sessionAddress = $data['sessionAddress'];
+            // $sessionCity = $data['sessionCity'];
             
-            $object = [
-                'created' => $data['created'],
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'pageVisited' => $data['pageVisited'],
-                'ip' => $data['ip'],
-                'device' => $data['deviceModel'],
-                'os' => $data['os'],
-                'browser' => $data['browserType'],
-                'errorType' => $data['errorType'],
-                'errorOccur' => $data['errorOccur'],
-                'address' => $sessionAddress,
-                'city' => $sessionCity
-            ];
+            // $object = [
+            //     'created' => $data['created'],
+            //     'storeName' => $storeName,
+            //     'customerName' => $customerName,
+            //     'sessionId' => $data['sessionId'],
+            //     'pageVisited' => $data['pageVisited'],
+            //     'ip' => $data['ip'],
+            //     'device' => $data['deviceModel'],
+            //     'os' => $data['os'],
+            //     'browser' => $data['browserType'],
+            //     'errorType' => $data['errorType'],
+            //     'errorOccur' => $data['errorOccur'],
+            //     'address' => $sessionAddress,
+            //     'city' => $sessionCity
+            // ];
 
-            array_push( 
-                $newArray,
-                $object
-            );
+            // array_push( 
+            //     $newArray,
+            //     $object
+            // );
 
         }
        
 
-        $datas = $newArray;        
+        // $datas = $newArray;        
         $datechosen = $req->date_chosen4;                
         $storename = $req->storename_chosen;
         $customername = $req->customer_chosen;
