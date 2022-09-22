@@ -769,7 +769,7 @@ class UserController extends Controller
                         ->where('roleId', 'STORE_OWNER')
                         ->where('countryId', '=', 'MYS')
                         ->whereNotNull('mobilePingLastResponse')
-                        ->orderBy('mobilePingLastResponse')
+                        ->orderBy('mobilePingLastResponse','DESC')
                         ->paginate(10);  
         }
         if($selectedCountry == 'PAK') {
@@ -777,7 +777,7 @@ class UserController extends Controller
                             ->where('roleId', 'STORE_OWNER')
                             ->where('countryId', '=', 'PAK')
                             ->whereNotNull('mobilePingLastResponse')
-                            ->orderBy('mobilePingLastResponse')
+                            ->orderBy('mobilePingLastResponse','DESC')
                             ->paginate(10);  
         }
         //dd($datas);                 
@@ -858,7 +858,7 @@ class UserController extends Controller
             $query->where('name', 'like', '%'.$req->name_chosen.'%');
         }
 
-        $datas = $query->orderBy('mobilePingLastResponse')->paginate(10);
+        $datas = $query->orderBy('mobilePingLastResponse','DESC')->paginate(10);
 
         foreach ($datas as $data) {
 
