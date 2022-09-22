@@ -1,3 +1,10 @@
+Version 1.12.5
+------------------------
+Date:22-Sep-2022
+
+Fix Route for Filter Activity Log
+
+
 Version 1.12.4
 ------------------------
 Date:22-Sep-2022

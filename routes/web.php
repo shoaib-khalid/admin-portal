@@ -91,6 +91,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
  
     Route::get('/useractivitylog', [ActivityController::class, "useractivitylog"])->name('useractivitylog');
     Route::post('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
+    Route::get('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
     Route::post('/export_useractivitylog', [ActivityController::class, "export_useractivitylog"])->name('export_useractivitylog');
 
 
