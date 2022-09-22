@@ -1,3 +1,10 @@
+Version 1.12.4
+------------------------
+Date:22-Sep-2022
+
+Add pagination for UserActvityLog page
+
+
 Version 1.12.3
 ------------------------
 Date:21-Sep-2022

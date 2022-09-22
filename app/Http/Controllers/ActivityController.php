@@ -149,15 +149,12 @@ class ActivityController extends Controller
 
         }
     
-
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
         $storename = '';   
         $customername = '';
         $device = '';  
         $browser = ''; 
         $pageVisited = '';
-        $MYS = '';
-        $PAK = '';
 
         return view('components.useractivity',compact('datas','datechosen','storename','customername','device','browser','MYS','PAK'));
     }
