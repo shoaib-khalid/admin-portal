@@ -11,6 +11,7 @@ use App\Models\UserActivity;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
 
 use DB;
+use Session;
 use Carbon\Carbon;
 use DateTime;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -26,11 +27,24 @@ class MerchantAppActivityExport implements FromCollection, ShouldAutoSize, WithH
     */
     public function collection()
     {
-                //query by Customer
-        $datas = Client::select('client.*')
+        //query by Customer
+        $selectedCountry = Session::get('selectedCountry');
+          if($selectedCountry == 'MYS') {
+          $datas = Client::select('client.*')
                         ->where('roleId', 'STORE_OWNER')
+                        ->where('countryId', '=', 'MYS')
                         ->whereNotNull('mobilePingLastResponse')
-                        ->paginate(10);  
+                        ->orderBy('mobilePingLastResponse','DESC')
+                        ->get();  
+        }
+           if($selectedCountry == 'PAK') {
+           $datas = Client::select('client.*')
+                            ->where('roleId', 'STORE_OWNER')
+                            ->where('countryId', '=', 'PAK')
+                            ->whereNotNull('mobilePingLastResponse')
+                            ->orderBy('mobilePingLastResponse','DESC')
+                            ->get();  
+        }
                 //dd($datas);
         foreach ($datas as $data) {
         

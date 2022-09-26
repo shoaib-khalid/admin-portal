@@ -11,6 +11,7 @@ use App\Models\UserActivity;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
 
 use DB;
+use Session;
 use Carbon\Carbon;
 use DateTime;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -28,7 +29,14 @@ class UserdataExport implements FromCollection, ShouldAutoSize, WithHeadings
     public function collection()
     {
         //query by Customer
-        $datas = Customer::paginate(10);
+        $selectedCountry = Session::get('selectedCountry');
+        
+        if($selectedCountry == 'MYS') {
+            $datas = Customer::where('countryId', '=', 'MYS')->get();
+        }
+        if($selectedCountry == 'PAK'){
+            $datas = Customer::where('countryId', '=', 'PAK')->get();
+        }
         //dd($datas);
         foreach ($datas as $data) {
 

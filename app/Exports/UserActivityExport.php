@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 use DateTime;
 use Illuminate\Support\Facades\Http;
-
+use Session;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -37,11 +37,26 @@ class UserActivityExport implements FromCollection, ShouldAutoSize, WithHeadings
     {
         // return User::all(); 
         
-         $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                         
+        $selectedCountry = Session::get('selectedCountry');
+        //query group by sessionId
+        if($selectedCountry == 'MYS') {
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->whereBetween('customer_activities.created', [$this->from, $this->to])  
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->where('pageVisited', 'like', '%dev-my%')
+                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
                         ->orderBy('customer_activities.created', 'DESC')
                         ->get();
+        }
+        if($selectedCountry == 'PAK') {
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                            ->whereBetween('customer_activities.created', [$this->from, $this->to])  
+                            ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                            ->where('pageVisited', 'like', '%dev-pk%')
+                            ->orWhere('pageVisited', 'like', '%easydukan.co%')
+                            ->orderBy('customer_activities.created', 'DESC')
+                            ->get();
+        }
        
         $newArray = array();
         $storeList=array();
