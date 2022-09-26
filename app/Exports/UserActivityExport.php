@@ -44,36 +44,30 @@ class UserActivityExport implements FromCollection, ShouldAutoSize, WithHeadings
                         ->get();
        
         $newArray = array();
-        $storeList = array();
+        $storeList=array();
         $customerList = array();
+
+        $storeListObject = Store::get();
+        $customerListObject = Customer::get();
+
+        foreach ($storeListObject as $store) {
+            $storeList[$store->id] = $store->name;
+        }
+
+         foreach ($customerListObject as $customer) {
+            $customerList[$customer->id] = $customer->name;
+        }
 
         //dd($datas);
         foreach ($datas as $data) {
 
             $storeName = '';
-            if (! array_key_exists($data['storeId'], $storeList)) {
-                $store_info = Store::where('id', $data['storeId'])
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$data['storeId']] = $store_info[0]['name']; 
-                    $storeName = $storeList[$data['storeId']];
-                }    
-
-            } else {
+            if (array_key_exists($data['storeId'], $storeList)) {            
                 $storeName = $storeList[$data['storeId']];
             }
              
-
             $customerName = '';
-            if (! array_key_exists($data['customerId'], $customerList)) {            
-                $customer_info = Customer::where('id', $data['customerId'])
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$data['customerId']] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$data['customerId']];
-                }  
-                
-            } else {
+            if (array_key_exists($data['customerId'], $customerList)) {                       
                 $customerName = $customerList[$data['customerId']];
             }
          
