@@ -22,6 +22,7 @@ use App\Exports\SettlementsExport;
 use App\Exports\MerchantExport;
 use App\Exports\PendingRefundExport;
 use App\Exports\RefundHistoryExport;
+use App\Exports\UserSiteMapExport;
 use App\Exports\UserActivitySummaryExport;
 use App\Exports\UserIncompleteOrderExport;
 use App\Exports\UserActivityExport;
@@ -53,28 +54,41 @@ class ActivityController extends Controller
         $selectedCountry = Session::get('selectedCountry');
         //query group by sessionId
         if($selectedCountry == 'MYS') {
-            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+            $datas1 = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')                        
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                         ->where('pageVisited', 'like', '%dev-my%')
-                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
-                        ->orderBy('customer_activities.created', 'DESC')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"]);  
+
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')                        
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->Where('pageVisited', 'like', '%deliverin.my%')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->union($datas1)
+                        ->orderBy('created', 'DESC')
                         ->paginate(15);
+
         }
         if($selectedCountry == 'PAK') {
-            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                            ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-                            ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                            ->where('pageVisited', 'like', '%dev-pk%')
-                            ->orWhere('pageVisited', 'like', '%easydukan.co%')
-                            ->orderBy('customer_activities.created', 'DESC')
-                            ->paginate(15);
+            $datas1 = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')                        
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->where('pageVisited', 'like', '%dev-pk%')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"]);  
+
+            $datas = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')                        
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->Where('pageVisited', 'like', '%easydukan.co%')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+                        ->union($datas1)
+                        ->orderBy('created', 'DESC')
+                        ->paginate(15);
+                        
         }
         
         // $newArray = array();
 
         //dd($datas);
         foreach ($datas as $data) {
+            
             $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
             $store = DB::connection('mysql2')->select($sql);
             if (count($store) > 0) {
@@ -95,7 +109,7 @@ class ActivityController extends Controller
 
             $sessionAddress = $data->sessionAddress;
             $sessionCity = $data->sessionCity;    
-            
+        }
             // $storeName = '';
             // if (! array_key_exists($data['storeId'], $storeList)) {
             //     $store_info = Store::where('id', $data['storeId'])
@@ -147,7 +161,7 @@ class ActivityController extends Controller
             //     $object
             // );
 
-        }
+        //}
     
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
         $storename = '';   
@@ -179,11 +193,6 @@ class ActivityController extends Controller
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
         //dd($query);
 
-        if($req->region == "all"){
-            $query->where(function($query){
-                $query->whereNotNull("pagevisited");
-            });
-        }
         if($req->region == "MYS"){
             $query->where(function ($query) {
                 $query->where('pageVisited', 'like', '%dev-my%')
@@ -231,7 +240,7 @@ class ActivityController extends Controller
 //dd($query);
         $query->orderBy('created', 'DESC');
         //dd($query);
-        $datas = $query->paginate(15);;
+        $datas = $query->paginate(15);
 
         // $newArray = array();
         // $storeList = array();
@@ -248,6 +257,7 @@ class ActivityController extends Controller
             }
             $data->storeName = $storename;
 
+
             $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
             $customer = DB::connection('mysql2')->select($sql);
             if (count($customer) > 0) {
@@ -257,8 +267,10 @@ class ActivityController extends Controller
             }
             $data->customerName = $customername;
 
+
             $sessionAddress = $data->sessionAddress;
             $sessionCity = $data->sessionCity;    
+        }
 
             // $storeName = '';
             // if (! array_key_exists($data['storeId'], $storeList)) {
@@ -311,7 +323,7 @@ class ActivityController extends Controller
             //     $object
             // );
 
-        }
+        //}
        
 
         // $datas = $newArray;        
@@ -340,14 +352,6 @@ class ActivityController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        // return $start_date."|".$end_date;
-        // return $data;
-        // die();
-        
-
-        // $from = "2021-08-01";
-        // $to = "2021-08-30";
-
         return Excel::download(new UserActivityExport($start_date, $end_date." 23:59:59"), 'useractivity.xlsx');
     }
 
@@ -361,7 +365,7 @@ class ActivityController extends Controller
         //query group by sessionId
         if($selectedCountry == 'MYS') {
             $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->select('customer_activities.storeId','customer_activities.customerId','csession.address AS sessionAddress', 'csession.city AS sessionCity')
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                         ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
                         ->where('pageVisited', 'like', '%dev-my%')
@@ -384,6 +388,17 @@ class ActivityController extends Controller
         $newArray = array();
         $storeList = array();
         $customerList = array();
+
+        $storeListObject = Store::get();
+        $customerListObject = Customer::get();
+
+        foreach ($storeListObject as $store) {
+            $storeList[$store->id] = $store->name;
+        }
+
+         foreach ($customerListObject as $customer) {
+            $customerList[$customer->id] = $customer->name;
+        }
 
         //dd($datas);
 
@@ -466,6 +481,16 @@ class ActivityController extends Controller
                 
             } else {
                 $customerName = $customerList[$customerId];
+            }
+
+            $storeName = '';
+            if (array_key_exists($data['storeId'], $storeList)) {            
+                $storeName = $storeList[$data['storeId']];
+            }
+             
+            $customerName = '';
+            if (array_key_exists($data['customerId'], $customerList)) {                       
+                $customerName = $customerList[$data['customerId']];
             }
 
              //get all history
@@ -752,6 +777,20 @@ class ActivityController extends Controller
         $browser = $req->browser_chosen;
 
         return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser'));
+    }
+
+    public function export_usersitemap(Request $req) 
+    {
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen4_copy );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+
+        return Excel::download(new UserSiteMapExport($start_date, $end_date." 23:59:59"), 'usersitemap.xlsx');
     }
 
     public function userdata(){
@@ -1381,9 +1420,37 @@ class ActivityController extends Controller
                             ->orderBy('created','DESC')
                             ->paginate(10);
             // dd($datas);
+            foreach ($datas as $data) {
+                $sql="SELECT B.customerId, address, email, phoneNumber FROM `order_shipment_detail` A
+                INNER JOIN `order` B ON A.orderId=B.id WHERE orderId='".$data->id."'";
+                //dd($sql);
+                $customerdetail = DB::connection('mysql2')->select($sql);
+                if (count($customerdetail) > 0) {
+                    $customernumber=$customerdetail[0]->phoneNumber;
+                    $customeraddress=$customerdetail[0]->address;
+                    $customeremail=$customerdetail[0]->email;
+                }
+                $data->phoneNumber= $customernumber;
+                $data->address = $customeraddress;
+                $data->email = $customeremail;
 
+                //check if any item in cart
+                $sql="SELECT productId, quantity, productName FROM `order_item` A INNER JOIN `order` B ON A.orderId=B.id 
+                INNER JOIN order_group C ON B.orderGroupId=C.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
+                //dd($sql);
+                $productdetail = DB::connection('mysql2')->select($sql);
+                if (count($productdetail) > 0) {
+                    $productname=$productdetail[0]->productName;
+                    $productquantity=$productdetail[0]->quantity;
+                    $productid=$productdetail[0]->productId;
+                }
+                $data->productName = $productname;
+                $data->quantity = $productquantity;
+                $data->productId = $productid;
+            }
             $datechosen = $date->format('F d, Y')." - ".date('F d, Y'); 
             return view('components.userincompleteorder', compact('datas','datechosen'));
+            
     
         }
     
@@ -1420,6 +1487,36 @@ class ActivityController extends Controller
                 ->union($query1);
                 
             $datas = $query->orderBy('created','DESC')->paginate(10);
+
+            foreach ($datas as $data) {
+                
+                $sql="SELECT B.customerId, address, email, phoneNumber FROM `order_shipment_detail` A
+                INNER JOIN `order` B ON A.orderId=B.id WHERE orderId='".$data->id."'";
+                //dd($sql);
+                $customerdetail = DB::connection('mysql2')->select($sql);
+                if (count($customerdetail) > 0) {
+                    $customernumber=$customerdetail[0]->phoneNumber;
+                    $customeraddress=$customerdetail[0]->address;
+                    $customeremail=$customerdetail[0]->email;
+                }
+                $data->phoneNumber= $customernumber;
+                $data->address = $customeraddress;
+                $data->email = $customeremail;
+
+                //check if any item in cart
+                $sql="SELECT productId, quantity, productName FROM `order_item` A INNER JOIN `order` B ON A.orderId=B.id 
+                INNER JOIN order_group C ON B.orderGroupId=C.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
+                //dd($sql);
+                $productdetail = DB::connection('mysql2')->select($sql);
+                if (count($productdetail) > 0) {
+                    $productname=$productdetail[0]->productName;
+                    $productquantity=$productdetail[0]->quantity;
+                    $productid=$productdetail[0]->productId;
+                }
+                $data->productName = $productname;
+                $data->quantity = $productquantity;
+                $data->productId = $productid;
+            }
     
             $datechosen = $req->date_chosen4;          
             return view('components.userincompleteorder', compact('datas','datechosen'));
@@ -1437,5 +1534,4 @@ class ActivityController extends Controller
             $end_date = date("Y-m-d", strtotime($end_date));
             return Excel::download(new UserIncompleteOrderExport($start_date, $end_date." 23:59:59"), 'UserIncompleteOrder.xlsx');
         }
-
 }

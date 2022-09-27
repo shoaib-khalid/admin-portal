@@ -1,3 +1,13 @@
+Version 1.12.7
+------------------------
+Date:27-Sep-2022
+
+Add Excel File for UserSiteMap
+Add modal for product details in UserIncompleteOrder page
+Update UserIncompleteOrder page excel file
+Update customer activity log query
+
+
 Version 1.12.6
 ------------------------
 Date:26-Sep-2022
