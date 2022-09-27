@@ -51,6 +51,35 @@ class UserIncompleteOrderExport implements FromCollection, ShouldAutoSize, WithH
                         ->whereBetween('order.created', [$this->from, $this->to." 23:59:59"])
                         ->union($datas1)
                         ->get();
+
+         foreach ($datas as $data) {
+                $sql="SELECT B.customerId, address, email, phoneNumber FROM `order_shipment_detail` A
+                INNER JOIN `order` B ON A.orderId=B.id WHERE orderId='".$data->id."'";
+                //dd($sql);
+                $customerdetail = DB::connection('mysql2')->select($sql);
+                if (count($customerdetail) > 0) {
+                    $customernumber=$customerdetail[0]->phoneNumber;
+                    $customeraddress=$customerdetail[0]->address;
+                    $customeremail=$customerdetail[0]->email;
+                }
+                $data->phoneNumber= $customernumber;
+                $data->address = $customeraddress;
+                $data->email = $customeremail;
+
+                //check if any item in cart
+                $sql="SELECT productId, quantity, productName FROM `order_item` A INNER JOIN `order` B ON A.orderId=B.id 
+                INNER JOIN order_group C ON B.orderGroupId=C.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
+                //dd($sql);
+                $productdetail = DB::connection('mysql2')->select($sql);
+                if (count($productdetail) > 0) {
+                    $productname=$productdetail[0]->productName;
+                    $productquantity=$productdetail[0]->quantity;
+                    $productid=$productdetail[0]->productId;
+                }
+                $data->productName = $productname;
+                $data->quantity = $productquantity;
+                $data->productId = $productid;
+            }
              
         $newArray = array();
 
@@ -62,10 +91,16 @@ class UserIncompleteOrderExport implements FromCollection, ShouldAutoSize, WithH
                 $data['created'],
                 $data['storeName'],
                 $data['customerName'],
+                $data['phoneNumber'],
+                $data['address'],
+                $data['email'],
                 $data['total'],
                 $data['paymentType'],
                 $data['paymentStatus'],
-                $data['completionStatus']
+                $data['completionStatus'],
+                $data['productId'],
+                $data['productName'],
+                $data['quantity']
             );
 
             $newArray[] = $cur_item;
@@ -78,11 +113,17 @@ class UserIncompleteOrderExport implements FromCollection, ShouldAutoSize, WithH
         return [
             'Created',
             'Store',
-            'Customer',
+            'Customer Name',
+            'Customer Email',
+            'Customer Address',
+            'Customer Phone Number',
             'Total',
             'Payment Type',
             'Payment Status',
             'Completion Status',
+            'Product ID',
+            'Product Name',
+            'Quantity',
         ];
     }
 }

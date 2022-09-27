@@ -52,6 +52,10 @@
                         <th>Created</th>
                         <th>Store</th>
                         <th>Customer</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Phone Number</th>
+                        <th>Product Details</th>
                         <th>Total</th>
                         <th>Payment Type</th>
                         <th>Payment Status</th>
@@ -61,13 +65,22 @@
                 <tbody>
                 @foreach ($datas as $data)
                         <tr class="text-center">
-                            <td>{{ \Carbon\Carbon::parse($data->created)->format('d/m/Y H:i:s')  }}</td>  
+                            <td>{{ \Carbon\Carbon::parse($data->created)->format('d/m/Y H:i:s')  }}</td> 
                             <td>{{ $data->storeName }}</td>
                             <td>{{ $data->customerName }}</td> 
+                            <td>{{ $data->email }}</td> 
+                            <td>{{ $data->address }}</td> 
+                            <td>{{ $data->phoneNumber }}</td> 
+                            <td><button type="button" class="btn btn-info"
+                                    data-toggle="modal" data-target="#ProductModal"
+                                    data-productid="{{ $data['productId'] }}"
+                                    data-productname="{{ $data['productName'] }}"
+                                    data-productquantity="{{ $data['quantity'] }}">view</button>  
+                            </td>   
                             <td>{{ $data->total}}</td> 
                             <td>{{ $data->paymentType }}</td> 
                             <td>{{ $data->paymentStatus }}</td> 
-                            <td>{{ $data->completionStatus }}</td>                       
+                            <td>{{ $data->completionStatus }}</td>                  
                         </tr>
                     @endforeach
                 </tbody>
@@ -104,6 +117,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 

@@ -10,6 +10,68 @@
 
     $(document).ready(function () {
     
+    // // Add event listener for opening and closing details
+    // $('#table-4 tbody').on('click', '.view_store', function () {
+
+    // var clientId = $(this).attr("clientId");
+    // var tr = $(this).closest('tr');
+    // var row = table.row(tr);
+
+    // // alert('clientId: ' + clientId)
+
+    // // return false
+
+    // var newObj = datas.find(x => x.id === clientId)
+
+    // // alert(JSON.stringify(newObj))
+
+    // // console.log('obj', newObj)
+
+    // // return false;
+
+    // if (row.child.isShown()) {
+    // // This row is already open - close it
+    // row.child.hide();
+    // tr.removeClass('shown');
+    // }
+    // else
+    // {
+    // // Open this row
+    // row.child(formatTable(row.data(), newObj)).show();
+    // tr.addClass('shown');
+    // }
+    // });
+
+    // $(window).load(function(){
+    //      $('#ProductModal').modal('show');
+    //   });
+
+    $('#ProductModal').on('show.bs.modal', function(e) {
+        console.log("CHECKING PRODCUCTNAME::::",productname);
+        var productid = $(e.relatedTarget).data('productid');
+        var productname = $(e.relatedTarget).data('productname');
+        var productquantity = $(e.relatedTarget).data('productquantity');  
+        $('#productid2').val(productid);  
+        $('#productname2').val(productname);
+        $('#productquantity2').val(productquantity);
+        // $('#quantity').val(quantity);
+    });
+
+    // $('#table-4 tbody').on('click', '.view_details', function (){
+    //     console.log("CHECKING PRODCUCTNAME::::",productId);
+    //     $('#ProductModal').modal('show');
+    // });
+
+
+    //   $("#ProductModal").on("show.bs.modal", function(e) {
+    //     var id = $(e.relatedTarget).data('target-id');
+    //     $.get('/components/userincompleteorder/' + id, function( data ) {
+    //     alert(data);
+    //       $(".modal-body").html(data);
+    //     });
+
+    //   });
+
 
     $('.daterange-btn4').daterangepicker({
             locale: {format: 'MMMM D, YYYY'},

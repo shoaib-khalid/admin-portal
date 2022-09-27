@@ -1,3 +1,9 @@
+@php
+    // var_dump($datas);
+    // dd($datas);
+    $id = (!empty($_POST['id']) ? explode("-", $_POST['id']) : '');
+@endphp
+
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -144,6 +150,85 @@
 </div>
 
 
+<div class="modal fade" tabindex="-1" role="dialog" id="DailyDetailsModal">
+    <div class="modal-dialog" role="document" style="max-width: 800px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Product Details<?php echo $id;?></h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <form action="filter_daily_group_details" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
+                    {{@csrf_field()}}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Total</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="Total2" name="Total2">
+                    </div>
+                </div>    
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Product Name</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="productname" name="productname">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Quantity</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="productquantity" name="productquantity">
+                    </div>
+                </div>                   
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="ProductModal">
+    <div class="modal-dialog" role="document" style="max-width: 600px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Customer Incomplete Order Details<?php echo $id;?></h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <form action="userincompleteorder" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
+                    {{@csrf_field()}}
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label class="text-primary">Product ID</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productid2" name="productid2">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label class="text-primary">Product Name</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productname2" name="productname2">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Product Quantity</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productquantity2" name="productquantity2">
+                    </div>
+                </div>                   
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" tabindex="-1" role="dialog" id="RefundDetailsModal">
     <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
         <div class="modal-content">
@@ -233,6 +318,7 @@
         </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="RefundHistoryDetailsModal">
