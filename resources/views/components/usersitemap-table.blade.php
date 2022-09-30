@@ -112,7 +112,7 @@
                             <td>{{ $data['timespent'] }}</td>
                             <td>{{ $data['lastpage'] }}</td>
                             <td>{{ $data['firstpage'] }}</td>      
-                            <td>{{ $data['AddedItem'] }}</td>   
+                            <td>{{ $data['AddedItem'] }}</td>  
                             <td>
                             <?php if ($data['orderCreated']=="YES") { ?>
                             <a href="#" class="btn btn-primary view_order" sessionId="{{ $data['sessionId'] }}">
