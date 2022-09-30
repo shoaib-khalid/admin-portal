@@ -170,12 +170,6 @@
                                         @endif
                             </td>
                             <td>{{ $orderStatus }}</td>
-                            <td>
-                                <a href="#" class="btn btn-primary view_store">
-                                    <i class="far fa-check-circle"></i>
-                                    Details
-                                </a>
-                            </td>
                         </tr>
                     @endforeach
                     

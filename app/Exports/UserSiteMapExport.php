@@ -39,24 +39,37 @@ class UserSiteMapExport implements FromCollection, ShouldAutoSize, WithHeadings
         // return User::all(); 
         $selectedCountry = Session::get('selectedCountry');
         if($selectedCountry == 'MYS') {
-            $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('customer_activities.storeId','customer_activities.customerId','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+
+            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
                         ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$this->from, $this->to])  
+                        ->whereBetween('customer_activities.created', [$this->from, $this->to." 23:59:59"])
                         ->where('pageVisited', 'like', '%dev-my%')
-                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
-                        ->orderBy('customer_activities.created', 'DESC')
+                        ->groupBy('customer_activities.sessionId');
+
+            $datas =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$this->from, $this->to." 23:59:59"])
+                        ->where('pageVisited', 'like', '%deliverin.my%')
+                        ->groupBy('customer_activities.sessionId') 
+                        ->union($datas1)
                         ->get();
         }
+
         if($selectedCountry == 'PAK'){
-            $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$this->from, $this->to])  
-                        ->where('pageVisited', 'like', '%dev-pk%')
-                        ->orWhere('pageVisited', 'like', '%easydukan.co%')
-                        ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
+
+            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
+                                    ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                                    ->whereBetween('customer_activities.created', [$this->from, $this->to." 23:59:59"])
+                                    ->where('pageVisited', 'like', '%dev-pk%')
+                                    ->groupBy('customer_activities.sessionId');
+
+            $datas  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
+                                    ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                                    ->whereBetween('customer_activities.created', [$this->from, $this->to." 23:59:59"])
+                                    ->where('pageVisited', 'like', '%easydukan.co%')
+                                    ->groupBy('customer_activities.sessionId')
+                                    ->union($datas1)
+                                    ->get();
         }
        
         $newArray = array();

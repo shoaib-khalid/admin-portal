@@ -83,36 +83,36 @@
 
             <table id="table-4" class="table table-striped">        
                 <thead>
-                    <tr class="text-center">                        
-                        <th>Session ID</th>
+                    <tr class="text-center"> 
+                        <th>Session ID</th>  
                         <th>Location</th>
                         <th>Customer</th>
-                        <th>Store</th>
+                        <th>Store</th>                     
                         <th>Start Timestamp</th>                        
                         <th>End Timestamp</th>
                         <th>Time Spent</th>
                         <th>First Page Visited</th>
                         <th>Last Page Visited</th>
-                        <th>Item Added</th>                        
+                        <th>Item Added</th>   
                         <th>Order Created</th>
-                        <th>Order Status</th>
-                        <th></th>
+                        <th>Order Status</th>         
+                        <th>Activity Details</th>           
                     </tr>
                 </thead>      
                 <tbody>
 
                     @foreach ($datas as $data)
-                        <tr class="text-center">                            
-                            <td>{{ $data['sessionId'] }}</td>
-                            <td>{{ $data['location'] }}</td>
+                        <tr class="text-center">  
+                            <td>{{ $data['sessionId'] }}</td>  
+                            <td>{{ $data['sessionAddress'] }}{{ $data['sessionCity'] }}</td>     
                             <td>{{ $data['customerName'] }}</td>
-                            <td>{{ $data['storeName'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['startTimestamp'])->format('d/m/Y H:i:s') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['endTimestamp'])->format('d/m/Y H:i:s') }}</td>                            
-                            <td>{{ number_format($data['timeSpent'],2) }}</td>
-                            <td>{{ $data['firstPage'] }}</td>
-                            <td>{{ $data['lastPage'] }}</td>
-                            <td>{{ $data['itemAdded'] }}</td>
+                            <td>{{ $data['storeName'] }}</td>                    
+                            <td>{{ $data['startTime'] }}</td>
+                            <td>{{ $data['endTime'] }}</td>
+                            <td>{{ $data['timespent'] }}</td>
+                            <td>{{ $data['lastpage'] }}</td>
+                            <td>{{ $data['firstpage'] }}</td>      
+                            <td>{{ $data['AddedItem'] }}</td>   
                             <td>
                             <?php if ($data['orderCreated']=="YES") { ?>
                             <a href="#" class="btn btn-primary view_order" sessionId="{{ $data['sessionId'] }}">
@@ -121,12 +121,15 @@
                             <?php } ?>
                             </td>
                             <td>{{ $data['orderStatus'] }}</td>
-                            <td>
-                                <a href="#" class="btn btn-primary view_store" clientId="{{ $data['sessionId'] }}">
-                                    <i class="far fa-check-circle"></i>
-                                    Details
-                                </a>
-                            </td>                   
+                            <td><button type="button" class="btn btn-primary"
+                                    data-toggle="modal" data-target="#ActivityModal"
+                                    data-os="{{ $data['os'] }}"
+                                    data-created="{{ $data['created'] }}"
+                                    data-erroroccur="{{ $data['errorOccur'] }}"
+                                    data-devicemodel="{{ $data['deviceModel'] }}"
+                                    data-pagevisited="{{ $data['pageVisited'] }}"
+                                    data-errortype="{{ $data['errorType'] }}"><i class="far fa-check-circle"></i>Details</button>  
+                            </td>                      
                         </tr>
                     @endforeach
 
@@ -159,7 +162,7 @@
                     </nav>
                 </div>
             </div> --}}
-            
+            {!! $datas->appends(request()->except('page'))->links("pagination::bootstrap-4") !!}       
         </div>
     </div>
 </div>
