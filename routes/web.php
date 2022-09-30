@@ -97,6 +97,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap');
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
+    Route::get('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');
     Route::post('/export_usersitemap', [ActivityController::class, "export_usersitemap"])->name('export_usersitemap');
 
     Route::get('/userdata', [ActivityController::class, "userdata"])->name('userdata');

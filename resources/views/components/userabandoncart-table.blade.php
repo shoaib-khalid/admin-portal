@@ -61,7 +61,8 @@
                         <th>Store</th>
                         <th>Created</th> 
                         <th>Updated</th>
-                        <th>Stage</th>               
+                        <th>Stage</th>
+                        <th>Service Type</th>               
                         <th>Item Added</th>                        
                         <th>Delivery Address</th>
                         <th>Delivery Fee</th>
@@ -77,6 +78,7 @@
                             <td>{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y H:i:s') }}</td>  
                             <td>{{ \Carbon\Carbon::parse($data['updated'])->format('d/m/Y H:i:s') }}</td>                            
                             <td>{{ $data['stage'] }}</td>
+                            <td>{{ $data['serviceType'] }}</td> 
                             <td>{{ $data['itemAdded'] }}</td>
                             <td>{{ $data['deliveryAddress'] }}</td>
                             <td>{{ $data['deliveryFee'] }}</td>
