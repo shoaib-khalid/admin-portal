@@ -14,11 +14,11 @@
 
     $(document).ready(function () {
     
-        // $("#table-4").dataTable({
-        // "columnDefs": [
-        //     { "sortable": false, "targets": [2,3] }
-        // ]
-        // });
+        $("#table-5").dataTable({
+        "columnDefs": [
+            { "sortable": false, "targets": [2,3] }
+        ]
+        });
 
         var datas = {!! json_encode($datas) !!};
 
@@ -49,6 +49,7 @@
       null,
       null,
       null,
+      null
     ],
     "aaSorting": [],
     'columnDefs': [

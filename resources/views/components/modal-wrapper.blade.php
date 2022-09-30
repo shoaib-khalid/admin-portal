@@ -1,7 +1,6 @@
 @php
     // var_dump($datas);
     // dd($datas);
-    $id = (!empty($_POST['id']) ? explode("-", $_POST['id']) : '');
 @endphp
 
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
@@ -154,7 +153,7 @@
     <div class="modal-dialog" role="document" style="max-width: 800px!important;">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Product Details<?php echo $id;?></h5>
+            <h5 class="modal-title">Product Details</h5>
                 <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -192,7 +191,7 @@
     <div class="modal-dialog" role="document" style="max-width: 600px!important;">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title">Customer Incomplete Order Details<?php echo $id;?></h5>
+            <h5 class="modal-title">Customer Incomplete Order Details</h5>
                 <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -497,7 +496,7 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="ActivityDetailsModal">
+<div class="modal fade" tabindex="-1" role="dialog" id="ActivityModal">
     <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
         <div class="modal-content">
             <div class="modal-header">
@@ -509,72 +508,41 @@
             </div>
             <div class="modal-body">
 
-                <form  enctype="multipart/form-data" >
+                <form action="usersitemap" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
                     {{@csrf_field()}}
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="text-primary">Timestamp</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acttimestamp">
+                        <label class="text-primary">Created</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="created2" id="created2">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="text-primary">Store Name</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actstorename" name="refund_id">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Customer Name</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actcustomername">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Session Id</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actsessionId">
+                        <label class="text-primary">OS</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="os2" id="os2">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="text-primary">Page Visited</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actpagevisited">
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="pagevisited2" id="pagevisited2">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="text-primary">IP</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actip">
-                    </div>
-                </div>
-                    
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Device</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actdevice">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">OS</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actos">
+                        <label class="text-primary">Device Model</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="devicemodel2" id="devicemodel2">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="text-primary">Browser</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="actbrowser" name="actbrowser">
-                    </div>
-                     <div class="form-group col-md-6">
                         <label class="text-primary">Error Type</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acterrorType" name="acterrortype">
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="erroroccur2" id="erroroccur2">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="text-primary">Error Occur</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="errortype2" id="errortype2">
                     </div>
                 </div>
-
-
-                <div class="form-row">                   
-                    <div class="form-group col-md-12">
-                        <label class="text-primary">Error Message</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="acterrorType" name="acterroroccur">
-                    </div>
-                </div>
-
-               
+            
                 </form>
                 
             </div>

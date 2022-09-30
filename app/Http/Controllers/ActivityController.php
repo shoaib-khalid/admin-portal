@@ -364,40 +364,52 @@ class ActivityController extends Controller
         $selectedCountry = Session::get('selectedCountry');
         //query group by sessionId
         if($selectedCountry == 'MYS') {
-            $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('customer_activities.storeId','customer_activities.customerId','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-                        ->where('pageVisited', 'like', '%dev-my%')
-                        ->orWhere('pageVisited', 'like', '%deliverin.my%')
-                        ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
+            // $datas = UserActivity::select('sessionId')->distinct()
+            //             ->select('customer_activities.storeId','customer_activities.customerId','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+            //             ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+            //             ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+            //             ->where('pageVisited', 'like', '%dev-my%')
+            //             ->orWhere('pageVisited', 'like', '%deliverin.my%')
+            //             ->orderBy('customer_activities.created', 'DESC')
+            //             ->paginate();
+
+            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
+                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
+                        ->where('pageVisited', 'like', '%dev-my%');
+    
+            $datas =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
+                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
+                        ->where('pageVisited', 'like', '%deliverin.my%')
+                        ->groupBy('customer_activities.sessionId') 
+                        ->union($datas1)
+                        ->groupBy('customer_activities.sessionId')
+                        ->paginate(15);
         }
+
         if($selectedCountry == 'PAK'){
-            $datas = UserActivity::select('sessionId')->distinct()
-                        ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
-                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-                        ->where('pageVisited', 'like', '%dev-pk%')
-                        ->orWhere('pageVisited', 'like', '%easydukan.co%')
-                        ->orderBy('customer_activities.created', 'DESC')
-                        ->get();
-        }
-        //dd($datas);
+            // $datas = UserActivity::select('sessionId')->distinct()
+            //             ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
+            //             ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+            //             ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
+            //             ->where('pageVisited', 'like', '%dev-pk%')
+            //             ->orWhere('pageVisited', 'like', '%easydukan.co%')
+            //             ->orderBy('customer_activities.created', 'DESC')
+            //             ->paginate();
 
-        $newArray = array();
-        $storeList = array();
-        $customerList = array();
+            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
+                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
+                        ->where('pageVisited', 'like', '%dev-pk%');
 
-        $storeListObject = Store::get();
-        $customerListObject = Customer::get();
-
-        foreach ($storeListObject as $store) {
-            $storeList[$store->id] = $store->name;
-        }
-
-         foreach ($customerListObject as $customer) {
-            $customerList[$customer->id] = $customer->name;
+            $datas  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
+                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
+                        ->where('pageVisited', 'like', '%easydukan.co%')
+                        ->union($datas1)
+                        ->groupBy('customer_activities.sessionId')
+                        ->paginate(15);
         }
 
         //dd($datas);
@@ -422,6 +434,13 @@ class ActivityController extends Controller
             $mins = ($end - $start) / 60;
             $timeSpent=$mins;
 
+            $data->startTime=$startTimestamp;
+            $data->firstpage=$firstPage;
+            $data->endTime=$endTimestamp;
+            $data->lastpage=$lastPage;
+            $data->timespent=$timeSpent;
+
+            
             //check if any item in cart
             $sql="SELECT * FROM cart_item WHERE cartId='".$data['sessionId']."'";
             $rsitem = DB::connection('mysql2')->select($sql);
@@ -430,10 +449,12 @@ class ActivityController extends Controller
             } else {
                 $itemAdded="NO";
             }
-            
+
+            $data->AddedItem=$itemAdded;
+
 
             //check if any order created & get status
-            $sql="SELECT completionStatus, A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
+            $sql="SELECT completionStatus, A.id, A.created as ordercreated, A.invoiceId  FROM `order` A INNER JOIN customer B 
             ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."'";
             $rsorder = DB::connection('mysql2')->select($sql);
             if (count($rsorder)>0) {
@@ -441,112 +462,136 @@ class ActivityController extends Controller
                 $orderStatus=$rsorder[0]->completionStatus;
                 $orderId = $rsorder[0]->id;
                 $orderDetails  = [
-                        'orderId' => $rsorder[0]->id,
-                        'invoiceNo' => $rsorder[0]->invoiceId,
-                        'created' => $rsorder[0]->created,
-                        'storeName' => $rsorder[0]->storeName,
-                        'customerName' => $rsorder[0]->customerName,
-                        'status' => $rsorder[0]->completionStatus 
-                    ];
+                    'orderId' => $rsorder[0]->id,
+                    'invoiceNo' => $rsorder[0]->invoiceId,
+                    'created' => $rsorder[0]->created,
+                    'storeName' => $rsorder[0]->storeName,
+                    'customerName' => $rsorder[0]->customerName,
+                    'status' => $rsorder[0]->completionStatus 
+                ];
+
             } else {
                 $orderCreated="NO";
                 $orderStatus="";
                 $orderId = "";
                 $orderDetails  = null;
-
             }
 
-            $storeName = '';
-            if (! array_key_exists($storeId, $storeList)) {
-                $store_info = Store::where('id', $storeId)
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$storeId] = $store_info[0]['name']; 
-                    $storeName = $storeList[$storeId];
-                }    
+            $data->orderStatus = $orderStatus;
+            $data->orderid = $orderId;
+            $data->order_details = $orderDetails;
 
-            } else {
-                $storeName = $storeList[$storeId];
-            }
-             
 
-            $customerName = '';
-            if (! array_key_exists($customerId, $customerList)) {            
-                $customer_info = Customer::where('id', $customerId)
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$customerId] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$customerId];
-                }  
-                
-            } else {
-                $customerName = $customerList[$customerId];
-            }
+             //Get Order Details
 
-            $storeName = '';
-            if (array_key_exists($data['storeId'], $storeList)) {            
-                $storeName = $storeList[$data['storeId']];
-            }
-             
-            $customerName = '';
-            if (array_key_exists($data['customerId'], $customerList)) {                       
-                $customerName = $customerList[$data['customerId']];
-            }
+             //get order item from order
 
-             //get all history
-            $activityList = array();
+
+            // $orderItems = DB::connection('mysql2')->table('order_item')
+            // ->select('order_item.id AS orderItemId','productId', 'productPrice', 'price', 'quantity', 'name', 'productVariant')
+            // ->join('product as product', 'order_item.productId', '=', 'product.id')
+            // ->where('orderId', $orderId)
+            // ->get();
+            // foreach ($orderItems as $item) {                
+            //     $orderSubItems = DB::connection('mysql2')->table('order_subitem')
+            //                     ->select('name')
+            //                     ->join('product as product', 'order_subitem.productId', '=', 'product.id')
+            //                     ->where('orderItemId', $item->orderItemId)
+            //                     ->get();
+            //     $item->subItems = $orderSubItems;
+            // }
+
+            // $rsorderdetails = DB::connection('mysql2')->table('order')
+            //                 ->select('order.completionStatus', 'order.id', 'order.created', 'order.invoiceId','customer.name AS customername', 'store.name AS storename')
+            //                 ->join('customer as customer', 'order.customer', '=', 'customer.id')
+            //                 ->join('store as store', 'order.store', '=', 'store.id')
+            //                 ->where('cardId', $sessionId)
+            //                 ->get();
+
+            // foreach ($rsorderdetails as $order)
+
+            // $ordersubdetails = DB::connection('mysql2')->table('order')
+            // ->select();
+
+
+            //  $sql="SELECT completionStatus, A.id, A.created, A.invoiceId, B.name AS customername, C.name AS storename FROM `order` A INNER JOIN customer B 
+            //  ON A.customerId=B.id INNER JOIN store C ON A.storeId=C.id WHERE cartId='".$data['sessionId']."'";
+            //  $rsorderdetails = DB::connection('mysql2')->select($sql);
+            //  $completionstatus = $rsorderdetails[0]->completionStatus;
+            //  $data->orderid = $orderId;
+
+
+            $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
+            $store = DB::connection('mysql2')->select($sql);
+            if (count($store) > 0) {
+                $storename=$store[0]->name;
+            } else{
+                $storename= "";
+            }
+            $data->storeName = $storename;
+
+
+            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $customer = DB::connection('mysql2')->select($sql);
+            if (count($customer) > 0) {
+                $customername=$customer[0]->name;
+            } else{
+                $customername= "";
+            }
+            $data->customerName = $customername;
+
+
+            //get all history
             $sql="SELECT created, pageVisited, os, deviceModel, errorOccur, errorType FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC";
             $rsactivity = DB::connection('mysql3')->select($sql);
             if (count($rsactivity) > 0) {
-                foreach ($rsactivity as $activity) {
-
-                    $activity_details = [
-                        'created' => $activity->created,
-                        'pageVisited' => $activity->pageVisited,
-                        'os' => $activity->os,
-                        'deviceModel' => $activity->deviceModel,
-                        'errorOccur' => $activity->errorOccur,
-                        'errorType' => $activity->errorType 
-                    ];
-    
-                    array_push( 
-                        $activityList,
-                        $activity_details
-                    );
-                   
-                }
+                $created = $rsactivity[0]->created;
+                $pageVisited = $rsactivity[0]->pageVisited;
+                $os = $rsactivity[0]->os;
+                $deviceModel = $rsactivity[0]->deviceModel;
+                $errorOccur = $rsactivity[0]->errorOccur;
+                $errorType = $rsactivity[0]->errorType; 
             }
+            $data->created = $created;
+            $data->pageVisited = $pageVisited;
+            $data->os = $os;
+            $data->deviceModel = $deviceModel;
+            $data->errorOccur = $errorOccur;
+            $data->errorType = $errorType;
+            
             //dd($activityList);
 
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];            
-
-            $object = [
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'startTimestamp' => $startTimestamp,
-                'endTimestamp' => $endTimestamp,
-                'timeSpent' => $timeSpent,
-                'firstPage' => $firstPage,
-                'lastPage' => $lastPage,
-                'itemAdded' => $itemAdded,
-                'orderCreated' => $orderCreated,
-                'orderStatus' => $orderStatus,
-                'activity_list' => $activityList,
-                'order_details' => $orderDetails,
-                'location' => $sessionAddress.", ".$sessionCity
-            ];
-
+            $sessionAddress = $data->sessionAddress;
+            $sessionCity = $data->sessionCity;  
             
-            array_push( 
-                $newArray,
-                $object
-            );
-
         }
 
-        $datas = $newArray;
+        //     $object = [
+        //         'storeName' => $storeName,
+        //         'customerName' => $customerName,
+        //         'sessionId' => $data['sessionId'],
+        //         'startTimestamp' => $startTimestamp,
+        //         'endTimestamp' => $endTimestamp,
+        //         'timeSpent' => $timeSpent,
+        //         'firstPage' => $firstPage,
+        //         'lastPage' => $lastPage,
+        //         'itemAdded' => $itemAdded,
+        //         'orderCreated' => $orderCreated,
+        //         'orderStatus' => $orderStatus,
+        //         'activity_list' => $activityList,
+        //         'order_details' => $orderDetails,
+        //         'location' => $sessionAddress.", ".$sessionCity
+        //     ];
+
+            
+        //     array_push( 
+        //         $newArray,
+        //         $object
+        //     );
+
+        // }
+
+        // $datas = $newArray;
 
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');  
         $storename = '';   
@@ -573,7 +618,7 @@ class ActivityController extends Controller
         Session::put('selectedCountry', $selectedCountry);
 
         //query group by sessionId
-        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId')->distinct()
+        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
                 ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
                 ->whereBetween('customer_activities.created', [$start_date, $end_date." 23:59:59"]);
 
@@ -623,8 +668,8 @@ class ActivityController extends Controller
             $query->where('browserType', $req->browser_chosen);
         }
 
-        $query->orderBy('customer_activities.created', 'DESC');
-        $datas = $query->get();
+        $query->groupBy('customer_activities.sessionId')->orderBy('customer_activities.created', 'DESC');
+        $datas = $query->paginate(15);
 
         $newArray = array();
         $storeList = array();
@@ -653,6 +698,12 @@ class ActivityController extends Controller
             $mins = ($end - $start) / 60;
             $timeSpent=$mins;
 
+            $data->startTime=$startTimestamp;
+            $data->firstpage=$firstPage;
+            $data->endTime=$endTimestamp;
+            $data->lastpage=$lastPage;
+            $data->timespent=$timeSpent;
+
                         
             //check if any item in cart
             $sql="SELECT * FROM cart_item WHERE cartId='".$data['sessionId']."'";
@@ -662,6 +713,8 @@ class ActivityController extends Controller
             } else {
                 $itemAdded="NO";
             }
+
+            $data->AddedItem=$itemAdded;
 
             //check if any order created & get status
             $sql="SELECT completionStatus, A.id, A.created, invoiceId, B.name AS customerName, C.name AS storeName  FROM `order` A INNER JOIN customer B 
@@ -687,88 +740,108 @@ class ActivityController extends Controller
 
             }
 
-            $storeName = '';
-            if (! array_key_exists($storeId, $storeList)) {
-                $store_info = Store::where('id', $storeId)
-                                    ->get();
-                if (count($store_info) > 0) {
-                    $storeList[$storeId] = $store_info[0]['name']; 
-                    $storeName = $storeList[$storeId];
-                }    
+            $data->orderCreated=$orderCreated;
+            $data->orderStatus=$orderStatus;
 
-            } else {
-                $storeName = $storeList[$storeId];
-            }
+            // $storeName = '';
+            // if (! array_key_exists($storeId, $storeList)) {
+            //     $store_info = Store::where('id', $storeId)
+            //                         ->get();
+            //     if (count($store_info) > 0) {
+            //         $storeList[$storeId] = $store_info[0]['name']; 
+            //         $storeName = $storeList[$storeId];
+            //     }    
+
+            // } else {
+            //     $storeName = $storeList[$storeId];
+            // }
              
 
-            $customerName = '';
-            if (! array_key_exists($customerId, $customerList)) {            
-                $customer_info = Customer::where('id', $customerId)
-                                    ->get();
-                if (count($customer_info) > 0) {
-                    $customerList[$customerId] = $customer_info[0]['name']; 
-                    $customerName = $customerList[$customerId];
-                }  
+            // $customerName = '';
+            // if (! array_key_exists($customerId, $customerList)) {            
+            //     $customer_info = Customer::where('id', $customerId)
+            //                         ->get();
+            //     if (count($customer_info) > 0) {
+            //         $customerList[$customerId] = $customer_info[0]['name']; 
+            //         $customerName = $customerList[$customerId];
+            //     }  
                 
-            } else {
-                $customerName = $customerList[$customerId];
-            }
+            // } else {
+            //     $customerName = $customerList[$customerId];
+            // }
 
-            //get all history
-            $activityList = array();
+            $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
+            $store = DB::connection('mysql2')->select($sql);
+            if (count($store) > 0) {
+                $storename=$store[0]->name;
+            } else{
+                $storename= "";
+            }
+            $data->storeName = $storename;
+
+
+            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $customer = DB::connection('mysql2')->select($sql);
+            if (count($customer) > 0) {
+                $customername=$customer[0]->name;
+            } else{
+                $customername= "";
+            }
+            $data->customerName = $customername;
+
+
+             //get all history
             $sql="SELECT created, pageVisited, os, deviceModel, errorOccur, errorType FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC";
             $rsactivity = DB::connection('mysql3')->select($sql);
-            if (count($rsactivity) > 0) {
-                foreach ($rsactivity as $activity) {
-
-                    $activity_details = [
-                        'created' => $activity->created,
-                        'pageVisited' => $activity->pageVisited,
-                        'os' => $activity->os,
-                        'deviceModel' => $activity->deviceModel,
-                        'errorOccur' => $activity->errorOccur,
-                        'errorType' => $activity->errorType 
-                    ];
-    
-                    array_push( 
-                        $activityList,
-                        $activity_details
-                    );
-                   
-                }
-            }
+             if (count($rsactivity) > 0) {
+                 $created = $rsactivity[0]->created;
+                 $pageVisited = $rsactivity[0]->pageVisited;
+                 $os = $rsactivity[0]->os;
+                 $deviceModel = $rsactivity[0]->deviceModel;
+                 $errorOccur = $rsactivity[0]->errorOccur;
+                 $errorType = $rsactivity[0]->errorType; 
+             }
+             $data->created = $created;
+             $data->pageVisited = $pageVisited;
+             $data->os = $os;
+             $data->deviceModel = $deviceModel;
+             $data->errorOccur = $errorOccur;
+             $data->errorType = $errorType;
+             
             //dd($activityList);
 
-            $sessionAddress = $data['sessionAddress'];
-            $sessionCity = $data['sessionCity'];  
+            $sessionAddress = $data->sessionAddress;
+            $sessionCity = $data->sessionCity; 
+            
+        }
 
-            $object = [
-                'storeName' => $storeName,
-                'customerName' => $customerName,
-                'sessionId' => $data['sessionId'],
-                'startTimestamp' => $startTimestamp,
-                'endTimestamp' => $endTimestamp,
-                'timeSpent' => $timeSpent,
-                'firstPage' => $firstPage,
-                'lastPage' => $lastPage,
-                'itemAdded' => $itemAdded,
-                'orderCreated' => $orderCreated,
-                'orderStatus' => $orderStatus,
-                'orderId' => $orderId,
-                'activity_list' => $activityList,
-                'order_details' => $orderDetails,
-                'location' => $sessionAddress.", ".$sessionCity
-            ];
+        //     $object = [
+        //         'storeName' => $storeName,
+        //         'customerName' => $customerName,
+        //         'sessionId' => $data['sessionId'],
+        //         'startTimestamp' => $startTimestamp,
+        //         'endTimestamp' => $endTimestamp,
+        //         'timeSpent' => $timeSpent,
+        //         'firstPage' => $firstPage,
+        //         'lastPage' => $lastPage,
+        //         'itemAdded' => $itemAdded,
+        //         'orderCreated' => $orderCreated,
+        //         'orderStatus' => $orderStatus,
+        //         'orderId' => $orderId,
+        //         'activity_list' => $activityList,
+        //         'order_details' => $orderDetails,
+        //         'location' => $sessionAddress.", ".$sessionCity
+        //     ];
 
             
-            array_push( 
-                $newArray,
-                $object
-            );
+        //     array_push( 
+        //         $newArray,
+        //         $object
+        //     );
 
-        }
+        // }
        
-        $datas = $newArray;
+        // $datas = $newArray;
 
         $datechosen = $req->date_chosen4;   
         $storename = $req->storename_chosen;
@@ -1204,6 +1277,19 @@ class ActivityController extends Controller
         return view('components.visitchannel', compact('datas','datechosen'));
 
     }
+
+    public function export_visitchannel(Request $req){
+
+        $data = $req->input();
+
+        $dateRange = explode( '-', $req->date_chosen4_copy );
+        $start_date = $dateRange[0];
+        $end_date = $dateRange[1];
+
+        $start_date = date("Y-m-d", strtotime($start_date));
+        $end_date = date("Y-m-d", strtotime($end_date));
+        return Excel::download(new AbandonCartExport($start_date, $end_date." 23:59:59"), 'visitchannel.xlsx');
+    }
         
     public function userabandoncartsummary(){
 
@@ -1251,18 +1337,6 @@ class ActivityController extends Controller
             return view('components.userabandoncartsummary', compact('datas','datechosen','storename'));
     }
     
-    public function export_userabandoncartsummary(Request $req){
-
-        $data = $req->input();
-
-        $dateRange = explode( '-', $req->date_chosen4_copy );
-        $start_date = $dateRange[0];
-        $end_date = $dateRange[1];
-
-        $start_date = date("Y-m-d", strtotime($start_date));
-        $end_date = date("Y-m-d", strtotime($end_date));
-        return Excel::download(new AbandonCartExport($start_date, $end_date." 23:59:59"), 'abandoncart.xlsx');
-    }
 
     public function filter_userabandoncart(Request $req){
 
@@ -1276,7 +1350,7 @@ class ActivityController extends Controller
             $end_date = date("Y-m-d", strtotime($end_date));
 
             //query group by sessionId
-            $datas = Cart::select('id','customerId','storeId','created','updated','isOpen', 'stage')
+            $datas = Cart::select('id','customerId','storeId','created','updated','isOpen', 'stage','serviceType')
                             ->whereBetween('created', [$start_date, $end_date." 23:59:59"])  
                             ->where('isOpen',1)
                             ->where('storeId', $req->storeId)
@@ -1362,6 +1436,7 @@ class ActivityController extends Controller
                     'updated' => $data['updated'],
                     'isOpen' => $data['isOpen'],
                     'stage' => $data['stage'],
+                    'serviceType' => $data['serviceType'],
                     'storeName' => $storeName,
                     'customerName' => $customerName,
                     'itemAdded' => $itemAdded,
@@ -1393,21 +1468,35 @@ class ActivityController extends Controller
 
         }
 
+        public function export_userabandoncart(Request $req){
 
-        public function userincompleteorder(){
+            $data = $req->input();
+    
+            $dateRange = explode( '-', $req->date_chosen4_copy );
+            $start_date = $dateRange[0];
+            $end_date = $dateRange[1];
+    
+            $start_date = date("Y-m-d", strtotime($start_date));
+            $end_date = date("Y-m-d", strtotime($end_date));
+            return Excel::download(new AbandonCartExport($start_date, $end_date." 23:59:59"), 'abandoncart.xlsx');
+        }
+    
+
+
+    public function userincompleteorder(){
             $to = date("Y-m-d");
             $date = new DateTime('30 days ago');
             $from = $date->format("Y-m-d");
             
             $datas1 = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
-                        ->join('store AS store', 'order.storeId', 'store.id')
-                        ->join('customer AS customer', 'order.customerId', 'customer.id')
-                        ->where([
-                            ['completionStatus','=','RECEIVED_AT_STORE'],
-                            ['paymentStatus','<>','PAID'],
-                            ['order.paymentType','=','ONLINEPAYMENT']
-                        ])
-                        ->whereBetween('order.created', [$from, $to." 23:59:59"]);
+                            ->join('store AS store', 'order.storeId', 'store.id')
+                            ->join('customer AS customer', 'order.customerId', 'customer.id')
+                            ->where([
+                                ['completionStatus','=','RECEIVED_AT_STORE'],
+                                ['paymentStatus','<>','PAID'],
+                                ['order.paymentType','=','ONLINEPAYMENT']
+                            ])
+                            ->whereBetween('order.created', [$from, $to." 23:59:59"]);
 
             $datas = Order::select('order.*', 'store.name AS storeName', 'customer.name AS customerName')
                             ->join('store AS store', 'order.storeId', 'store.id')

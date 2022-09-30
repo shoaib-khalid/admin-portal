@@ -1,3 +1,12 @@
+Version 1.12.8
+------------------------
+Date:30-Sep-2022
+
+Add Usersitemap Excel file & pagination
+Fix Excel Error
+Add Service Type column in Customer Analytic
+
+
 Version 1.12.7
 ------------------------
 Date:27-Sep-2022

@@ -56,6 +56,7 @@
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>Product Details</th>
+                        <th>Service Type</th>
                         <th>Total</th>
                         <th>Payment Type</th>
                         <th>Payment Status</th>
@@ -77,6 +78,7 @@
                                     data-productname="{{ $data['productName'] }}"
                                     data-productquantity="{{ $data['quantity'] }}">view</button>  
                             </td>   
+                            <td>{{ $data->serviceType }}</td> 
                             <td>{{ $data->total}}</td> 
                             <td>{{ $data->paymentType }}</td> 
                             <td>{{ $data->paymentStatus }}</td> 
