@@ -245,9 +245,11 @@ class VoucherController extends Controller
             $query->where('voucherCode', 'like', '%'.$req->code_chosen.'%');
         }
 
+
         $query->orderBy('created_at', 'DESC');
        // dd($query);
         $datas = $query->get();
+        $totalClaim=array();
         foreach ($datas as $data) {
             //get total claim
             $sql = "SELECT COUNT(*) AS total FROM customer_voucher WHERE voucherId='".$data->id."'";
