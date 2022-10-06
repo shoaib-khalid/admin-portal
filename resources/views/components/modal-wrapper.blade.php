@@ -188,7 +188,7 @@
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id="ProductModal">
-    <div class="modal-dialog" role="document" style="max-width: 600px!important;">
+    <div class="modal-dialog" role="document" style="max-width: 900px!important;">
         <div class="modal-content">
             <div class="modal-header">
             <h5 class="modal-title">Customer Incomplete Order Details</h5>
@@ -201,8 +201,27 @@
 
                 <form action="userincompleteorder" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
                     {{@csrf_field()}}
-                <div class="form-row">
-                    <div class="form-group col-md-8">
+                    <table class="table table-bordered table-striped">
+                        <thead class="btn-light">
+                            <tr>
+                            <th  width="50%">Product ID</th>
+                            <th  width="40%">Product Name</th>
+                            <th  width="10%">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productid2" name="productid2"></td>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productname2" name="productname2"></td>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productquantity2" name="productquantity2"></td>
+                        </tbody>
+                        <tbody>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productid2" name="productid2">fff</td>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productname2" name="productname2">fff</td>
+                            <td> <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productquantity2" name="productquantity2">ff</td>
+                        </tbody>
+                    </table>
+                <!-- <div class="form-row">
+                    <div class="form-group col-md-8">                       
                         <label class="text-primary">Product ID</label>
                         <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productid2" name="productid2">
                     </div>
@@ -218,7 +237,7 @@
                         <label class="text-primary">Product Quantity</label>
                         <input type="text" class="form-control-plaintext font-weight-bold"  readonly="" id="productquantity2" name="productquantity2">
                     </div>
-                </div>                   
+                </div>                    -->
                 </form>
                 
             </div>
@@ -226,6 +245,32 @@
         </div>
     </div>
 </div>
+
+<!-- <div class="modal" tabindex="-1" role="dialog" id="ProductModal">
+    <div class="modal-dialog" role="document" style="max-width: 600px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Customer Incomplete Order Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped">
+          <thead class="btn-primary">
+            <tr>
+              <th>Product ID</th>
+              <th>Product Name</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+       </table>
+      </div>
+    </div>
+</div> -->
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="RefundDetailsModal">

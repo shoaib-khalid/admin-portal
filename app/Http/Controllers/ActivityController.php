@@ -1524,19 +1524,48 @@ class ActivityController extends Controller
                 $data->email = $customeremail;
 
                 //check if any item in cart
-                $sql="SELECT productId, quantity, productName FROM `order_item` A INNER JOIN `order` B ON A.orderId=B.id 
-                INNER JOIN order_group C ON B.orderGroupId=C.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
+                $sql="SELECT GROUP_CONCAT(B.productName) AS productName, GROUP_CONCAT(B.quantity) AS quantity,  GROUP_CONCAT(productId) AS productId, C.customerId, D.name
+                FROM `order` A
+                INNER JOIN order_item B ON A.id=B.orderId 
+                INNER JOIN order_group C ON A.orderGroupId=C.id
+                INNER JOIN customer D ON A.customerId=D.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
                 //dd($sql);
                 $productdetail = DB::connection('mysql2')->select($sql);
                 if (count($productdetail) > 0) {
+                    foreach ($productdetail as $detail) {
                     $productname=$productdetail[0]->productName;
                     $productquantity=$productdetail[0]->quantity;
                     $productid=$productdetail[0]->productId;
+                    }
                 }
                 $data->productName = $productname;
                 $data->quantity = $productquantity;
                 $data->productId = $productid;
             }
+        //     $sql="SELECT B.productName AS productName, B.quantity AS Quantity, productId AS productId, C.customerId 
+        //     FROM `order` A INNER JOIN order_item B ON A.id=B.orderId INNER JOIN order_group C ON A.orderGroupId=C.id
+        //     INNER JOIN customer D ON A.customerId=D.id WHERE cartId='".$data['id']."' GROUP BY C.customerId";
+        //     $rsitem = DB::connection('mysql2')->select($sql);
+
+        //     $item_array = array();
+        //     if (count($rsitem) > 0) {
+        //         foreach ($rsitem as $item) {
+
+        //             $item_details = [
+        //                 'productId' => $item->productId,
+        //                 'quantity' => $item->quantity,
+        //                 'name' => $item->name                       
+        //             ];
+    
+        //             array_push( 
+        //                 $item_array,
+        //                 $item_details
+        //             );
+                   
+        //         }
+        //     }
+        //     $data->item_list = $item_array;
+        // }
             $datechosen = $date->format('F d, Y')." - ".date('F d, Y'); 
             return view('components.userincompleteorder', compact('datas','datechosen'));
             
@@ -1592,19 +1621,24 @@ class ActivityController extends Controller
                 $data->address = $customeraddress;
                 $data->email = $customeremail;
 
-                //check if any item in cart
-                $sql="SELECT productId, quantity, productName FROM `order_item` A INNER JOIN `order` B ON A.orderId=B.id 
-                INNER JOIN order_group C ON B.orderGroupId=C.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
-                //dd($sql);
-                $productdetail = DB::connection('mysql2')->select($sql);
-                if (count($productdetail) > 0) {
-                    $productname=$productdetail[0]->productName;
-                    $productquantity=$productdetail[0]->quantity;
-                    $productid=$productdetail[0]->productId;
-                }
-                $data->productName = $productname;
-                $data->quantity = $productquantity;
-                $data->productId = $productid;
+                 //check if any item in cart
+                 $sql="SELECT GROUP_CONCAT(B.productName) AS productName, GROUP_CONCAT(B.quantity) AS quantity,  GROUP_CONCAT(productId) AS productId, C.customerId, D.name
+                 FROM `order` A
+                 INNER JOIN order_item B ON A.id=B.orderId 
+                 INNER JOIN order_group C ON A.orderGroupId=C.id
+                 INNER JOIN customer D ON A.customerId=D.id WHERE orderId='".$data->id."' GROUP BY C.customerId ";
+                 //dd($sql);
+                 $productdetail = DB::connection('mysql2')->select($sql);
+                 if (count($productdetail) > 0) {
+                     foreach ($productdetail as $detail) {
+                     $productname=$productdetail[0]->productName;
+                     $productquantity=$productdetail[0]->quantity;
+                     $productid=$productdetail[0]->productId;
+                     }
+                 }
+                 $data->productName = $productname;
+                 $data->quantity = $productquantity;
+                 $data->productId = $productid;
             }
     
             $datechosen = $req->date_chosen4;          

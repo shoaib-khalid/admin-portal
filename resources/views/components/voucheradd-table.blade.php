@@ -56,7 +56,7 @@
                         <div class="col-3">Select Store</div>
                         <div class="col-7">
                             <div class="input-group mb-3">
-                                <select name="selectStore" id="selectStore" disabled="true" class="form-control">   
+                                <select name="selectStore" id="selectStore" disabled="true" class="form-control" required>   
                                     <option></option>                         
                                     @foreach ($storelist as $store)
                                     <option value="{{$store->id}}">{{$store->name}}</option>                            
