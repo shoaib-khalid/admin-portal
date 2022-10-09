@@ -852,6 +852,7 @@ class ActivityController extends Controller
         return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser'));
     }
 
+
     public function export_usersitemap(Request $req) 
     {
         $data = $req->input();
@@ -913,6 +914,76 @@ class ActivityController extends Controller
         return view('components.userdata', compact('datas','custnamechosen'));
         }
 
+
+        //Product Details Popup for Incomplete order
+        public function getuserdatadetails_incompleteorder($orderId = 0){
+            //dd($orderId);                      
+             $sql="SELECT * FROM order_item A INNER JOIN `order` B ON A.orderId=B.id WHERE completionStatus = 'RECEIVED_AT_STORE' AND customerId='".$orderId."'";
+             //dd($sql);
+             $datas = DB::connection('mysql2')->select($sql);
+ 
+             $html = "";
+             //dd($datas);
+            foreach ($datas as $data) {
+             //dd($data);              
+                $html .= "<tr>
+                     <td width='30%'> ".$data->productId."</td>                
+                     <td width='20%'> ".$data->productName."</td>              
+                     <td width='10%'> ".$data->quantity."</td>
+                  </tr>";
+             }
+             $response['html'] = $html;
+       
+             return response()->json($response);
+         }
+
+
+        //Product Details Popup for Complete order
+        public function getuserdatadetails_completeorder($orderId = 0){
+             //dd($orderId);                      
+             $sql="SELECT * FROM order_item A INNER JOIN `order` B ON A.orderId=B.id WHERE completionStatus<>'RECEIVED_AT_STORE' AND customerId='".$orderId."'";
+             //dd($sql);
+             $datas = DB::connection('mysql2')->select($sql);
+ 
+             $html = "";
+             //dd($datas);
+            foreach ($datas as $data) {
+             //dd($data);              
+                $html .= "<tr>
+                     <td width='30%'> ".$data->productId."</td>                
+                     <td width='20%'> ".$data->productName."</td>              
+                     <td width='10%'> ".$data->quantity."</td>
+                  </tr>";
+             }
+             $response['html'] = $html;
+       
+             return response()->json($response);
+         }
+
+
+        //Product Details Popup for Abandon Cart
+        public function getuserdatadetails_abandoncart($cartId = 0){
+            //dd($orderId);                      
+             $sql="SELECT * FROM cart_item A INNER JOIN `cart` B ON A.cartId=B.id WHERE customerId='".$cartId."'";
+             //dd($sql);
+             $datas = DB::connection('mysql2')->select($sql);
+ 
+             $html = "";
+             //dd($datas);
+            foreach ($datas as $data) {
+             //dd($data);              
+                $html .= "<tr>
+                     <td width='30%'> ".$data->productId."</td>                
+                     <td width='20%'> ".$data->productName."</td>              
+                     <td width='10%'> ".$data->quantity."</td>
+                  </tr>";
+             }
+             $response['html'] = $html;
+       
+             return response()->json($response);
+         }
+        
+ 
 
         public function filter_userdata(Request $req){
 
@@ -1643,6 +1714,29 @@ class ActivityController extends Controller
     
             $datechosen = $req->date_chosen4;          
             return view('components.userincompleteorder', compact('datas','datechosen'));
+        }
+
+        public function getdetails_incompleteorder($orderId = 0){
+           // dd($orderId);                      
+            $sql="SELECT * FROM order_item WHERE orderId='".$orderId."'";
+            //dd($sql);
+            $datas = DB::connection('mysql2')->select($sql);
+
+            $html = "<tr><td width='30%'><b>Product ID</b></td>
+                        <td width='20%'><b>Product Name</b></td>
+                        <td width='10%'><b>Quantity</b></td></tr>";
+            //dd($datas);
+           foreach ($datas as $data) {
+            //dd($data);              
+               $html .= "<tr>
+                    <td width='30%'> ".$data->productId."</td>                
+                    <td width='20%'> ".$data->productName."</td>              
+                    <td width='10%'> ".$data->quantity."</td>
+                 </tr>";
+            }
+            $response['html'] = $html;
+      
+            return response()->json($response);
         }
 
         public function export_userincompleteorder(Request $req){

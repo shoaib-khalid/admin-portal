@@ -57,20 +57,35 @@
         // $('#quantity').val(quantity);
     });
 
-    // $('#table-4 tbody').on('click', '.view_details', function (){
-    //     console.log("CHECKING PRODCUCTNAME::::",productId);
-    //     $('#ProductModal').modal('show');
-    // });
 
+    $('#table-4 tbody').on('click','.viewdetails',function(){
+        
+        var customerId = $(this).attr('data-id');
+        console.log("customerId:"+customerId);
+        if(customerId){
 
-    //   $("#ProductModal").on("show.bs.modal", function(e) {
-    //     var id = $(e.relatedTarget).data('target-id');
-    //     $.get('/components/userincompleteorder/' + id, function( data ) {
-    //     alert(data);
-    //       $(".modal-body").html(data);
-    //     });
+        // AJAX request
+        var url = "{{ route('getdetails_incompleteorder',[':customerId']) }}";
+        url = url.replace(':customerId',customerId);
+        console.log("url:"+url);
+        // Empty modal data
+        $('#productinfo tbody').empty();
 
-    //   });
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(response){
+
+                console.log("response:"+response);
+                // Add details
+                $('#productinfo tbody').html(response.html);
+
+                // Display Modal
+                $('#ProductModalDetails').modal('show'); 
+            }
+        });
+        }
+    });
 
 
     $('.daterange-btn4').daterangepicker({

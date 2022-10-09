@@ -102,6 +102,9 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/userdata', [ActivityController::class, "userdata"])->name('userdata');
     Route::get('/filter_userdata', [ActivityController::class, "filter_userdata"])->name('filter_userdata');
+    Route::get('/getuserdatadetails_incompleteorder/{customerId}', [ActivityController::class, "getuserdatadetails_incompleteorder"])->name('getuserdatadetails_incompleteorder');
+    Route::get('/getuserdatadetails_completeorder/{customerId}', [ActivityController::class, "getuserdatadetails_completeorder"])->name('getuserdatadetails_completeorder');
+    Route::get('/getuserdatadetails_abandoncart/{customerId}', [ActivityController::class, "getuserdatadetails_abandoncart"])->name('getuserdatadetails_abandoncart');
     Route::post('/filter_userdata', [ActivityController::class, "filter_userdata"])->name('filter_userdata');
     Route::post('/export_userdata', [ActivityController::class, "export_userdata"])->name('export_userdata');
 
@@ -112,6 +115,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/userincompleteorder', [ActivityController::class, "userincompleteorder"])->name('userincompleteorder');
     Route::post('/filter_userincompleteorder', [ActivityController::class, "filter_userincompleteorder"])->name('filter_userincompleteorder');
     Route::get('/filter_userincompleteorder', [ActivityController::class, "filter_userincompleteorder"])->name('filter_userincompleteorder');
+    Route::get('/getdetails_incompleteorder/{customerId}', [ActivityController::class, "getdetails_incompleteorder"])->name('getdetails_incompleteorder');
     Route::post('/export_userincompleteorder', [ActivityController::class, "export_userincompleteorder"])->name('export_userincompleteorder');
 
     Route::get('/useractivitysummary', [ActivityController::class, "useractivitysummary"])->name('useractivitysummary');
@@ -157,6 +161,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/deletemultiple_featuredstore', [FeaturedProductController::class, "deletemultiple_featuredstore"])->name('deletemultiple_featuredstore');
     Route::post('/post_editfeaturedstore', [FeaturedStoreController::class, "post_editfeaturedstore"])->name('post_editfeaturedstore');
     Route::post('/storeSearchByLocation', [FeaturedStoreController::class, "storeSearchByLocation"])->name('storeSearchByLocation');
+    Route::post('/filterLocation', [FeaturedStoreController::class, "filterLocation"])->name('filterLocation');
     Route::post('/deletemultiple_featuredstore', [FeaturedStoreController::class, "deletemultiple_featuredstore"])->name('deletemultiple_featuredstore');
     
     Route::get('/featuredproduct', [FeaturedProductController::class, "index"])->name('featuredproduct');    

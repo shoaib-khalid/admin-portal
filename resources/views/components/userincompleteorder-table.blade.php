@@ -72,19 +72,15 @@
                             <td>{{ $data->email }}</td> 
                             <td>{{ $data->address }}</td> 
                             <td>{{ $data->phoneNumber }}</td> 
-                            <td><button type="button" class="btn btn-info"
-                                    data-toggle="modal" data-target="#ProductModal"
-                                    data-productid="{{ $data['productId'] }}"
-                                    data-productname="{{ $data['productName'] }}"
-                                    data-productquantity="{{ $data['quantity'] }}">view</button>  
-                            </td>   
+                            <td><button class='btn btn-primary viewdetails' data-id='{{ $data->id }}' >View</button></td>
                             <td>{{ $data->serviceType }}</td> 
                             <td>{{ $data->total}}</td> 
                             <td>{{ $data->paymentType }}</td> 
                             <td>{{ $data->paymentStatus }}</td> 
                             <td>{{ $data->completionStatus }}</td>                  
+                @endforeach
                         </tr>
-                    @endforeach
+                  
                 </tbody>
             </table>
            

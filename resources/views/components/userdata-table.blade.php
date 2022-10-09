@@ -115,9 +115,21 @@
                             <td  colspan="2" rowspan="2">{{ $data['email'] }}</td>
                             <td  colspan="2" rowspan="2">{{ $data['phoneNumber'] }}</td>
                             <td  colspan="2" rowspan="2">{{ \Carbon\Carbon::parse($data['created'])->format('d/m/Y') }}</td>
-                            <td  rowspan="2">{{ $data['abandonCart'] }}</td>
-                            <td  rowspan="2">{{ $data['Completed'] }}</td>
-                            <td  rowspan="2">{{ $data['Incomplete'] }}</td>
+                            <td>
+                            <?php if ($data['abandonCart']=="YES") { ?>
+                            <a href="#" class='btn btn-primary viewabandondetails' data-id='{{ $data->id }}' >{{ $data['abandonCart'] }}</a>
+                            <?php } ?>
+                            </td>
+                            <td>
+                            <?php if ($data['Completed']=="YES") { ?>
+                            <a href="#" class='btn btn-primary viewcompletedetails' data-id='{{ $data->id }}' >{{ $data['Completed'] }}</a>
+                            <?php } ?>
+                            </td>
+                            <td>
+                            <?php if ($data['Incomplete']=="YES") { ?>
+                            <a href="#" class='btn btn-primary viewdetails' data-id='{{ $data->id }}' >{{ $data['Incomplete'] }}</a>
+                            <?php } ?>
+                            </td>
                         </tr>
                         <tr></tr>
                     @endforeach

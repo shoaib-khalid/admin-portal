@@ -1,3 +1,10 @@
+Version 1.13.0
+------------------------
+Date:10-October-2022
+
+Add Pop Up Modal for Customer Data and Incomplete Order
+
+
 Version 1.12.9
 ------------------------
 Date:06-October-2022
