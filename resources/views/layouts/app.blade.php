@@ -53,7 +53,7 @@
         <div id="app">
             <div class="main-wrapper">
                 @include('components.navbar')
-                @include('components.sidebar')
+                @include('components.sidebar3')
                 @include('components.modal-wrapper')
 
                 <!-- Main Content -->
