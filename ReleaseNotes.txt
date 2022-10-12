@@ -1,3 +1,10 @@
+Version 1.13.1
+------------------------
+Date:12-October-2022
+
+Change side bar to collapse-able
+
+
 Version 1.13.0
 ------------------------
 Date:10-October-2022
