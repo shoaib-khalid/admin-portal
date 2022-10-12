@@ -3,6 +3,7 @@ Version 1.13.1
 Date:12-October-2022
 
 Change side bar to collapse-able
+Add OG-Tag Page
 
 
 Version 1.13.0

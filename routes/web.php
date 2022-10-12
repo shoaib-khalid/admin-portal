@@ -15,6 +15,7 @@ use App\Http\Controllers\FeaturedCategoryController;
 use App\Http\Controllers\MarketBannerController;
 use App\Http\Controllers\MarketPopupController;
 use App\Http\Controllers\ParentCategoryController;
+use App\Http\Controllers\OgTagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -215,6 +216,15 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/add_marketpopup', [MarketPopupController::class, "add_marketpopup"])->name('add_marketpopup');  
     Route::post('/edit_marketpopup', [MarketPopupController::class, "edit_marketpopup"])->name('edit_marketpopup');
     Route::post('/delete_marketpopup', [MarketPopupController::class, "delete_marketpopup"])->name('delete_marketpopup'); 
+
+    Route::get('/ogtag', [OgTagController::class, "index"])->name('ogtag');
+    Route::post('/index_filter', [OgTagController::class, "index_filter"])->name('index_filter');
+    Route::post('/add_ogtag', [OgTagController::class, "add_ogtag"])->name('add_ogtag');
+    Route::post('/edit_ogtag', [OgTagController::class, "edit_ogtag"])->name('edit_ogtag');
+    Route::get('/edit_ogtag', [OgTagController::class, "edit_ogtag"])->name('edit_ogtag');
+    Route::post('/delete_ogtag', [OgTagController::class, "delete_ogtag"])->name('delete_ogtag');
+    Route::post('/post_edit_ogtag', [OgTagController::class, "post_edit_ogtag"])->name('post_edit_ogtag');
+    Route::get('/post_edit_ogtag', [OgTagController::class, "post_edit_ogtag"])->name('post_edit_ogtag');
 
     Route::get('/groupsales', [UserController::class, "daily_group_details"])->name('groupsales');   
     Route::post('/filter_groupsales', [UserController::class, "filter_daily_group_details"])->name('filter_groupsales');
