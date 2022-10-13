@@ -242,5 +242,15 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/edit_tag', [TagController::class, "edit_tag"])->name('edit_tag');
     Route::post('/delete_tag', [TagController::class, "delete_tag"])->name('delete_tag');
     Route::post('/post_edit_tag', [TagController::class, "post_edit_tag"])->name('post_edit_tag');
+
     Route::get('/add_tag_details', [TagController::class, "add_tag_details"])->name('add_tag_details');
+    Route::post('/save_tag_details', [TagController::class, "save_tag_details"])->name('save_tag_details');
+    Route::post('query_tag_details', [TagController::class, "query_tag_details"])->name('query_tag_details');
+    Route::post('deletemultiple_tag_details', [TagController::class, "deletemultiple_tag_details"])->name('deletemultiple_tag_details');
+
+
+    Route::get('/add_tag_config', [TagController::class, "add_tag_config"])->name('add_tag_config');
+    Route::post('/save_tag_config', [TagController::class, "save_tag_config"])->name('save_tag_config');
+    Route::post('query_tag_config', [TagController::class, "query_tag_config"])->name('query_tag_config');
+    Route::post('deletemultiple_tag_config', [TagController::class, "deletemultiple_tag_config"])->name('deletemultiple_tag_config');
 });

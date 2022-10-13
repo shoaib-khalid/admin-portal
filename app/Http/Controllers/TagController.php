@@ -24,10 +24,16 @@ class TagController extends Controller
 
     protected $url;
     protected $token;
+    protected $baseurl;
+    protected $basepreviewurl;
+    protected $basepath;
 
     function __construct() {
             $this->url = config('services.report_svc.url');
             $this->token = config('services.report_svc.token');
+            $this->baseurl = config('services.tagbanner_svc.url');
+            $this->basepreviewurl = config('services.tagbanner_svc.previewurl');
+            $this->basepath = config('services.tagbanner_svc.path');
     }
 
 
@@ -159,33 +165,120 @@ class TagController extends Controller
 
 
     public function add_tag_details(Request $request){
-        /*$data = new TagKeyword();
-        $data->keyword = $request->keyword;
-        $data->longitude = $request->longitude;
-        $data->latitude = $request->latitude;
-        $data->save();
-        */
-        echo $request->keywordId;
-        dd($request->keywordId);
-        
-        $datas = TagKeyword::select('tag_keyword.*')->get(); 
-        foreach ($datas as $data) {
-            //find details
-            $query = TagDetails::select('tag_details.*' , 'product.name AS productName', 'store.name AS storeName', 'store_category.name as categoryName')
-                ->leftjoin('product', 'tag_details.productId' ,'=', 'product.id')
-                ->leftjoin('store', 'tag_details.storeId' ,'=', 'store.id')
-                ->leftjoin('store_category', 'tag_details.categoryId' ,'=', 'store_category.id')
-                ->where('tag_details.tagId', '=', $data->id); 
-            $details = $query->get();
-            //dd($details);
-            $data->details = $details;
-
-            $query = TagConfig::select('tag_config.*')->where('tag_config.tagId', '=', $data->id); 
-            $configs = $query->get();
-            //dd($details);
-            $data->configs = $configs;
-        }     
-
-        return view('components.tag', compact('datas'));
+        $keywordId = $request->keywordId;
+        $datas = TagKeyword::select('tag_keyword.*')
+                ->where('tag_keyword.id', '=', $keywordId)
+                ->get();        
+        return view('components.tag-add-details', compact('datas','keywordId'));
     }
+
+    public function save_tag_details(Request $request){
+        $keywordId = $request->keywordId;
+        $storeId = $request->storeId;
+        $data = new TagDetails();
+        $data->tagId = $request->keywordId;
+        $data->storeId = $request->storeId;
+        $data->save();      
+        return response()->json($data, 200); 
+    }
+
+
+    public function query_tag_details(Request $req){
+       
+        //find details
+        $query = TagDetails::select('tag_details.*' , 'product.name AS productName', 'store.name AS storeName', 'store_category.name as categoryName')
+            ->leftjoin('product', 'tag_details.productId' ,'=', 'product.id')
+            ->leftjoin('store', 'tag_details.storeId' ,'=', 'store.id')
+            ->leftjoin('store_category', 'tag_details.categoryId' ,'=', 'store_category.id')
+            ->where('tag_details.tagId', '=', $req->keywordId); 
+        $details = $query->get();
+        return response()->json(array('storeList'=> $details), 200); 
+
+    }
+
+
+     public function deletemultiple_tag_details(Request $request){
+        $ids = $request->ids;
+        foreach ($ids as $id) {
+            DB::connection('mysql2')->delete("DELETE FROM tag_details WHERE id='".$id."'");
+        
+        }
+        
+        //find details
+        $query = TagDetails::select('tag_details.*' , 'product.name AS productName', 'store.name AS storeName', 'store_category.name as categoryName')
+            ->leftjoin('product', 'tag_details.productId' ,'=', 'product.id')
+            ->leftjoin('store', 'tag_details.storeId' ,'=', 'store.id')
+            ->leftjoin('store_category', 'tag_details.categoryId' ,'=', 'store_category.id')
+            ->where('tag_details.tagId', '=', $request->keywordId); 
+        $details = $query->get();
+        return response()->json(array('storeList'=> $details), 200); 
+        
+    }
+
+
+      public function add_tag_config(Request $request){
+        $keywordId = $request->keywordId;
+        $datas = TagKeyword::select('tag_keyword.*')
+                ->where('tag_keyword.id', '=', $keywordId)
+                ->get();        
+        return view('components.tag-add-config', compact('datas','keywordId'));
+    }
+
+    public function save_tag_config(Request $request){
+        $keywordId = $request->keywordId;
+        $storeId = $request->storeId;
+        $file = $request->file('selectFile');        
+
+        $data = new TagConfig();
+        $data->tagId = $request->keywordId;
+        $data->property = $request->prop;
+        $data->content = $request->txtContent;
+
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            //Move Uploaded File
+            $newfilename = date("YmdHis").".".$extension;
+            $destinationPath = $this->basepath;
+            //echo " path:".$destinationPath;
+            $file->move($destinationPath,$newfilename);
+            $url = $this->baseurl."/".$newfilename;
+            $data->content = $url;
+        }
+
+        $data->save();      
+        
+        $keywordId = $request->keywordId;
+        $datas = TagKeyword::select('tag_keyword.*')
+                ->where('tag_keyword.id', '=', $keywordId)
+                ->get(); 
+        return view('components.tag-add-config', compact('datas','keywordId'));
+    }
+
+
+    public function query_tag_config(Request $req){
+       
+        //find details
+        $query = TagConfig::select('tag_config.*')
+            ->where('tag_config.tagId', '=', $req->keywordId); 
+        $details = $query->get();
+        return response()->json(array('storeList'=> $details), 200); 
+
+    }
+
+
+     public function deletemultiple_tag_config(Request $request){
+        $ids = $request->ids;
+        foreach ($ids as $id) {
+            DB::connection('mysql2')->delete("DELETE FROM tag_config WHERE id='".$id."'");
+        
+        }
+        
+        //find details
+        $query = TagConfig::select('tag_config.*')
+            ->where('tag_config.tagId', '=', $request->keywordId); 
+        $details = $query->get();
+        return response()->json(array('storeList'=> $details), 200); 
+        
+    }
+
 }

@@ -46,8 +46,9 @@
                         <th>Longitude</th>
                         <th>Latitude</th>
                         <th></th>
-                        <th>Details</th>  
-                        <th>Config</th>     
+                        <th></th>
+                        <th style="width: 40%;">Details</th>  
+                        <th style="width: 40%;">Config</th>     
                                           
                     </tr>
                 </thead>      
@@ -66,6 +67,8 @@
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
                                     </button>
                                 </form>
+                            </td>
+                            <td>
                             <form action="delete_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
@@ -81,7 +84,7 @@
                                             <th>Store</th>
                                             <th>Category</th>
                                             <th>
-                                                 <button class="btn btn-success" style="float: right;" type="button" onclick="addDetails('{{ $data['id'] }}')"><i class="fas fa-plus"></i></button>
+                                                 <button class="btn btn-success" style="float: right;" type="button" onclick="addDetails('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
                                             </th>
                                         </tr>
                                     </thead>
@@ -91,19 +94,7 @@
                                             <td>{{ $detail->productName }}</td>
                                             <td>{{ $detail->storeName }}</td>
                                             <td>{{ $detail->categoryName }}</td> 
-                                            <td>
-                                                <form action="edit_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                                    {{@csrf_field()}}
-                                                     <input type="hidden" name="id" value="{{ $data['id'] }}">
-                                                     <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
-                                                    </button>
-                                                </form>
-                                                <form action="delete_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                                    {{@csrf_field()}}
-                                                     <input type="hidden" name="id" value="{{ $data['id'] }}">
-                                                     <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close" onclick="return confirm('Are you sure want to delete this record?')"></i> 
-                                                    </button>
-                                                </form>
+                                            <td>                                              
                                             </td>
                                         </tr>
                                         @endforeach
@@ -117,7 +108,7 @@
                                             <th>Property</th>
                                             <th>Content</th>
                                             <th>
-                                                 <button class="btn btn-success" style="float: right;" type="button"><i class="fas fa-plus"></i></button>
+                                                 <button class="btn btn-success" style="float: right;" type="button" onclick="addConfig('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
                                             </th>                                            
                                         </tr>
                                     </thead>
@@ -126,19 +117,7 @@
                                         <tr class="text-center">                                           
                                             <td>{{ $config->property }}</td>
                                             <td>{{ $config->content }}</td> 
-                                            <td>    
-                                            <form action="edit_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                                {{@csrf_field()}}
-                                                 <input type="hidden" name="id" value="{{ $data['id'] }}">
-                                                 <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
-                                                </button>
-                                            </form>   
-                                            <form action="delete_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                                                {{@csrf_field()}}
-                                                 <input type="hidden" name="id" value="{{ $data['id'] }}">
-                                                 <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close" onclick="return confirm('Are you sure want to delete this record?')"></i> 
-                                                </button>
-                                            </form>  
+                                            <td>                                               
                                             </td>                                   
                                         </tr>
                                         @endforeach
@@ -183,8 +162,13 @@
 </div>
 <script type="text/javascript">
     function addDetails(keywordId) {
-        alert(keywordId);
+        //alert(keywordId);
         window.location.href="/add_tag_details?keywordId="+keywordId;        
+    }
+
+     function addConfig(keywordId) {
+        //alert(keywordId);
+        window.location.href="/add_tag_config?keywordId="+keywordId;        
     }
 </script>
 

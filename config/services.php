@@ -45,4 +45,10 @@ return [
         'previewurl' => env('MARKETPLACE_BANNER_PREVIEWURL'),
     ],
 
+    'tagbanner_svc' => [
+        'url' => env('TAG_BANNER_BASEURL'),
+        'path' => env('TAG_BANNER_PATH'),
+        'previewurl' => env('TAG_BANNER_PREVIEWURL'),
+    ],
+
 ];
