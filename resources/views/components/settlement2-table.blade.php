@@ -58,10 +58,10 @@
 
                     @foreach ($datas as $data)
                         <tr class="text-center" data-toggle="modal" data-target="#SettlementDetailsModal"
-                                    data-payoutdate="{{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y H:i:s') }}"
+                                    data-payoutdate="{{ \Carbon\Carbon::parse($data['settlementDate'])->format('Y/m/d H:i:s') }}"
                                     data-storename="{{ $data['storeName'] }}"
-                                    data-startdate="{{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y H:i:s') }}"
-                                    data-cutoffdate="{{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y H:i:s') }}"
+                                    data-startdate="{{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('Y/m/d H:i:s') }}"
+                                    data-cutoffdate="{{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('Y/m/d H:i:s') }}"
                                     data-grossamount="{{ $data['totalTransactionValue'] }}"
                                     data-servicecharge="{{ $data['totalServiceFee'] }}"
                                     data-deliverycharge="{{ $data['totalDeliveryFee'] }}"
@@ -70,10 +70,10 @@
                                     data-remarks="{{ $data['remarks'] }}"
                                     data-id="{{ $data['id'] }}"
                                     >
-                            <td>{{ \Carbon\Carbon::parse($data['settlementDate'])->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data['settlementDate'])->format('Y/m/d') }}</td>
                             <td>{{ $data['storeName'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('d/m/Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('d/m/Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('Y/m/d') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('Y/m/d') }}</td>
                             <td>{{ $data['totalTransactionValue'] }}</td>
                             <td>{{ $data['totalServiceFee'] }}</td>
                             <td>{{ $data['totalDeliveryFee'] }}</td>
