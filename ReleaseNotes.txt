@@ -1,3 +1,10 @@
+Version 1.13.2
+------------------------
+Date:13-October-2022
+
+Add new menu : Tag
+
+
 Version 1.13.1
 ------------------------
 Date:12-October-2022
