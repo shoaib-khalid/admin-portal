@@ -16,6 +16,7 @@ use App\Http\Controllers\MarketBannerController;
 use App\Http\Controllers\MarketPopupController;
 use App\Http\Controllers\ParentCategoryController;
 use App\Http\Controllers\OgTagController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -233,4 +234,13 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/voucherredemption', [UserController::class, "voucherredemption"])->name('voucherredemption');   
     Route::post('/filter_voucherredemption', [UserController::class, "filter_voucherredemption"])->name('filter_voucherredemption');  
     Route::post('/export_voucherredemption', [UserController::class, "export_voucherredemption"])->name('export_voucherredemption');
+
+
+    Route::get('/tag', [TagController::class, "index"])->name('tag');
+    Route::post('/tag_filter', [TagController::class, "tag_filter"])->name('tag_filter');
+    Route::post('/add_tag', [TagController::class, "add_tag"])->name('add_tag');
+    Route::get('/edit_tag', [TagController::class, "edit_tag"])->name('edit_tag');
+    Route::post('/delete_tag', [TagController::class, "delete_tag"])->name('delete_tag');
+    Route::post('/post_edit_tag', [TagController::class, "post_edit_tag"])->name('post_edit_tag');
+    Route::get('/add_tag_details', [TagController::class, "add_tag_details"])->name('add_tag_details');
 });

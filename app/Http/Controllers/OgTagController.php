@@ -42,7 +42,8 @@ class OgTagController extends Controller
         $Store_Front= '';
         $DineIn = '';
         $Merchant_Portal = '';
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        $selectedplatform = '';
+        return view('components.ogtag', compact('datas','platformdata','propertylist','selectedplatform'));
     }
 
     public function index_filter(Request $request){
@@ -52,22 +53,11 @@ class OgTagController extends Controller
         $query = PlatformOgTag::select('platform_config.*', 'platform_og_tag.*')
                               ->join('platform_config', 'platform_og_tag.platformId' ,'=', 'platform_config.platformId');
 
-        if($request->type_platform == "Marketplace" ){
-               $query->where('platformType', '=', 'marketplace');           
+        $selectedplatform = $request->id_platform ;
+        if($request->id_platform <> "" ){
+               $query->where('platform_config.platformId', '=', $request->id_platform);           
          }
 
-         if($request->type_platform == "Store_Front" ){
-               $query->where('platformType', '=', 'store-front');           
-         }
-
-         
-         if($request->type_platform == "DineIn" ){
-               $query->where('platformType', '=', 'dinein');         
-         }
-
-         if($request->type_platform == "Merchant_Portal" ){
-               $query->where('platformType', '=', 'merchant-portal');           
-         }
 
         $datas = $query->get();
 
@@ -80,7 +70,7 @@ class OgTagController extends Controller
         $DineIn= $request->DineIn;
         $Merchant_Portal= $request->Merchant_Portal;
 
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        return view('components.ogtag', compact('datas','platformdata','propertylist','selectedplatform'));
     }
 
     public function add_ogtag(Request $request){
@@ -99,8 +89,9 @@ class OgTagController extends Controller
 
         $sql="SELECT platformType, platformId FROM platform_config";
         $propertylist = DB::connection('mysql2')->select($sql);
+        $selectedplatform = '';
 
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        return view('components.ogtag', compact('datas','platformdata','propertylist','selectedplatform'));
     }
 
     public function edit_ogtag(Request $request){
@@ -114,8 +105,9 @@ class OgTagController extends Controller
         //dd($datas);
         $sql="SELECT platformType, platformId FROM platform_config";
         $propertylist = DB::connection('mysql2')->select($sql);
+        $selectedplatform = '';
 
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        return view('components.ogtag', compact('datas','platformdata','propertylist', 'selectedplatform'));
     }
 
     public function delete_ogtag(Request $request){
@@ -126,8 +118,9 @@ class OgTagController extends Controller
         $platformdata=null;
         $sql="SELECT platformType, platformId FROM platform_config";
         $propertylist = DB::connection('mysql2')->select($sql);
+        $selectedplatform = '';
 
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        return view('components.ogtag', compact('datas','platformdata','propertylist','selectedplatform'));
     }
 
     public function post_edit_ogtag(Request $request){
@@ -136,7 +129,7 @@ class OgTagController extends Controller
         $platform->content = $request->content;
         $platform->name = $request->name;
         $platform->platformId = $request->selectPlatform;
-        $platform->property = $request->property;
+        $platform->property = $request->property;        
         $platform->save();
 
         
@@ -147,8 +140,9 @@ class OgTagController extends Controller
 
         $sql="SELECT platformType, platformId FROM platform_config";
         $propertylist = DB::connection('mysql2')->select($sql);
+        $selectedplatform = '';
 
-        return view('components.ogtag', compact('datas','platformdata','propertylist'));
+        return view('components.ogtag', compact('datas','platformdata','propertylist','selectedplatform'));
     }
 
 

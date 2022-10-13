@@ -159,13 +159,16 @@ $navigation_links = array_to_object($links);
                 <ul class="collapse list-unstyled" id="subMenuConfig">
 
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('promotext') ? '' : 'text-gray-400' }}" href="{{ route('promotext') }}"><i class="fas fa-bullhorn pr-3"></i><span>Promo Text</span></a>
+                    <a class="nav-link {{ Request::routeIs('promotext') ? '' : 'text-gray-400' }}" href="{{ route('promotext') }}"><i class="fas fa-cogs pr-3"></i><span>Promo Text</span></a>
                 </li>
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('featuredstore') ? '' : 'text-gray-400' }}" href="{{ route('featuredstore') }}"><i class="fas fa-bullhorn pr-3"></i><span>Featured Store</span></a>
+                    <a class="nav-link {{ Request::routeIs('ogtag') ? '' : 'text-gray-400' }}" href="{{ route('ogtag') }}"><i class="fas fa-cogs pr-3"></i><span>OG-Tag</span></a>
                 </li>
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('featuredproduct') ? '' : 'text-gray-400' }}" href="{{ route('featuredproduct') }}"><i class="fas fa-bullhorn pr-3"></i><span>Featured Product</span></a>
+                    <a class="nav-link {{ Request::routeIs('featuredstore') ? '' : 'text-gray-400' }}" href="{{ route('featuredstore') }}"><i class="fas fa-cogs pr-3"></i><span>Featured Store</span></a>
+                </li>
+                <li class="">
+                    <a class="nav-link {{ Request::routeIs('featuredproduct') ? '' : 'text-gray-400' }}" href="{{ route('featuredproduct') }}"><i class="fas fa-cogs pr-3"></i><span>Featured Product</span></a>
                 </li>
            
                <!--
@@ -174,24 +177,28 @@ $navigation_links = array_to_object($links);
                 </li>!-->
 
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('parentcategory') ? '' : 'text-gray-400' }}" href="{{ route('parentcategory') }}"><i class="fas fa-bullhorn pr-3"></i><span>Parent Category</span></a>
+                    <a class="nav-link {{ Request::routeIs('parentcategory') ? '' : 'text-gray-400' }}" href="{{ route('parentcategory') }}"><i class="fas fa-cogs pr-3"></i><span>Parent Category</span></a>
                 </li>
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('featuredcategory') ? '' : 'text-gray-400' }}" href="{{ route('featuredcategory') }}"><i class="fas fa-bullhorn pr-3"></i><span>Category Sequence</span></a>
+                    <a class="nav-link {{ Request::routeIs('featuredcategory') ? '' : 'text-gray-400' }}" href="{{ route('featuredcategory') }}"><i class="fas fa-cogs pr-3"></i><span>Category Sequence</span></a>
                 </li>
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('citylocation') ? '' : 'text-gray-400' }}" href="{{ route('citylocation') }}"><i class="fas fa-bullhorn pr-3"></i><span>Locations</span></a>
+                    <a class="nav-link {{ Request::routeIs('citylocation') ? '' : 'text-gray-400' }}" href="{{ route('citylocation') }}"><i class="fas fa-cogs pr-3"></i><span>Locations</span></a>
                 </li>
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('cityregion') ? '' : 'text-gray-400' }}" href="{{ route('cityregion') }}"><i class="fas fa-bullhorn pr-3"></i><span>City Region</span></a>
+                    <a class="nav-link {{ Request::routeIs('cityregion') ? '' : 'text-gray-400' }}" href="{{ route('cityregion') }}"><i class="fas fa-cogs pr-3"></i><span>City Region</span></a>
                 </li>
                
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('marketbanner') ? '' : 'text-gray-400' }}" href="{{ route('marketbanner') }}"><i class="fas fa-bullhorn pr-3"></i><span>Marketplace Banner</span></a>
+                    <a class="nav-link {{ Request::routeIs('marketbanner') ? '' : 'text-gray-400' }}" href="{{ route('marketbanner') }}"><i class="fas fa-cogs pr-3"></i><span>Marketplace Banner</span></a>
                 </li>
                 
                 <li class="">
-                    <a class="nav-link {{ Request::routeIs('marketpopup') ? '' : 'text-gray-400' }}" href="{{ route('marketpopup') }}"><i class="fas fa-bullhorn pr-3"></i><span>Marketplace Popup</span></a>
+                    <a class="nav-link {{ Request::routeIs('marketpopup') ? '' : 'text-gray-400' }}" href="{{ route('marketpopup') }}"><i class="fas fa-cogs pr-3"></i><span>Marketplace Popup</span></a>
+                </li>
+
+                 <li class="">
+                    <a class="nav-link {{ Request::routeIs('tag') ? '' : 'text-gray-400' }}" href="{{ route('tag') }}"><i class="fas fa-cogs pr-3"></i><span>Tag</span></a>
                 </li>
 
             </ul>
@@ -226,7 +233,7 @@ $navigation_links = array_to_object($links);
         openTab(tabid5);
     }
 
-    var tabid6 = "{{ (Request::routeIs('promotext') || Request::routeIs('featuredstore') || Request::routeIs('featuredproduct') || Request::routeIs('parentcategory') || Request::routeIs('featuredcategory') || Request::routeIs('citylocation') || Request::routeIs('cityregion') || Request::routeIs('marketbanner') || Request::routeIs('marketpopup')) ? 'tabconfig' : '' }}";
+    var tabid6 = "{{ (Request::routeIs('promotext') || Request::routeIs('ogtag') || Request::routeIs('featuredstore') || Request::routeIs('featuredproduct') || Request::routeIs('parentcategory') || Request::routeIs('featuredcategory') || Request::routeIs('citylocation') || Request::routeIs('cityregion') || Request::routeIs('marketbanner') || Request::routeIs('marketpopup') || Request::routeIs('tag')) ? 'tabconfig' : '' }}";
     if (tabid6) {
         openTab(tabid6);
     }

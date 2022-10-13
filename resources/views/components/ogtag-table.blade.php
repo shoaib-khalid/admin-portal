@@ -20,7 +20,7 @@
                             <select name="selectPlatform" id="selectPlatform" class="form-control">   
                                 <option></option>                         
                                 @foreach ($propertylist as $platform)
-                                <option selected disabled value="{{$platform->platformId}}"<?php if ($platformdata->platformId==$platform->platformId) echo "selected"; ?>>{{$platform->platformId}}</option>                            
+                                <option value="{{$platform->platformId}}"<?php if ($platformdata->platformId==$platform->platformId) echo "selected"; ?>>{{$platform->platformId}}</option>                            
                                 @endforeach
                             </select>
                             </div>
@@ -90,13 +90,13 @@
                     <form action="index_filter" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}  
                     <div class="input-group mb-3">
-                       <div class="col-3">Platform Type</div>
+                       <div class="col-3">Platform Id</div>
                             <div class="col-3">
-                                <select class="form-control" id="type_platform" name="type_platform">
-                                <option  value="Marketplace">Marketplace</option>
-                                <option  value="Store_Front">Store Front</option>
-                                <option  value="DineIn">Dine In</option>
-                                <option  value="Merchant_Portal">Merchant Portal</option>
+                                <select class="form-control" id="id_platform" name="id_platform">
+                                <option value="">All</option>                         
+                                @foreach ($propertylist as $platform)
+                                <option value="{{$platform->platformId}}" <?php if ($selectedplatform==$platform->platformId) echo "selected"; ?>>{{$platform->platformId}}</option>                            
+                                @endforeach
                                 </select>
                             </div>
                         <div class="input-group-append">
@@ -144,7 +144,7 @@
                             <form action="delete_ogtag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
-                                     <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close"></i> 
+                                     <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close" onclick="return confirm('Are you sure want to delete this record?')"></i> 
                                     </button>
                                 </form>
                             </td>

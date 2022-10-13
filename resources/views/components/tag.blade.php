@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header_content">
-        <h1>OG-Tags</h1>        
+        <h1>Tags</h1>        
     </x-slot>
     <div>
-        <x-ogtag-table :datas="$datas" :platformdata="$platformdata" :propertylist="$propertylist" :selectedplatform="$selectedplatform"></x-ogtag-table>
+        <x-tag-table :datas="$datas"></x-tag-table>
     </div>
 </x-app-layout>
 <script>
