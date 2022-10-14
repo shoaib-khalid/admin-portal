@@ -3,7 +3,7 @@
         <h1>Tags</h1>        
     </x-slot>
     <div>
-        <x-tag-table :datas="$datas"></x-tag-table>
+        <x-tag-table :datas="$datas" :keyworddata="$keyworddata"></x-tag-table>
     </div>
 </x-app-layout>
 <script>

@@ -118,6 +118,21 @@ class FeaturedCategoryController extends Controller
         return view('components.featuredcategory', compact('datas','cityList','citySelected', 'stateList', 'stateSelected', 'categoryList', 'categorySelected', 'verticalList', 'verticalSelected'));
     }
 
+     public function filter_category(Request $req){
+        
+       $sql="SELECT * FROM
+                        store_category 
+                    WHERE storeId IS NULL ";
+        if ($req->name<>"") {
+            $sql .= "AND name like '%".$req->name."%'";    
+        }
+        
+        //echo $sql;
+        $searchresult = DB::connection('mysql2')->select($sql);
+        return response()->json(array('categoryList'=> $searchresult), 200);        
+
+    }
+
     public function searchByVertical(Request $request) {    
       $datas = StoreCategory::select('*', 'displaySequence as sequence', 'name AS categoryName')
                 ->whereRaw("verticalCode = '".$request->vertical."'")

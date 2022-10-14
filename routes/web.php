@@ -240,6 +240,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/tag_filter', [TagController::class, "tag_filter"])->name('tag_filter');
     Route::post('/add_tag', [TagController::class, "add_tag"])->name('add_tag');
     Route::get('/edit_tag', [TagController::class, "edit_tag"])->name('edit_tag');
+    Route::post('/save_edit_tag', [TagController::class, "save_edit_tag"])->name('save_edit_tag');
     Route::post('/delete_tag', [TagController::class, "delete_tag"])->name('delete_tag');
     Route::post('/post_edit_tag', [TagController::class, "post_edit_tag"])->name('post_edit_tag');
 
@@ -253,4 +254,5 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/save_tag_config', [TagController::class, "save_tag_config"])->name('save_tag_config');
     Route::post('query_tag_config', [TagController::class, "query_tag_config"])->name('query_tag_config');
     Route::post('deletemultiple_tag_config', [TagController::class, "deletemultiple_tag_config"])->name('deletemultiple_tag_config');
+    Route::post('/filter_category', [FeaturedCategoryController::class, "filter_category"])->name('filter_category');
 });

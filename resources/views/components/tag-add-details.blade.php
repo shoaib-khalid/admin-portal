@@ -127,27 +127,66 @@
            var searchKeyword = document.getElementById('searchKeyword').value;
            console.log(searchBy+":"+searchKeyword);
            
-            $.ajax({
-               type:'POST',
-               url:'/filter_store',
-               headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'Content-Type' : 'application/x-www-form-urlencoded'
-                },
-               data:{
-                    store_name : searchKeyword,                   
-                },
-               success:function(data) {
-                  $("#msg").html(data.storeList);
-                  //console.log(data);
-                  var resultData = data.storeList;
-                  showSearchResult(resultData);
-               }
-            });
-         }
+           if (searchBy=="store") {
+                $.ajax({
+                   type:'POST',
+                   url:'/filter_store',
+                   headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type' : 'application/x-www-form-urlencoded'
+                    },
+                   data:{
+                        store_name : searchKeyword,                   
+                    },
+                   success:function(data) {
+                      $("#msg").html(data.storeList);
+                      //console.log(data);
+                      var resultData = data.storeList;
+                      showSearchResultStore(resultData);
+                   }
+                });
+
+            } else if (searchBy=="product") {
+                $.ajax({
+                   type:'POST',
+                   url:'/filter_product',
+                   headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type' : 'application/x-www-form-urlencoded'
+                    },
+                   data:{
+                        store_name : searchKeyword,                   
+                    },
+                   success:function(data) {
+                      $("#msg").html(data.productList);
+                      //console.log(data);
+                      var resultData = data.productList;
+                      showSearchResultProduct(resultData);
+                   }
+                });
+            } else if (searchBy=="category") {
+                $.ajax({
+                   type:'POST',
+                   url:'/filter_category',
+                   headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type' : 'application/x-www-form-urlencoded'
+                    },
+                   data:{
+                        name : searchKeyword,                   
+                    },
+                   success:function(data) {
+                      $("#msg").html(data.categoryList);
+                      //console.log(data);
+                      var resultData = data.categoryList;
+                      showSearchResultCategory(resultData);
+                   }
+                });
+            }
+    }
 
 
-    function showSearchResult(resultData) {
+    function showSearchResultStore(resultData) {
           var bodyData = '';
           var i=1;
           $.each(resultData,function(index,row){
@@ -183,6 +222,82 @@
      }
 
 
+      function showSearchResultProduct(resultData) {
+          var bodyData = '';
+          var i=1;
+          $.each(resultData,function(index,row){
+            console.log(row);
+
+            bodyData+='<tr class="text-center">';                         
+                    bodyData+='<td style="padding: 0">'+row.name+'</td>';                    
+                    bodyData+='<td style="padding: 0">'+row.storeName+'</td>';
+                    bodyData+='<td style="padding: 0">'+row.storeCity+'</td>';
+                    bodyData+='<td style="padding: 0">';                                 
+                             bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="addProduct(\''+row.id+'\')"><i class="fas fa-plus"></i>';
+                            bodyData+='</button>';
+                    bodyData+='</td>';                    
+            bodyData+='</tr>';
+                                             
+          })
+
+          var tableData = '<table id="table-4" class="table table-striped" style="font-size:11px !important">';       
+                tableData+='<thead>';
+                    tableData+='<tr class="text-center">';
+                    tableData+='<th>Product Name</th>';
+                    tableData+='<th>Store Name</th>';
+                    tableData+='<th>Store City</th>';
+                    tableData+='<th></th>';
+                    tableData+='</tr>';
+                tableData+='</thead>';  
+           tableData+='<tbody id="filterStoreList">';
+           tableData+=bodyData;
+                tableData+='</tbody>';
+            tableData+='</table>';
+
+          $("#searchResultList").html(tableData);
+     }
+
+
+     function showSearchResultCategory(resultData) {
+          var bodyData = '';
+          var i=1;
+          $.each(resultData,function(index,row){
+            console.log(row);
+
+            bodyData+='<tr class="text-center">';                         
+                    bodyData+='<td style="padding: 0">'+row.name+'</td>';                    
+                    bodyData+='<td style="padding: 0">'+row.verticalCode+'</td>';
+                    if (row.parentCategoryId==null) {
+                        bodyData+='<td style="padding: 0"></td>';    
+                    } else {
+                        bodyData+='<td style="padding: 0">'+row.parentCategoryId+'</td>';
+                    }                    
+                    bodyData+='<td style="padding: 0">';                                 
+                             bodyData+='<button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="addCategory(\''+row.id+'\')"><i class="fas fa-plus"></i>';
+                            bodyData+='</button>';
+                    bodyData+='</td>';                    
+            bodyData+='</tr>';
+                                             
+          })
+
+          var tableData = '<table id="table-4" class="table table-striped" style="font-size:11px !important">';       
+                tableData+='<thead>';
+                    tableData+='<tr class="text-center">';
+                    tableData+='<th>Category Name</th>';
+                    tableData+='<th>Vertical</th>';
+                    tableData+='<th>Parent Category</th>';
+                    tableData+='<th></th>';
+                    tableData+='</tr>';
+                tableData+='</thead>';  
+           tableData+='<tbody id="filterStoreList">';
+           tableData+=bodyData;
+                tableData+='</tbody>';
+            tableData+='</table>';
+
+          $("#searchResultList").html(tableData);
+     }
+
+
      function addStore(storeId) {
             
             var keywordId = document.getElementById("keywordId").value;
@@ -196,6 +311,51 @@
                 },
                data:{
                     storeId : storeId,
+                    keywordId : keywordId,
+                },
+               success:function(data) {
+                  alert('Details added!');
+                  queryDetails();
+               }
+            });
+        }
+
+
+    function addProduct(productId) {
+            
+            var keywordId = document.getElementById("keywordId").value;
+
+            $.ajax({
+               type:'POST',
+               url:'/save_tag_details',
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type' : 'application/x-www-form-urlencoded'
+                },
+               data:{
+                    productId : productId,
+                    keywordId : keywordId,
+                },
+               success:function(data) {
+                  alert('Details added!');
+                  queryDetails();
+               }
+            });
+        }
+
+    function addCategory(categoryId) {
+            
+            var keywordId = document.getElementById("keywordId").value;
+
+            $.ajax({
+               type:'POST',
+               url:'/save_tag_details',
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type' : 'application/x-www-form-urlencoded'
+                },
+               data:{
+                    categoryId : categoryId,
                     keywordId : keywordId,
                 },
                success:function(data) {

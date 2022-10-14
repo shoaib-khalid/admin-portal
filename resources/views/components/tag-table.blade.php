@@ -9,24 +9,37 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
+                <?php if ($keyworddata==null) { 
+                    $keyword="";
+                    $longitude="";
+                    $latitude="";
+                    ?>
                 <form action="add_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <?php } else { 
+                        $keyword=$keyworddata->keyword;
+                        $longitude=$keyworddata->longitude;
+                        $latitude=$keyworddata->latitude;
+                    ?>
+                <form action="save_edit_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    <input type="hidden" name="id" value="<?php echo $keyworddata->id; ?>">
+                <?php } ?>
                         {{@csrf_field()}} 
                         <div class="input-group mb-3">  
                             <div class="col-3">Keyword</div>
                             <div class="col-7">
-                            <input type="text" name="keyword" id="keyword" class="form-control" value="" required></input>
+                            <input type="text" name="keyword" id="keyword" class="form-control" value="<?php echo $keyword; ?>" required></input>
                             </div>
                         </div>
                         <div class="input-group mb-3">  
                             <div class="col-3">Longitude</div>
                             <div class="col-7">
-                             <input type="text" name="longitude" id="longitude" class="form-control"></input>
+                             <input type="text" name="longitude" id="longitude" class="form-control" value="<?php echo $longitude; ?>"></input>
                             </div>
                         </div>  
                         <div class="input-group mb-3">  
                             <div class="col-3">Latitude</div>
                             <div class="col-7">
-                             <input type="text" name="latitude" id="latitude" class="form-control"></input>
+                             <input type="text" name="latitude" id="latitude" class="form-control" value="<?php echo $latitude; ?>"></input>
                             </div>
                         </div>                                                         
                             <div class="col-10">
@@ -61,7 +74,7 @@
                             <td>{{ $data->longitude }}</td>
                             <td>{{ $data->latitude }}</td>
                             <td>
-                            <form action="edit_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                            <form action="edit_tag" method="get" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
