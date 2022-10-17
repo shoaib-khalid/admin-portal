@@ -136,5 +136,95 @@
         });
         
     });
+
+
+    $('#table-4 tbody').on('click','.viewactivititydetails',function(){
+        
+        var sessionId = $(this).attr('data-id');
+        console.log("customerId:"+sessionId);
+        if(sessionId){
+
+        // AJAX request
+        var url = "{{ route('getactivity_details',[':sessionId']) }}";
+        url = url.replace(':sessionId',sessionId);
+        console.log("url:"+url);
+        // Empty modal data
+        $('#activitydetails tbody').empty();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(response){
+
+                console.log("response:"+response);
+                // Add details
+                $('#activitydetails tbody').html(response.html);
+
+                // Display Modal
+                $('#ActivityModal').modal('show'); 
+            }
+        });
+        }
+    });
+
+
+     $('#table-4 tbody').on('click','.viewacartdetails',function(){
+        
+        var sessionId = $(this).attr('data-id');
+        console.log("sessionId:"+sessionId);
+        if(sessionId){
+
+        // AJAX request
+        var url = "{{ route('getcart_details',[':sessionId']) }}";
+        url = url.replace(':sessionId',sessionId);
+        console.log("url:"+url);
+        // Empty modal data
+        $('#cartdetails tbody').empty();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(response){
+
+                console.log("response:"+response);
+                // Add details
+                $('#cartdetails tbody').html(response.html);
+
+                // Display Modal
+                $('#CartDetailsModal').modal('show'); 
+            }
+        });
+        }
+    });
+
+
+      $('#table-4 tbody').on('click','.vieworderdetails',function(){
+        
+        var sessionId = $(this).attr('data-id');
+        console.log("sessionId:"+sessionId);
+        if(sessionId){
+
+        // AJAX request
+        var url = "{{ route('getorder_details',[':sessionId']) }}";
+        url = url.replace(':sessionId',sessionId);
+        console.log("url:"+url);
+        // Empty modal data
+        $('#orderdetails tbody').empty();
+
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            success: function(response){
+
+                console.log("response:"+response);
+                // Add details
+                $('#orderdetails tbody').html(response.html);
+
+                // Display Modal
+                $('#OrderDetailsModal').modal('show'); 
+            }
+        });
+        }
+    });
     
 </script>

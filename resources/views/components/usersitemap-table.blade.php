@@ -93,9 +93,8 @@
                         <th>Time Spent</th>
                         <th>First Page Visited</th>
                         <th>Last Page Visited</th>
-                        <th>Item Added</th>   
-                        <th>Order Created</th>
-                        <th>Order Status</th>         
+                        <th>Cart Details</th>   
+                        <th>Order Created</th>                            
                         <th>Activity Details</th>           
                     </tr>
                 </thead>      
@@ -112,23 +111,13 @@
                             <td>{{ $data['timespent'] }}</td>
                             <td>{{ $data['lastpage'] }}</td>
                             <td>{{ $data['firstpage'] }}</td>      
-                            <td>{{ $data['AddedItem'] }}</td>  
                             <td>
-                            <?php if ($data['orderCreated']=="YES") { ?>
-                            <a href="#" class="btn btn-primary view_order" sessionId="{{ $data['sessionId'] }}">
-                            {{ $data['orderCreated'] }}
-                            </a>
-                            <?php } ?>
-                            </td>
-                            <td>{{ $data['orderStatus'] }}</td>
-                            <td><button type="button" class="btn btn-primary"
-                                    data-toggle="modal" data-target="#ActivityModal"
-                                    data-os="{{ $data['os'] }}"
-                                    data-created="{{ $data['created'] }}"
-                                    data-erroroccur="{{ $data['errorOccur'] }}"
-                                    data-devicemodel="{{ $data['deviceModel'] }}"
-                                    data-pagevisited="{{ $data['pageVisited'] }}"
-                                    data-errortype="{{ $data['errorType'] }}"><i class="far fa-check-circle"></i>Details</button>  
+                                <button class='btn btn-primary viewacartdetails' data-id="{{ $data['sessionId'] }}" >View</button> 
+                            </td>  
+                            <td>
+                             <button class='btn btn-primary vieworderdetails' data-id="{{ $data['sessionId'] }}" >View</button> 
+                            </td>                            
+                            <td><button class='btn btn-primary viewactivititydetails' data-id="{{ $data['sessionId'] }}" >View</button> 
                             </td>                      
                         </tr>
                     @endforeach

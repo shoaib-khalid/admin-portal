@@ -614,42 +614,82 @@
             </div>
             <div class="modal-body">
 
-                <form action="usersitemap" method="post" enctype="multipart/form-data" onload="document.getElementById('btnComplete').disabled=false;" >
-                    {{@csrf_field()}}
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Created</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="created2" id="created2">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">OS</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="os2" id="os2">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Page Visited</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="pagevisited2" id="pagevisited2">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Device Model</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="devicemodel2" id="devicemodel2">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Error Type</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="erroroccur2" id="erroroccur2">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="text-primary">Error Occur</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" name="errortype2" id="errortype2">
-                    </div>
-                </div>
+                <table class="w-100" id="activitydetails">
+                    <thead class="btn-light">
+                            <tr>
+                            <th  width="50%">Page Visited</th>
+                            <th  width="20%">Store</th>
+                            <th  width="10%">Channel</th>
+                            <th  width="20%">Created</th>
+                            </tr>
+                        </thead>
+                      <tbody>
+                      </tbody>
+                   </table>
+                
+            </div>
             
-                </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="CartDetailsModal">
+    <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cart Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <table class="w-100" id="cartdetails">
+                    <thead class="btn-light">
+                            <tr>
+                            <th  width="45%">CartId</th>
+                            <th  width="45%">Store</th>
+                            <th  width="10%">Item Added</th>                            
+                            </tr>
+                        </thead>
+                      <tbody>
+                      </tbody>
+                   </table>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="OrderDetailsModal">
+    <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                <table class="w-100" id="orderdetails">
+                    <thead class="btn-light">
+                            <tr>
+                            <th  width="10%">OrderId</th>
+                            <th  width="20%">Store</th>
+                            <th  width="20%">Status</th>
+                            <th  width="10%">InvoiceId</th>
+                            <th  width="20%">Payment Status</th>
+                            <th  width="10%">Created</th>
+                            </tr>
+                        </thead>
+                      <tbody>
+                      </tbody>
+                   </table>
                 
             </div>
             

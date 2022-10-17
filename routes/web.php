@@ -95,7 +95,9 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
     Route::get('/filter_useractivitylog', [ActivityController::class, "filter_useractivitylog"])->name('filter_refundhistory');
     Route::post('/export_useractivitylog', [ActivityController::class, "export_useractivitylog"])->name('export_useractivitylog');
-
+    Route::get('/getactivity_details/{sessionId}', [ActivityController::class, "getactivity_details"])->name('getactivity_details');
+    Route::get('/getcart_details/{sessionId}', [ActivityController::class, "getcart_details"])->name('getcart_details');
+    Route::get('/getorder_details/{sessionId}', [ActivityController::class, "getorder_details"])->name('getorder_details');
 
     Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap');
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap');

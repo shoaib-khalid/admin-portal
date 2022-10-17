@@ -867,6 +867,102 @@ class ActivityController extends Controller
         return Excel::download(new UserSiteMapExport($start_date, $end_date." 23:59:59"), 'usersitemap.xlsx');
     }
 
+    public function getactivity_details($sessionId){
+        $query = UserActivity::select('customer_activities.*','csession.address AS sessionAddress', 'csession.city AS sessionCity')
+                        ->where('customer_activities.sessionId', $sessionId)  
+                        ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId');
+        $datas = $query->paginate(100);
+        //dd($datas);
+        $html="";
+        foreach ($datas as $data) {
+         //dd($data);  
+            $sql="SELECT id, name FROM store WHERE id='".$data->storeId."'";
+            $store = DB::connection('mysql2')->select($sql);
+            if (count($store) > 0) {
+                $storename=$store[0]->name;
+            } else{
+                $storename= "";
+            }
+            $data->storeName = $storename;
+
+            $html .= "<tr>
+                 <td width='30%'> ".$data->pageVisited."</td>                
+                 <td width='20%'> ".$data->storeName."</td>   
+                 <td width='20%'> ".$data->channel."</td>   
+                 <td width='10%'> ".$data->created."</td>
+              </tr>";
+         }
+         $response['html'] = $html;
+   
+         return response()->json($response);
+    }
+
+
+    public function getcart_details($sessionId){
+        $sql="SELECT cartId FROM customer_session_carts WHERE sessionId='".$sessionId."'";
+        $datas = DB::connection('mysql3')->select($sql);
+        
+        $html="";
+        foreach ($datas as $data) {
+         //dd($data);
+            $sql="SELECT cart.*, store.name FROM cart INNER JOIN store ON cart.storeId=store.id WHERE cart.id='".$data->cartId."'";  
+            $cart = DB::connection('mysql2')->select($sql);
+            if (count($cart) > 0) {
+                $store=$cart[0]->name;
+            } else{
+                $store= "";
+            }
+
+            $sql="SELECT * FROM cart_item WHERE cartId='".$data->cartId."'";
+            $item = DB::connection('mysql2')->select($sql);
+            if (count($item) > 0) {
+                $itemAdded="YES";
+            } else{
+                $itemAdded= "NO";
+            }
+            $data->itemAdded = $itemAdded;
+            $data->store = $store;
+
+            $html .= "<tr>
+                 <td width='45%'> ".$data->cartId."</td>                
+                 <td width='45%'> ".$data->store."</td>                   
+                 <td width='10%'> ".$data->itemAdded."</td>
+              </tr>";
+         }
+         $response['html'] = $html;
+   
+         return response()->json($response);
+    }
+
+
+    public function getorder_details($sessionId){
+        $sql="SELECT cartId FROM customer_session_carts WHERE sessionId='".$sessionId."'";
+        $datas = DB::connection('mysql3')->select($sql);
+        
+        $html="";
+        foreach ($datas as $data) {
+         //dd($data);
+            $sql="SELECT A.*, B.name FROM `order` A INNER JOIN store B ON A.storeId=B.id WHERE A.cartId='".$data->cartId."'";  
+            $order = DB::connection('mysql2')->select($sql);   
+            //dd($order);
+            //echo $sql."<br>\n";
+            if (count($order) > 0) {
+                $html .= "<tr>
+                     <td width='45%'> ".$order[0]->id."&nbsp;</td> 
+                     <td width='45%'> ".$order[0]->name."&nbsp;</td> 
+                     <td width='45%'> ".$order[0]->completionStatus."&nbsp;</td>                   
+                     <td width='45%'> ".$order[0]->invoiceId."&nbsp;</td>                   
+                     <td width='10%'> ".$order[0]->paymentStatus."&nbsp;</td>
+                     <td width='10%'> ".$order[0]->created."</td>
+                  </tr>";
+            }
+         }
+         $response['html'] = $html;
+   
+         return response()->json($response);
+    }
+
+
     public function userdata(){
         //query by Customer
         $selectedCountry = Session::get('selectedCountry');
