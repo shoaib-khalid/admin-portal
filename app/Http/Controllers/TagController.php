@@ -240,7 +240,12 @@ class TagController extends Controller
         $data = new TagConfig();
         $data->tagId = $request->keywordId;
         $data->property = $request->prop;
-        $data->content = $request->txtContent;
+        if ($data->property=="type") {
+            $data->content = $request->typeContent;
+        } else {
+            $data->content = $request->txtContent;    
+        }
+        
 
         if ($file) {
             $extension = $file->getClientOriginalExtension();

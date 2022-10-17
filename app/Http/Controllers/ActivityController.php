@@ -98,10 +98,10 @@ class ActivityController extends Controller
             }
             $data->storeName = $storename;
 
-            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $sql="SELECT id, username FROM customer WHERE id='".$data->customerId."'";
             $customer = DB::connection('mysql2')->select($sql);
             if (count($customer) > 0) {
-                $customername=$customer[0]->name;
+                $customername=$customer[0]->username;
             } else{
                 $customername= "";
             }
@@ -258,10 +258,10 @@ class ActivityController extends Controller
             $data->storeName = $storename;
 
 
-            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $sql="SELECT id, username FROM customer WHERE id='".$data->customerId."'";
             $customer = DB::connection('mysql2')->select($sql);
             if (count($customer) > 0) {
-                $customername=$customer[0]->name;
+                $customername=$customer[0]->username;
             } else{
                 $customername= "";
             }
@@ -531,10 +531,10 @@ class ActivityController extends Controller
             $data->storeName = $storename;
 
 
-            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $sql="SELECT id, username FROM customer WHERE id='".$data->customerId."'";
             $customer = DB::connection('mysql2')->select($sql);
             if (count($customer) > 0) {
-                $customername=$customer[0]->name;
+                $customername=$customer[0]->username;
             } else{
                 $customername= "";
             }
@@ -780,10 +780,10 @@ class ActivityController extends Controller
             $data->storeName = $storename;
 
 
-            $sql="SELECT id, name FROM customer WHERE id='".$data->customerId."'";
+            $sql="SELECT id, username FROM customer WHERE id='".$data->customerId."'";
             $customer = DB::connection('mysql2')->select($sql);
             if (count($customer) > 0) {
-                $customername=$customer[0]->name;
+                $customername=$customer[0]->username;
             } else{
                 $customername= "";
             }

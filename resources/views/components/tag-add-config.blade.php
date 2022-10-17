@@ -43,24 +43,31 @@
                     <div class="input-group mb-3">
                         <div class="col-3">Property</div>
                         <div class="col-7">
-                            <input type="radio" id="title" name="prop" value="title" checked>
+                            <input type="radio" id="title" name="prop" value="title" checked onchange="handleChange(this);">
                                 <label for="title">Title</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="radio" id="type" name="prop" value="type">
+                            <input type="radio" id="type" name="prop" value="type" onchange="handleChange(this);">
                                 <label for="type">Type</label>&nbsp;&nbsp;&nbsp;&nbsp; 
-                            <input type="radio" id="bannerMobile" name="prop" value="bannerMobile">
+                            <input type="radio" id="bannerMobile" name="prop" value="bannerMobile" onchange="handleChange(this);">
                                 <label for="bannerMobile">Banner Mobile</label>&nbsp;&nbsp;&nbsp;&nbsp;    
-                            <input type="radio" id="bannerDesktop" name="prop" value="bannerDesktop">
+                            <input type="radio" id="bannerDesktop" name="prop" value="bannerDesktop" onchange="handleChange(this);">
                                 <label for="bannerDesktop">Banner Desktop</label>                          
                         </div>                          
                     </div>
 
+
                     <div class="input-group mb-3">
                         <div class="col-3">Content</div>
-                        <div class="col-7">
+                        <div class="col-7" id="selectType" style="display:none">
+                                <input type="radio" id="foodcourt" name="typeContent" value="title" checked>
+                                <label for="foodcourt">foodcourt</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" id="restaurant" name="typeContent" value="type">
+                                <label for="restaurant">restaurant</label>&nbsp;&nbsp;&nbsp;&nbsp;                                                             
+                        </div> 
+                        <div class="col-7" id="inputType" style="">
                             <div class="input-group mb-3">
                                 <input class="form-control" type="text" name="txtContent" id="txtContent" value="">                                
                             </div>                          
-                        </div>                                              
+                        </div>                                               
                     </div>
 
                      <div class="input-group mb-3">
@@ -316,4 +323,17 @@
     }
 
     queryDetails();
+
+    function handleChange(src) {
+        //alert(src.value);
+        var x = document.getElementById("selectType");
+        var x2 = document.getElementById("inputType");
+        if (src.value=="type") {
+            x.style.display = "block";
+            x2.style.display = "none";
+        } else {
+            x.style.display = "none";
+            x2.style.display = "block";
+        }        
+    }
 </script>
