@@ -72,8 +72,8 @@
                         <tr class="text-center">
                             <td>{{ $data->id }}</td>
                             <td>{{ $data->keyword }}</td>
-                            <td>https://www.dinein.my/getting-started/{{ $data->keyword }}<br><br>
-https://www.dinein.my/getting-started/{{ $data->keyword }}?tableno=1</td>
+                            <td>{{$tagurl}}/{{ $data->keyword }}<br><br>
+{{$tagurl}}/{{ $data->keyword }}?tableno=1</td>
                             <td>{{ $data->longitude }}</td>
                             <td>{{ $data->latitude }}</td>
                             <td>

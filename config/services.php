@@ -49,6 +49,7 @@ return [
         'url' => env('TAG_BANNER_BASEURL'),
         'path' => env('TAG_BANNER_PATH'),
         'previewurl' => env('TAG_BANNER_PREVIEWURL'),
+        'usageurl' => env('TAG_USAGE_URL'),
     ],
 
 ];

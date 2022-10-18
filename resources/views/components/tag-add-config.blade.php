@@ -49,7 +49,7 @@
                                 <label for="type">Type</label>&nbsp;&nbsp;&nbsp;&nbsp; 
                             <input type="radio" id="bannerMobile" name="prop" value="bannerMobile" onchange="handleChange(this);">
                                 <label for="bannerMobile">Banner Mobile</label>&nbsp;&nbsp;&nbsp;&nbsp;    
-                            <input type="radio" id="bannerDesktop" name="prop" value="bannerDesktop" onchange="handleChange(this);">
+                            <input type="radio" id="bannerDesktop" name="prop" value="banner" onchange="handleChange(this);">
                                 <label for="bannerDesktop">Banner Desktop</label>                          
                         </div>                          
                     </div>

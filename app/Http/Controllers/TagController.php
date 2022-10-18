@@ -27,6 +27,7 @@ class TagController extends Controller
     protected $baseurl;
     protected $basepreviewurl;
     protected $basepath;
+    protected $tagurl;
 
     function __construct() {
             $this->url = config('services.report_svc.url');
@@ -34,6 +35,7 @@ class TagController extends Controller
             $this->baseurl = config('services.tagbanner_svc.url');
             $this->basepreviewurl = config('services.tagbanner_svc.previewurl');
             $this->basepath = config('services.tagbanner_svc.path');
+            $this->tagurl = config('services.tagbanner_svc.usageurl');
     }
 
 
@@ -57,7 +59,8 @@ class TagController extends Controller
         }     
         //dd($datas); 
         $keyworddata=null; 
-        return view('components.tag', compact('datas','keyworddata'));
+        $tagurl = $this->tagurl;
+        return view('components.tag', compact('datas','keyworddata','tagurl'));
     }
 
     public function add_tag(Request $request){
