@@ -58,9 +58,9 @@
                     <div class="input-group mb-3">
                         <div class="col-3">Content</div>
                         <div class="col-7" id="selectType" style="display:none">
-                                <input type="radio" id="foodcourt" name="typeContent" value="title" checked>
+                                <input type="radio" id="foodcourt" name="typeContent" value="foodcourt" checked>
                                 <label for="foodcourt">foodcourt</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" id="restaurant" name="typeContent" value="type">
+                                <input type="radio" id="restaurant" name="typeContent" value="restaurant">
                                 <label for="restaurant">restaurant</label>&nbsp;&nbsp;&nbsp;&nbsp;                                                             
                         </div> 
                         <div class="col-7" id="inputType" style="">
