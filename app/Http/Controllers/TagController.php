@@ -89,7 +89,8 @@ class TagController extends Controller
             $data->configs = $configs;
         }     
         $keyworddata=null; 
-        return view('components.tag', compact('datas','keyworddata'));
+        $tagurl = $this->tagurl;
+        return view('components.tag', compact('datas','keyworddata','tagurl'));
     }
 
     public function edit_tag(Request $request){
@@ -115,7 +116,8 @@ class TagController extends Controller
         $keyworddatas = TagKeyword::where('id',$request->id)->get();
         $keyworddata = $keyworddatas[0];
 
-        return view('components.tag', compact('datas','keyworddata'));
+        $tagurl = $this->tagurl;
+        return view('components.tag', compact('datas','keyworddata','tagurl'));
     }
 
     public function delete_tag(Request $request){
@@ -138,7 +140,8 @@ class TagController extends Controller
             $data->configs = $configs;
         }   
         $keyworddata=null;  
-        return view('components.tag', compact('datas','keyworddata'));
+        $tagurl = $this->tagurl;
+        return view('components.tag', compact('datas','keyworddata','tagurl'));
     }
 
     public function save_edit_tag(Request $request){
@@ -169,7 +172,8 @@ class TagController extends Controller
         }     
         $keyworddata=null;
 
-        return view('components.tag', compact('datas','keyworddata'));
+        $tagurl = $this->tagurl;
+        return view('components.tag', compact('datas','keyworddata','tagurl'));
     }
 
 
