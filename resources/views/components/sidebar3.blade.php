@@ -132,6 +132,9 @@ $navigation_links = array_to_object($links);
                 <li class="">
                     <a class="nav-link {{ Request::routeIs('userincompleteorder') ? '' : 'text-gray-400' }}" href="{{ route('userincompleteorder') }}"><i class="fas fa-exclamation-circle pr-3"></i><span>Incomplete Order</span></a>
                 </li>
+                 <li class="">
+                    <a class="nav-link {{ Request::routeIs('mobilelog') ? '' : 'text-gray-400' }}" href="{{ route('mobilelog') }}"><i class="fas fa-exclamation-circle pr-3"></i><span>MobileApp Log</span></a>
+                </li>
 
             </ul>
 
@@ -223,7 +226,7 @@ $navigation_links = array_to_object($links);
         openTab(tabid3);
     }
 
-    var tabid4 = "{{ (Request::routeIs('useractivitylog') || Request::routeIs('userdata') || Request::routeIs('usersitemap') || Request::routeIs('visitchannel') || Request::routeIs('useractivitysummary') || Request::routeIs('userabandoncartsummary') || Request::routeIs('userincompleteorder')) ? 'tabanalytic' : '' }}";
+    var tabid4 = "{{ (Request::routeIs('useractivitylog') || Request::routeIs('userdata') || Request::routeIs('usersitemap') || Request::routeIs('visitchannel') || Request::routeIs('useractivitysummary') || Request::routeIs('userabandoncartsummary') || Request::routeIs('userincompleteorder') || Request::routeIs('mobilelog')) ? 'tabanalytic' : '' }}";
     if (tabid4) {
         openTab(tabid4);
     }

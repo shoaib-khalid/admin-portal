@@ -17,6 +17,7 @@ use App\Http\Controllers\MarketPopupController;
 use App\Http\Controllers\ParentCategoryController;
 use App\Http\Controllers\OgTagController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\MobileLogController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -257,4 +258,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('query_tag_config', [TagController::class, "query_tag_config"])->name('query_tag_config');
     Route::post('deletemultiple_tag_config', [TagController::class, "deletemultiple_tag_config"])->name('deletemultiple_tag_config');
     Route::post('/filter_category', [FeaturedCategoryController::class, "filter_category"])->name('filter_category');
+
+
+    Route::get('/mobilelog', [MobileLogController::class, "index"])->name('mobilelog');
+    Route::post('/mobilelog_filter', [MobileLogController::class, "mobilelog_filter"])->name('mobilelog_filter');
 });
