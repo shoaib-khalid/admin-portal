@@ -362,57 +362,28 @@ class ActivityController extends Controller
         $date = new DateTime('1 days ago');
         $from = $date->format("Y-m-d");
         $selectedCountry = Session::get('selectedCountry');
-        //query group by sessionId
-        if($selectedCountry == 'MYS') {
-            // $datas = UserActivity::select('sessionId')->distinct()
-            //             ->select('customer_activities.storeId','customer_activities.customerId','csession.address AS sessionAddress', 'csession.city AS sessionCity')
-            //             ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-            //             ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-            //             ->where('pageVisited', 'like', '%dev-my%')
-            //             ->orWhere('pageVisited', 'like', '%deliverin.my%')
-            //             ->orderBy('customer_activities.created', 'DESC')
-            //             ->paginate();
 
-            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
-                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
-                        ->where('pageVisited', 'like', '%dev-my%');
-    
-            $datas =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
-                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
-                        ->where('pageVisited', 'like', '%deliverin.my%')
-                        ->groupBy('customer_activities.sessionId') 
-                        ->union($datas1)
-                        ->groupBy('customer_activities.sessionId')
-                        ->paginate(15);
-        }
 
-        if($selectedCountry == 'PAK'){
-            // $datas = UserActivity::select('sessionId')->distinct()
-            //             ->select('csession.address AS sessionAddress', 'csession.city AS sessionCity')
-            //             ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-            //             ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])  
-            //             ->where('pageVisited', 'like', '%dev-pk%')
-            //             ->orWhere('pageVisited', 'like', '%easydukan.co%')
-            //             ->orderBy('customer_activities.created', 'DESC')
-            //             ->paginate();
+        $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
+                ->leftjoin('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
+                ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"]);
+        
+        if($selectedCountry == "MYS"){
+            $query->where(function ($query) {
+                $query->where('pageVisited', 'like', '%dev-my%')
+                ->orWhere('pageVisited', 'like', '%deliverin.my%');
+            });           
+          }
 
-            $datas1  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
-                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
-                        ->where('pageVisited', 'like', '%dev-pk%');
+          if($selectedCountry == "PAK"){
+             $query->where(function ($query) {
+                $query->where('pageVisited', 'like', '%dev-pk%')
+                ->orWhere('pageVisited', 'like', '%easydukan.co%');
+            });              
+          }
 
-            $datas  =  UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId', 'customer_activities.storeId','customer_activities.customerId')
-                        ->join('customer_session as csession', 'customer_activities.sessionId', '=', 'csession.sessionId')
-                        ->whereBetween('customer_activities.created', [$from, $to." 23:59:59"])
-                        ->where('pageVisited', 'like', '%easydukan.co%')
-                        ->union($datas1)
-                        ->groupBy('customer_activities.sessionId')
-                        ->paginate(15);
-        }
-
-        //dd($datas);
+        $query->groupBy('customer_activities.sessionId')->orderBy('customer_activities.created', 'DESC');
+        $datas = $query->paginate(15);       
 
         foreach ($datas as $data) {
 
@@ -539,6 +510,14 @@ class ActivityController extends Controller
                 $customername= "";
             }
             $data->customerName = $customername;
+
+            if ($customername=="") {
+                $sql="SELECT email FROM guest_session WHERE id='".$data['sessionId']."'";
+                $rscustomer = DB::connection('mysql2')->select($sql);
+                if (count($rscustomer) > 0) {
+                    $data->customerName = $rscustomer[0]->email;
+                }
+            }            
 
 
             //get all history
@@ -789,6 +768,13 @@ class ActivityController extends Controller
             }
             $data->customerName = $customername;
 
+            if ($customername=="") {
+                $sql="SELECT email FROM guest_session WHERE id='".$data['sessionId']."'";
+                $rscustomer = DB::connection('mysql2')->select($sql);
+                if (count($rscustomer) > 0) {
+                    $data->customerName = $rscustomer[0]->email;
+                }
+            }     
 
              //get all history
             $sql="SELECT created, pageVisited, os, deviceModel, errorOccur, errorType FROM customer_activities WHERE sessionId='".$data['sessionId']."' ORDER BY created ASC";
