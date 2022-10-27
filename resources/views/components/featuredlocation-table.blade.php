@@ -67,10 +67,10 @@
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                 <td><input type="text" name="sequence" value="{{ $data['sequence'] }}" class="form-control" ></td>
                                 <td>
-                                   
+                                    @if(checkPermission('edit_featuredlocation','POST'))                           
                                          <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> 
                                         </button>
-                                   
+                                    @endif
                                    
                                 </td>
                              </form>                          

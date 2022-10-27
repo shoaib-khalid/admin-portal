@@ -81,10 +81,12 @@
                             <div class="col-7">
                              <textarea name="displayText" id="displayText" class="form-control" value="" style="height:100px !important"></textarea>
                             </div>
-                        </div>                                                       
+                        </div> 
+                            @if(checkPermission('add_promotext','POST'))
                             <div class="col-10">
                                 <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
                             </div>
+                            @endif
                     </form>
                     <?php } ?>
                     <div class="input-group mb-3">  
@@ -133,18 +135,22 @@
                             <td>{{ $data['eventId'] }}</td>
                             <td>{{ $data['displayText'] }}</td>
                             <td>
+                                @if(checkPermission('edit_promotext','POST'))
                                 <form action="edit_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
                                     </button>
                                 </form>
+                                @endif
+                                @if(checkPermission('delete_promotext','POST'))
                                 <form action="delete_promotext" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close"></i> 
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

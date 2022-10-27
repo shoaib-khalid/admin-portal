@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -68,6 +69,22 @@ class User extends Authenticatable
         return empty($query) ? static::query()
             : static::where('name', 'like', '%'.$query.'%')
                 ->orWhere('email', 'like', '%'.$query.'%');
+    }
+
+    /*public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'user_roles');
+    }*/
+
+    public function isAuthorized($object, $operation)
+    {
+        return Db::table('role_permission')
+            ->where('menu', $object)
+            ->where('operation', $operation)
+            ->join('menu', 'menu.id', '=', 'role_permission.menu_id')
+            ->join('user_roles', 'user_roles.role_id', '=', 'role_permission.role_id')
+            ->where('user_roles.user_id', $this->id)
+            ->exists();
     }
 
 }

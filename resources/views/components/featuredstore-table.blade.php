@@ -350,8 +350,10 @@
             </table>
 
              <div class="w-full flex flex-row justify-end">
+                @if(checkPermission('deletemultiple_featuredstore','POST')) 
                  <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteMultiple()"><span>Delete Store</span> 
                  </button>
+                @endif
             </div>
 
             {{-- <div class="row" style="margin-top: 5px;">

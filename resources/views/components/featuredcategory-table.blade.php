@@ -185,7 +185,9 @@
                     <div class="input-group mb-3">
                         <input type="text" name="sequence" id="sequence" class="form-control"  value="" placeholder="Sequence">  
                         <div class="input-group-append">
+                            @if(checkPermission('add_featuredcategory','POST'))
                             <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Add</span></button>
+                            @endif
                         </div>
                     </div>
                                
@@ -246,10 +248,10 @@
                                      <input type="hidden" name="cityId" value="{{ $data['cityId'] }}">
                                 <td><input type="text" name="sequence" value="{{ $data['sequence'] }}" class="form-control" ></td>
                                 <td>
-                                   
+                                    @if(checkPermission('edit_featuredcategory','POST'))
                                          <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> 
                                         </button>
-                                   
+                                    @endif
                                    
                                 </td>
                              </form>                             
@@ -260,8 +262,10 @@
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <input type="hidden" name="cityId" value="{{ $data['cityId'] }}">
                                      <input type="hidden" name="stateId" value="{{ $data['stateId'] }}">
+                                     @if(checkPermission('delete_featuredcategory','POST'))
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to delete this city?')"><i class="fas fa-window-close"></i> 
                                     </button>
+                                    @endif
                                 </form>
                                 <?php } ?>
                             </td>

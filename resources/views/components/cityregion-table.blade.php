@@ -112,7 +112,9 @@
                             @endforeach
                         </select> 
                         <div class="input-group-append">
+                            @if(checkPermission('add_cityregion','POST')) 
                             <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Add</span></button>
+                            @endif
                         </div>               
                     </div>                                   
                 </form>
@@ -167,8 +169,12 @@
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <input type="hidden" name="cityId" value="{{ $data['userLocationCityId'] }}">
                                      <input type="hidden" name="stateId" value="{{ $data['stateId'] }}">
+
+                                     @if(checkPermission('delete_cityregion','POST')) 
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to delete this city?')"><i class="fas fa-window-close"></i> 
                                     </button>
+                                    @endif
+                                    
                                 </form>
                             </td>
                         </tr>

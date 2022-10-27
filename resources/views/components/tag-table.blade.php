@@ -43,7 +43,15 @@
                             </div>
                         </div>                                                         
                             <div class="col-10">
-                                <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                                <?php if ($keyworddata==null) { ?>
+                                    @if(checkPermission('add_tag','POST')) 
+                                    <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                                    @endif
+                                <?php } else { ?>
+                                    @if(checkPermission('save_edit_tag','POST')) 
+                                    <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                                    @endif
+                                <?php } ?>
                             </div>
                 </form>
             </div>
@@ -88,8 +96,10 @@
                             <form action="delete_tag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
+                                     @if(checkPermission('delete_tag','POST')) 
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close" onclick="return confirm('Are you sure want to delete this record?')"></i> 
                                     </button>
+                                     @endif
                                 </form>
                             </td>
                             <td>
@@ -100,7 +110,9 @@
                                             <th>Store</th>
                                             <th>Category</th>
                                             <th>
+                                                @if(checkPermission('add_tag_details','POST')) 
                                                  <button class="btn btn-success" style="float: right;" type="button" onclick="addDetails('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
+                                                @endif
                                             </th>
                                         </tr>
                                     </thead>
@@ -124,7 +136,9 @@
                                             <th>Property</th>
                                             <th>Content</th>
                                             <th>
+                                                @if(checkPermission('add_tag_config','POST')) 
                                                  <button class="btn btn-success" style="float: right;" type="button" onclick="addConfig('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
+                                                @endif
                                             </th>                                            
                                         </tr>
                                     </thead>

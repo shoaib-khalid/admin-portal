@@ -66,7 +66,9 @@
                         </div>                                  
                         <div class="input-group mb-3">                        
                             <div class="col-10">
+                                @if(checkPermission('add_marketpopup','POST')) 
                                 <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                                @endif
                             </div>
                         </div>
                     </form>
@@ -126,17 +128,21 @@
                             <td><input type="text" name="actionUrl" class="form-control"  value="{{ $data['actionUrl'] }}"></td>
 
                             <td>
+                                @if(checkPermission('edit_marketpopup','POST')) 
                                  <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveSequence('{{ $data->id }}')"><i class="fas fa-save"></i> 
                                         </button>
+                                @endif
                             </td>
                             </form>
                             <td>
+                                @if(checkPermission('delete_marketpopup','POST')) 
                                 <form action="delete_marketpopup" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to remove this?')"><i class="fas fa-window-close"></i> 
                                     </button>
                                 </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

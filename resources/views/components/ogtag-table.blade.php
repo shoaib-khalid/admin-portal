@@ -79,11 +79,13 @@
                              <input type="text" name="name" id="name" class="form-control" value=""></input>
                             </div>
                         </div>  
-                        <!--                                                 
+                        
+                        @if(checkPermission('add_ogtag','POST'))                                               
                             <div class="col-10">
                                 <button class="btn btn-success" style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
                             </div>
-                            !-->
+                        @endif
+                            
                     </form>
                     <?php } ?>
                     <div class="input-group mb-3">  
@@ -137,20 +139,22 @@
                             <td>{{ $data->content }}</td>
                             <td>{{ $data->name }}</td>
                             <td>
-                                <!--
+                           @if(checkPermission('edit_ogtag','POST'))                                               
                             <form action="edit_ogtag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-wrench"></i> 
                                     </button>
                                 </form>
+                            @endif
+                            @if(checkPermission('delete_ogtag','POST'))                                               
                             <form action="delete_ogtag" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-window-close" onclick="return confirm('Are you sure want to delete this record?')"></i> 
                                     </button>
                                 </form>
-                                !-->
+                            @endif
                             </td>
                         </tr>
                     @endforeach

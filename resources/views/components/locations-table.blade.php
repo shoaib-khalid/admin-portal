@@ -123,7 +123,9 @@
                         </div>                                  
                         <div class="input-group mb-3">                        
                             <div class="col-10">
+                                @if(checkPermission('add_location','POST')) 
                                 <button class="btn btn-success"  style="float: right;" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                                @endif
                             </div>
                         </div>
                     </form>
@@ -185,10 +187,10 @@
                                 <input type="file" name="selectFile">
                             </td>
                             <td>
-                                   
+                                        @if(checkPermission('edit_location','POST')) 
                                          <button type="submit" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;"><i class="fas fa-save"></i> 
                                         </button>
-                                   
+                                        @endif
                                    
                             </td>
                             </form>    
@@ -197,8 +199,12 @@
                                  <form action="delete_location" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                                     {{@csrf_field()}}
                                      <input type="hidden" name="id" value="{{ $data['id'] }}">
+
+                                     @if(checkPermission('delete_location','POST')) 
                                      <button type="submit" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="return confirm('Are you sure want to delete this location?')"><i class="fas fa-window-close"></i> 
                                     </button>
+                                    @endif
+                                    
                                 </form>
                             </td>
                         </tr>

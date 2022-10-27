@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use App\Models\User;
+use App\Models\UserRole;
+use App\Models\Roles;
+use App\Models\RolePermission;
 use App\Models\Client;
 use App\Models\PaymentDetail as Payment;
 use App\Models\Store;
@@ -33,6 +36,125 @@ class UserController extends Controller
     function __construct() {
             $this->url = config('services.report_svc.url');
             $this->token = config('services.report_svc.token');
+    }
+
+    public function user ()
+    {
+       $query = User::select('users.*','roles.name AS rolesName')
+                        ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
+                        ->join('roles', 'roles.id', '=', 'user_roles.role_id');
+       $query->orderBy('created_at', 'DESC');
+       $datas = $query->paginate(15);
+       $channelList = array('DELIVERIN','PAYHUB2U','ALL');
+       $sql="SELECT * FROM roles";
+       $rolesList = DB::connection('mysql')->select($sql);
+       $channelSelected='';
+       $rolesSelected='';
+
+       return view('components.user', compact('datas','channelList','rolesList','channelSelected','rolesSelected'));
+    }
+
+    public function add_user (Request $request) {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->channel = $request->selectChannel;
+        $user->save();
+        //save roles
+        $role = new UserRole();
+        $role->role_id = $request->selectRoles;
+        $role->user_id = $user->id;
+        $role->save();
+        return redirect()->route("user");
+    }
+
+    public function delete_user (Request $request) {
+        DB::connection('mysql')->delete("DELETE FROM user_roles WHERE user_id='".$request->deleteUserId."'");
+        DB::connection('mysql')->delete("DELETE FROM users WHERE id='".$request->deleteUserId."'");
+        return redirect()->route("user");
+    }
+
+     public function roles ()
+    {
+       $query = Roles::select('roles.*');                        
+       $query->orderBy('created_at', 'DESC');
+       $datas = $query->paginate(15);      
+       $rolesSelected='';
+
+       return view('components.roles', compact('datas','rolesSelected'));
+    }
+
+    public function add_roles (Request $request) {
+        $role = new Roles();
+        $role->name = $request->name;
+        $role->is_enabled = 1;
+        $role->save();
+        return redirect()->route("roles");
+    }
+
+     public function delete_roles (Request $request) {
+        DB::connection('mysql')->delete("DELETE FROM user_roles WHERE role_id='".$request->deleteRoleId."'");
+        DB::connection('mysql')->delete("DELETE FROM roles WHERE id='".$request->deleteRoleId."'");
+        return redirect()->route("roles");
+    }
+
+    public function roles_permission ($roleId)
+    {
+        $sql="SELECT A.*, B.name AS roleName, C.menu AS menuName FROM role_permission A
+            INNER JOIN `roles` B ON A.role_id=B.id 
+            INNER JOIN `menu` C ON A.menu_id=C.id 
+            WHERE A.role_id='".$roleId."'";
+
+         //dd($sql);
+         $permission=array();
+         $datas = DB::connection('mysql')->select($sql);
+         foreach ($datas as $data) {
+            $permission[$data->menu_id] = true;
+         }
+        // dd($permission);
+
+        $sql="SELECT * FROM menu ORDER BY menu";
+        $menus = DB::connection('mysql')->select($sql);
+
+        $html = "";
+        foreach ($menus as $menu) {
+            if (array_key_exists($menu->id, $permission)) {
+                $menu->selected=true;            
+            }
+            else {
+                $menu->selected=false;
+            }
+
+                     
+            $html .= "<tr>
+                    <td width='30%'> ".$menu->id."</td>                
+                    <td width='20%'> ".$menu->menu."</td>              
+                    <td width='20%'> ".$menu->operation."</td>";
+            if ($menu->selected) {
+                $html .= "<td><input type=\"checkbox\" name=\"menuId[]\" value=".$menu->id." checked></td>";    
+            } else {
+                $html .= "<td><input type=\"checkbox\" name=\"menuId[]\" value=".$menu->id."></td>";    
+            }
+            $html .= "</tr>";
+            $html .= "<input type=\"hidden\" name=\"roleId\" value=".$roleId.">";
+
+            $response['html'] = $html;
+        }
+
+        return response()->json($response);
+    }
+
+    public function add_roles_permission (Request $request) {
+        
+        DB::connection('mysql')->delete("DELETE FROM role_permission WHERE role_id='".$request->roleId."'");
+        foreach ($request->menuId as $menu) {
+            $role = new RolePermission();
+            $role->role_id = $request->roleId;
+            $role->menu_id = $menu;
+            $role->save();            
+        }
+        //dd($request);
+        return redirect()->route("roles");
     }
 
     public function export() 

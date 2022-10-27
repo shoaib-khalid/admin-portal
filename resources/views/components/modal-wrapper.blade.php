@@ -696,3 +696,44 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="PermissionModalDetails">
+    <div class="modal-dialog" role="document" style="max-width: 1000px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Order Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <div class="modal-body">
+
+                 <form action="add_roles_permission" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    {{@csrf_field()}} 
+                    
+                <table class="w-100" id="permissioninfo">
+                    <thead class="btn-light">
+                            <tr>
+                            <th  width="10%">Id</th>
+                            <th  width="20%">Menu</th>
+                            <th  width="20%">Method</th>
+                            <th  width="20%"></th>
+                            </tr>
+                        </thead>
+                      <tbody>
+                      </tbody>
+                   </table>
+                
+                <div class="row">                
+                <div class="col-12" style="text-align:right">
+                <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Save</span></button>
+                </div>
+                </div>
+
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>

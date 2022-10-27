@@ -22,7 +22,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
- 
+use Auth;
+
 use App\Mail\NotifyMail;
 use App\Mail\EmailContent;
 
@@ -39,8 +40,7 @@ class RefundController extends Controller
             $this->storeLogo = config('services.logo_svc.storeLogo');
     }
 
-    public function pendingrefund(){
-
+    public function pendingrefund(){       
         $to = date("Y-m-d");
         $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
