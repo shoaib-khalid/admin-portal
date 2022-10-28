@@ -12,6 +12,7 @@ use App\Models\Refund;
 use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
@@ -43,16 +44,24 @@ class SettlementController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
+        $selectedService="DELIVERIN";
+        $selectedChannel="DELIVERIN";      
+        $selectedCountry = Session::get('selectedCountry');
 
-        $datas = Settlement::whereBetween('settlementDate', [$from, $to." 23:59:59"])  
+        $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
+                        ->whereBetween('settlementDate', [$from, $to." 23:59:59"])
+                        ->where('serviceType',$selectedService)  
+                        ->where('channel',$selectedChannel) 
+                        ->where('store.regionCountryId',$selectedCountry) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
         //print_r($datas);                    
 
         // return $datas;
         // die();        
-        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');                
-        return view('components.settlement2', compact('datas','datechosen'));
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
+                
+        return view('components.settlement2', compact('datas','datechosen','selectedService','selectedChannel'));
     }
 
     
@@ -67,12 +76,23 @@ class SettlementController extends Controller
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
 
-        $datas = Settlement::whereBetween('settlementDate', [$start_date, $end_date." 23:59:59"])  
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
+
+        $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
+                        ->whereBetween('settlementDate', [$start_date, $end_date." 23:59:59"])  
+                        ->where('serviceType',$req->selectService)  
+                        ->where('channel',$req->selectChannel) 
+                        ->where('store.regionCountryId',$selectedCountry) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
 
-        $datechosen = $req->date_chosen4;                
-        return view('components.settlement2', compact('datas', 'datechosen'));
+        $datechosen = $req->date_chosen4; 
+        $region = $req->region;
+        $selectedService=$req->selectService;
+        $selectedChannel=$req->selectChannel;
+                       
+        return view('components.settlement2', compact('datas', 'datechosen','selectedService','selectedChannel'));
 
     }
 

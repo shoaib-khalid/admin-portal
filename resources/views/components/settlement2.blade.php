@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-settlement2-table :datas="$datas" :datechosen="$datechosen"></x-settlement2-table>
+        <x-settlement2-table :datas="$datas" :datechosen="$datechosen" :selectedService="$selectedService" :selectedChannel="$selectedChannel"></x-settlement2-table>
     </div>
 </x-app-layout>
 <script>

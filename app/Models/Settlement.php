@@ -12,7 +12,7 @@ class Settlement extends Model
     
     protected $connection = 'mysql2';
 
-    protected $table = 'store_settlement';
+    protected $table = 'store_settlement2';
 
     protected $casts = ['id' => 'string'];
 

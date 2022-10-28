@@ -1,6 +1,7 @@
 @php
     // var_dump($datas);
     // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
 @endphp
 <div class="card section">
     <div class="card-header">
@@ -12,13 +13,51 @@
 
         <div class="row">
             <div class="col">
+            <div class="col">
                 
-                <form action="filter_settlement2" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                <form class="flex flex-row w-full" action="filter_settlement2" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}}
-                    <div class="input-group mb-3">
-                        <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+
+                    <div class="col">                       
+                        <div class="input-group mb-3">
+                            <div class="col-3">Country</div>
+                            <div class="col">                                
+                                    <select class="form-control" id="region" name="region">
+                                        <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                                    </select>                                    
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="col-3">Service</div>
+                            <div class="col">
+                                <select  class="form-control" name="selectService">
+                                    <option <?php if ($selectedService=="DELIVERIN") echo "selected"; ?>>DELIVERIN</option>
+                                    <option <?php if ($selectedService=="DINEIN") echo "selected"; ?>>DINEIN</option>
+                                </select>
+                            </div>
+                        </div>                   
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="col-3">Channel</div>
+                            <div class="col">
+                            <select  class="form-control" name="selectChannel">
+                                <option <?php if ($selectedChannel=="DELIVERIN") echo "selected"; ?> value="DELIVERIN">WEBSITE</option>
+                                <option <?php if ($selectedChannel=="PAYHUB2U") echo "selected"; ?> value="PAYHUB2U">PAYHUB2U</option>
+                            </select>
+                        </div>
+                        </div>                   
+                    </div>
+
+                    <div class="col">             
+                        <div class="input-group mb-3">
+                            <input type="text" name="date_chosen4" id="date_chosen4" class="form-control daterange-btn4" value="{{$datechosen}}">
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -33,6 +72,7 @@
                         <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
                         </button>
                     </form>
+            </div>
             </div>
         </div>
             
@@ -51,7 +91,9 @@
                         <th>Delivery Charge</th>
                         <th>Commission</th>
                         <th>Nett Amount</th>
-                        <th>Remarks</th>                    
+                        <th>Remarks</th>
+                        <th>Service</th>
+                        <th>Channel</th>    
                     </tr>
                 </thead>      
                 <tbody>
@@ -79,7 +121,9 @@
                             <td>{{ $data['totalDeliveryFee'] }}</td>
                             <td>{{ $data['totalCommisionFee'] }}</td>
                             <td>{{ $data['totalStoreShare'] }}</td>
-                            <td>{{ $data['remarks'] }}</td>                            
+                            <td>{{ $data['remarks'] }}</td>  
+                            <td>{{ $data['serviceType'] }}</td>  
+                            <td><?php if ($data['channel']=="DELIVERIN") echo "WEBSITE"; else echo $data['channel']; ?></td>                            
                         </tr>
                     @endforeach
 
