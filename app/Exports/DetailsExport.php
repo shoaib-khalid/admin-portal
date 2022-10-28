@@ -13,10 +13,16 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
+    protected $serviceType;
+    protected $channel;
+    protected $country;
 
-    function __construct($from, $to) {
+    function __construct($from, $to, $serviceType, $channel, $country) {
             $this->from = $from;
             $this->to = $to;
+            $this->serviceType = $serviceType;
+            $this->channel = $channel;
+            $this->country = $country;
     }
 
     /**
@@ -30,7 +36,10 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
             'startDate' => $this->from,
             'endDate' => $this->to,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => $this->serviceType,
+            'channel' => $this->channel,
+            'countryCode' => $this->country
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -50,6 +59,9 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
 
                 $cur_item = array();
 
+                $channel = $item['channel'];
+                if ($item['channel']=="DELIVERIN") $channel = "WEBSITE";
+
                 array_push( 
                     $cur_item,
                     $data['date'],
@@ -64,6 +76,8 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
                     $item['total'],
                     $item['orderStatus'],
                     $item['deliveryStatus'],
+                    $item['serviceType'], 
+                    $channel, 
                 );
 
                 $newArray[] = $cur_item;
@@ -94,6 +108,8 @@ class DetailsExport implements FromCollection, ShouldAutoSize, WithHeadings
             'Total',
             'Order Status',
             'Delivery Status',
+            'Service',
+            'Channel',
         ];
     }
 }

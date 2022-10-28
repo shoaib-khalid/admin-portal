@@ -13,10 +13,16 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
+    protected $serviceType;
+    protected $channel;
+    protected $country;
 
-    function __construct($from, $to) {
+    function __construct($from, $to, $serviceType, $channel, $country) {
             $this->from = $from;
             $this->to = $to;
+            $this->serviceType = $serviceType;
+            $this->channel = $channel;
+            $this->country = $country;
     }
 
     /**
@@ -31,7 +37,10 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
             'to' =>$this->to,
             'sortBy' => 'created',            
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => $this->serviceType,
+            'channel' => $this->channel,
+            'countryCode' => $this->country
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -69,7 +78,8 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
                 }
 
 
-
+                $channel = $data['channel'];
+                if ($data['channel']=="DELIVERIN") $channel = "WEBSITE";
                 
                 array_push( 
                     $cur_item,
@@ -86,6 +96,8 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
                     $data['total'],
                     $data['paymentStatus'],
                     $orderStatus,
+                    $data['serviceType'],
+                    $channel
                 );
 
                 $newArray[] = $cur_item;
@@ -118,6 +130,8 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
             'Total',
             'Payment Status',
             'Order Status',
+            'Service',
+            'Channel'
         ];
     }
 }

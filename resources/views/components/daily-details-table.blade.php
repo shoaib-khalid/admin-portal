@@ -74,6 +74,9 @@
                     <form action="/export_detail" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                         {{@csrf_field()}}
                         <input type="text" name="date_chosen2_copy" id="date_chosen2_copy" class="form-control daterange-btn2" value="{{$datechosen}}" hidden>
+                        <input type="text" name="service_copy" id="service_copy" class="" value="{{$selectedService}}" hidden>
+                        <input type="text" name="channel_copy" id="channel_copy" class="" value="{{$selectedChannel}}" hidden>
+                        <input type="text" name="country_copy" id="country_copy" class="" value="{{$selectedCountry}}" hidden>
                         <button type="submit" class="btn btn-success icon-left btn-icon float-right"><i class="fas fa-file"></i> <span>Export Excel</span>
                         </button>
                     </form>

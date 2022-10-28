@@ -186,8 +186,12 @@ class UserController extends Controller
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
+        $service=$req->service_copy;
+        $channel=$req->channel_copy;
+        $country = $req->country_copy;
+        //dd($req);
 
-        return Excel::download(new UsersExport($start_date, $end_date), 'dailySalesSummary.xlsx');
+        return Excel::download(new UsersExport($start_date, $end_date, $service, $channel, $country), 'dailySalesSummary.xlsx');
     }
 
     public function export_detail(Request $req) 
@@ -207,8 +211,11 @@ class UserController extends Controller
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
+        $service=$req->service_copy;
+        $channel=$req->channel_copy;
+        $country = $req->country_copy;
 
-        return Excel::download(new DetailsExport($start_date, $end_date), 'dailyDetailsSales.xlsx');
+        return Excel::download(new DetailsExport($start_date, $end_date, $service, $channel, $country), 'dailyDetailsSales.xlsx');
     }
 
 
@@ -591,8 +598,11 @@ class UserController extends Controller
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
+        $service=$req->service_copy;
+        $channel=$req->channel_copy;
+        $country = $req->country_copy;
 
-        return Excel::download(new GroupSalesExport($start_date, $end_date), 'dailyDetailsSales.xlsx');
+        return Excel::download(new GroupSalesExport($start_date, $end_date, $service, $channel, $country), 'dailyDetailsSales.xlsx');
     }
 
 

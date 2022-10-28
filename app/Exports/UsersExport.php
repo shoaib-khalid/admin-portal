@@ -13,10 +13,16 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
+    protected $serviceType;
+    protected $channel;
+    protected $country;
 
-    function __construct($from, $to) {
+    function __construct($from, $to, $serviceType, $channel, $country) {
             $this->from = $from;
             $this->to = $to;
+            $this->serviceType = $serviceType;
+            $this->channel = $channel;
+            $this->country = $country;
     }
 
     /**
@@ -30,7 +36,10 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
             'from' => $this->from,
             'to' => $this->to,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => $this->serviceType,
+            'channel' => $this->channel,
+            'countryCode' => $this->country
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -46,10 +55,14 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
         foreach($datas as $data){
             $cur_item = array();
 
+            $channel = $data['channel'];
+            if ($data['channel']=="DELIVERIN") $channel = "WEBSITE";
             array_push( 
                 $cur_item,
                 $data['date'],
                 $data['store']['name'],
+                $data['serviceType'], 
+                $channel, 
                 $data['totalOrders'], 
                 $data['amountEarned']
             );
@@ -72,6 +85,8 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
         return [
             'Date',
             'Store Name',
+            'Service',
+            'Channel',
             'Total Order',
             'Amount Earned',
         ];

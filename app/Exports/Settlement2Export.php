@@ -15,10 +15,16 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
 
     protected $from;
     protected $to;
+    protected $serviceType;
+    protected $channel;
+    protected $country;
 
-    function __construct($from, $to) {
+    function __construct($from, $to, $serviceType, $channel, $country) {
             $this->from = $from;
             $this->to = $to;
+            $this->serviceType = $serviceType;
+            $this->channel = $channel;
+            $this->country = $country;
     }
 
     /**
@@ -27,7 +33,11 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
     public function collection()
     {
 
-        $datas = Settlement::whereBetween('settlementDate', [$this->from, $this->to." 23:59:59"])  
+        $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
+                        ->whereBetween('settlementDate', [$this->from, $this->to." 23:59:59"])  
+                        ->where('serviceType',$this->serviceType)  
+                        ->where('channel',$this->channel) 
+                        ->where('store.regionCountryId',$this->country) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
                                         
@@ -36,6 +46,9 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
         foreach ($datas as $data) {
 
             $cur_item = array();
+
+            $channel = $data['channel'];
+            if ($data['channel']=="DELIVERIN") $channel = "WEBSITE";
 
             array_push( 
                 $cur_item,
@@ -48,7 +61,9 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
                 $data['totalDeliveryFee'],
                 $data['totalCommisionFee'],
                 $data['totalStoreShare'],
-                $data['remarks']
+                $data['remarks'],
+                $data['serviceType'],
+                $channel
             );
 
             $newArray[] = $cur_item;
@@ -80,7 +95,9 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
             'Delivery Charge',
             'Commision',
             'Nett Amount',
-            'Remarks'
+            'Remarks',
+            'Service',
+            'Channel'
         ];
     }
 }

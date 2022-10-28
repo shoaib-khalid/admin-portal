@@ -140,8 +140,11 @@ class SettlementController extends Controller
 
         // $from = "2021-08-01";
         // $to = "2021-08-30";
+        $service=$req->service_copy;
+        $channel=$req->channel_copy;
+        $country = $req->country_copy;
 
-        return Excel::download(new Settlement2Export($start_date, $end_date." 23:59:59"), 'settlement.xlsx');
+        return Excel::download(new Settlement2Export($start_date, $end_date." 23:59:59", $service, $channel, $country), 'settlement.xlsx');
     }
 
 
