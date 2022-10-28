@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-daily-group-details-table :datas="$datas" :datechosen="$datechosen"></x-daily-group-details-table>
+        <x-daily-group-details-table :datas="$datas" :datechosen="$datechosen" :selectedService="$selectedService" :selectedChannel="$selectedChannel"></x-daily-group-details-table>
     </div>
 </x-app-layout>
 

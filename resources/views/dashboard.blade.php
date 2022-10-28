@@ -7,7 +7,7 @@
         </div>
     </x-slot>
     <div>
-        <x-dashboard-table :days="$days" :datechosen="$datechosen"></x-dashboard-table>
+        <x-dashboard-table :days="$days" :datechosen="$datechosen" :selectedService="$selectedService" :selectedChannel="$selectedChannel"></x-dashboard-table>
     </div>
 </x-app-layout>
 

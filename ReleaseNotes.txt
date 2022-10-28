@@ -1,8 +1,9 @@
 Version 1.14.0
 ------------------------
-Date:27-October-2022
+Date:28-October-2022
 
 Implement user access control, user roles
+Add service type, channel in transaction report
 
 
 Version 1.13.3

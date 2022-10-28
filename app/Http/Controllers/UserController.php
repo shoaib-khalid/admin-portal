@@ -283,7 +283,7 @@ class UserController extends Controller
         // ]);
 
        
-
+        $selectedCountry = Session::get('selectedCountry');
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/daily_sales?from=2021-06-01&to=2021-08-16')->object();
         $to = date("Y-m-d");
         $date = new DateTime('7 days ago');             
@@ -297,7 +297,10 @@ class UserController extends Controller
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => 'DELIVERIN',
+            'channel' => 'DELIVERIN',
+            'countryCode' => $selectedCountry
         ]);
 
         if($request->successful()){
@@ -335,12 +338,14 @@ class UserController extends Controller
         //dd($days);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');        
         //dd($testdata);
-        return view('dashboard', compact('datechosen','days'));
+        $selectedService="DELIVERIN";
+        $selectedChannel="DELIVERIN";
+        return view('dashboard', compact('datechosen','days','selectedService','selectedChannel'));
     }
 
     public function daily_sales_filter(Request $req){
 
-        // dd($user);
+         //dd($req);
         // dd(Session::get('selectedCountry'));
 
         $data = $req->input();
@@ -350,12 +355,16 @@ class UserController extends Controller
 
         $start_date = date("Y-m-d", strtotime($start_date));
         $end_date = date("Y-m-d", strtotime($end_date));
+        $selectedCountry = $req->region;
 
         $request = Http::withToken($this->token)->get($this->url.'/store/null/daily_sales', [
             'from' => $start_date,
             'to' => $end_date,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => $req->selectService,
+            'channel' => $req->selectChannel,
+            'countryCode' => $selectedCountry
         ]);
         
 
@@ -364,12 +373,17 @@ class UserController extends Controller
             $days = $request['data']['content'];
 
         }
+        //dd($days);
 
         //dd($req->date_chosen);
         $datechosen = $req->date_chosen;
         // return $days;
         // die();
-        return view('dashboard', compact('days','datechosen'));
+        
+        Session::put('selectedCountry', $selectedCountry);
+        $selectedService=$req->selectService;
+        $selectedChannel=$req->selectChannel;
+        return view('dashboard', compact('days','datechosen','selectedService','selectedChannel'));
 
     }
 
@@ -378,12 +392,16 @@ class UserController extends Controller
         $to = date("Y-m-d");
         $date = new DateTime('7 days ago');
         $from = $date->format("Y-m-d");
-        
+        $selectedCountry = Session::get('selectedCountry');
+
         $request = Http::withToken($this->token)->get($this->url.'/store/null/report/detailedDailySales', [
             'startDate' => $from,
             'endDate' => $to,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => 'DELIVERIN',
+            'channel' => 'DELIVERIN',
+            'countryCode' => $selectedCountry
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -430,7 +448,10 @@ class UserController extends Controller
         // return $datas;
         // return json_decode($datas);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
-        return view('components.daily-details', compact('datas','datechosen'));
+        $selectedService="DELIVERIN";
+        $selectedChannel="DELIVERIN";
+
+        return view('components.daily-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
 
     public function daily_details_filter(Request $req){
@@ -448,7 +469,10 @@ class UserController extends Controller
             'startDate' => $start_date,
             'endDate' => $end_date,
             'sortingOrder' => "DESC",
-            'pageSize' => 1000
+            'pageSize' => 1000,
+            'serviceType' => $req->selectService,
+            'channel' => $req->selectChannel,
+            'countryCode' => $req->region
         ]); 
         
         // $posts = Http::get('https://api.symplified.biz/report-service/v1/store/null/report/detailedDailySales?startDate=2021-07-1&endDate=2021-08-16')->json();
@@ -460,7 +484,12 @@ class UserController extends Controller
 
         // return $datas;
         $datechosen = $req->date_chosen2;
-        return view('components.daily-details', compact('datas','datechosen'));
+        $selectedCountry = $req->region;
+        Session::put('selectedCountry', $selectedCountry);
+        $selectedService=$req->selectService;
+        $selectedChannel=$req->selectChannel;
+
+        return view('components.daily-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
 
 
@@ -478,7 +507,9 @@ class UserController extends Controller
                 'to' => $to,
                 'sortBy' => 'created',            
                 'sortingOrder' => "DESC",
-                'pageSize' => 1000
+                'pageSize' => 1000,
+                'serviceType' => 'DELIVERIN',
+                'channel' => 'DELIVERIN'
             ]); 
         }
 
@@ -493,7 +524,10 @@ class UserController extends Controller
         // return json_decode($datas);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
         $region = '';
-        return view('components.daily-group-details', compact('datas','datechosen'));
+        $selectedService="DELIVERIN";
+        $selectedChannel="DELIVERIN";
+
+        return view('components.daily-group-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
 
     public function filter_daily_group_details(Request $req){
@@ -518,7 +552,9 @@ class UserController extends Controller
                 'to' => $end_date,
                 'sortBy' => 'created',            
                 'sortingOrder' => "DESC",
-                'pageSize' => 1000
+                'pageSize' => 1000,
+                'serviceType' => $req->selectService,
+                'channel' => $req->selectChannel
             ]); 
         }
 
@@ -531,7 +567,10 @@ class UserController extends Controller
         $datas = $result['content'];
         $datechosen = $req->date_chosen2;
         $region = $req->region;
-        return view('components.daily-group-details', compact('datas','datechosen'));
+        $selectedService=$req->selectService;
+        $selectedChannel=$req->selectChannel;
+
+        return view('components.daily-group-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
 
 

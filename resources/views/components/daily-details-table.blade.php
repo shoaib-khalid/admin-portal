@@ -1,4 +1,8 @@
-
+@php
+    // var_dump($datas);
+    // dd($datas);
+    $selectedCountry = Session::get('selectedCountry');
+@endphp
 <div class="card section">
     <div class="card-header">
         <h4>Daily Details Sales</h4>
@@ -9,17 +13,60 @@
 
             <div class="row">
                 <div class="col">
+
+                <div class="col">
+                    <form
+                        class="flex flex-row w-full" 
+                        action="/filter_detail" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                            {{@csrf_field()}}
                     
-                    <form action="/filter_detail" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
-                        {{@csrf_field()}}
-                        <div class="input-group mb-3">
-                            <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                        <div class="col">                       
+                            <div class="input-group mb-3">
+                                <div class="col-3">Country</div>
+                                <div class="col">                                
+                                        <select class="form-control" id="region" name="region">
+                                            <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                                            <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                                        </select>                                    
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="col-2">Service</div>
+                                    <div class="col">
+                                        <select  class="form-control" name="selectService">
+                                            <option <?php if ($selectedService=="DELIVERIN") echo "selected"; ?>>DELIVERIN</option>
+                                            <option <?php if ($selectedService=="DINEIN") echo "selected"; ?>>DINEIN</option>
+                                        </select>
+                                    </div>
+                                </div>                   
+                        </div>
+
+                        <div class="col">
+                                <div class="input-group mb-3">
+                                    <div class="col-3">Channel</div>
+                                    <div class="col">
+                                        <select  class="form-control" name="selectChannel">
+                                            <option <?php if ($selectedChannel=="DELIVERIN") echo "selected"; ?> value="DELIVERIN">WEBSITE</option>
+                                            <option <?php if ($selectedChannel=="PAYHUB2U") echo "selected"; ?> value="PAYHUB2U">PAYHUB2U</option>
+                                        </select>
+                                    </div>
+                                </div>                   
+                        </div>
+
+                        <div class="col">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="date_chosen2" id="date_chosen2" class="form-control daterange-btn2" value="{{$datechosen}}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i> <span>Search</span></button>
+                                    </div>
+                                </div>
                         </div>
                     </form>
                 </div>
+
                 <div class="col-1">
                     
                 </div>
@@ -31,8 +78,10 @@
                         </button>
                     </form>
                 </div>
+
+                </div>
             </div>
-            
+
         </div>
 
         <div class="table-responsive">
@@ -55,6 +104,8 @@
                     <th>Total</th>
                     <th>Order Status</th>
                     <th>Delivery Status</th>
+                    <th>Service</th>
+                    <th>Channel</th>
                     {{-- <th>Action</th> --}}
                     </tr>
                 </thead>
@@ -118,6 +169,16 @@
                                         @else 
                                             <div class="badge badge-light">{{ $item['deliveryStatus'] }}</div>
                                         @endif
+                                    </td>
+                                    <td>
+                                        {{ $item['serviceType'] }}
+                                    </td>
+                                    <td>
+                                         @if ($item['channel'] == "DELIVERIN")
+                                            WEBSITE
+                                         @else 
+                                            {{ $item['channel'] }}
+                                         @endif
                                     </td>
                                     {{-- <td>
                                         <button class="btn btn-dark" 

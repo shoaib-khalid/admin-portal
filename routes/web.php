@@ -231,8 +231,8 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/post_edit_ogtag', [OgTagController::class, "post_edit_ogtag"])->name('post_edit_ogtag')->middleware('check-permission:post_edit_ogtag');
 
     Route::get('/groupsales', [UserController::class, "daily_group_details"])->name('groupsales')->middleware('check-permission:groupsales');   
-    Route::post('/filter_groupsales', [UserController::class, "filter_daily_group_details"])->name('filter_groupsales')->middleware('check-permission:filter_daily_group_details');
-    Route::post('/export_groupsales', [UserController::class, "export_daily_group_details"])->name('export_groupsales')->middleware('check-permission:export_daily_group_details');
+    Route::post('/filter_groupsales', [UserController::class, "filter_daily_group_details"])->name('filter_groupsales')->middleware('check-permission:filter_groupsales');
+    Route::post('/export_groupsales', [UserController::class, "export_daily_group_details"])->name('export_groupsales')->middleware('check-permission:export_groupsales');
       
     Route::get('/voucherredemption', [UserController::class, "voucherredemption"])->name('voucherredemption')->middleware('check-permission:voucherredemption');
     Route::post('/filter_voucherredemption', [UserController::class, "filter_voucherredemption"])->name('filter_voucherredemption')->middleware('check-permission:filter_voucherredemption');
