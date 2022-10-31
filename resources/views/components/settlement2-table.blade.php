@@ -45,8 +45,12 @@
                             <div class="col-3">Channel</div>
                             <div class="col">
                             <select  class="form-control" name="selectChannel">
+                                <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { ?>
                                 <option <?php if ($selectedChannel=="DELIVERIN") echo "selected"; ?> value="DELIVERIN">WEBSITE</option>
+                                <?php } ?>
+                                <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { ?>
                                 <option <?php if ($selectedChannel=="PAYHUB2U") echo "selected"; ?> value="PAYHUB2U">PAYHUB2U</option>
+                                <?php } ?>
                             </select>
                         </div>
                         </div>                   

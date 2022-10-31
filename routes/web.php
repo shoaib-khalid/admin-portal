@@ -266,6 +266,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/user', [UserController::class, "user"])->name('user')->middleware('check-permission:user');
     Route::post('/add_user', [UserController::class, "add_user"])->name('add_user')->middleware('check-permission:add_user');
     Route::post('/delete_user', [UserController::class, "delete_user"])->name('delete_user')->middleware('check-permission:delete_user');
+    Route::post('/edit_user', [UserController::class, "edit_user"])->name('edit_user')->middleware('check-permission:edit_user');
 
     Route::get('/roles', [UserController::class, "roles"])->name('roles')->middleware('check-permission:roles');
     Route::post('/add_roles', [UserController::class, "add_roles"])->name('add_roles')->middleware('check-permission:add_roles');

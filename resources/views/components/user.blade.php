@@ -29,9 +29,9 @@
         <div class="row">
             <div class="col-12">
                
-                    <form action="add_user" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
+                    <form action="add_user" name="frmUser" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}} 
-
+                     <input type="hidden" name="editUserId" id="editUserId" value="">
                         <div class="input-group mb-3">
                             <div class="col-3">Name</div>
                             <div class="col-7">
@@ -52,7 +52,11 @@
                                 <select name="selectChannel" id="selectChannel" class="form-control">   
                                     <option value="">Select Channel</option>                         
                                     @foreach ($channelList as $channel)
+                                    <?php if ($channel=="DELIVERIN") { ?>
+                                    <option value="DELIVERIN" <?php if ($channelSelected==$channel) echo "selected"; ?>>WEBSITE</option>                            
+                                    <?php } else { ?>
                                     <option value="{{$channel}}" <?php if ($channelSelected==$channel) echo "selected"; ?>>{{$channel}}</option>                            
+                                    <?php }  ?>
                                     @endforeach
                                 </select>          
                             </div>                           
@@ -68,7 +72,7 @@
                                     @endforeach
                                 </select> 
                                 <div class="input-group-append">
-                                    <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span>Add</span></button>
+                                    <button class="btn btn-success" type="submit"><i class="fas fa-save"></i> <span id="btnSave">Add</span></button>
                                 </div>     
                             </div>          
                         </div>                                   
@@ -97,8 +101,9 @@
                                         <td>{{ $data->name}}</td>
                                         <td>{{ $data->email}}</td>
                                         <td>{{ $data->rolesName }}</td>
-                                        <td>{{ $data->channel}}</td>    
+                                        <td><?php if ($data->channel=="DELIVERIN") echo "WEBSITE"; else echo $data->channel; ?></td>    
                                          <td>
+                                        <button class='btn btn-success' data-id='{{ $data->id }}' onclick="editUser('{{ $data->id }}','{{$data->name}}','{{$data->email}}','{{$data->role_id}}','{{$data->channel}}')">Edit User</button>  
                                         <button class='btn btn-danger' data-id='{{ $data->id }}' onclick="deleteUser({{ $data->id }})">Delete User</button>    
                                         </td>
                                     </tr>
@@ -113,7 +118,7 @@
                 <form name="frmDelete" action="delete_user" method="post" enctype="multipart/form-data" accept-charset='UTF-8'>
                     {{@csrf_field()}} 
                     <input type="hidden" name="deleteUserId" id="deleteUserId" value="">
-                </form>
+                </form>               
             </div>
             
         </div>       
@@ -129,5 +134,15 @@
             document.getElementById("deleteUserId").value=userId;
             document.frmDelete.submit();
         }
+    }
+    function editUser(userId, name, email, roles, channel) {
+       document.getElementById("name").value=name;
+       document.getElementById("email").value=email;
+       document.getElementById("email").disabled=true;
+       document.getElementById("selectRoles").value=roles;
+       document.getElementById("selectChannel").value=channel;
+       document.getElementById("editUserId").value=userId;
+       document.getElementById("btnSave").innerHTML="Save";
+       document.frmUser.action="edit_user";      
     }
 </script>

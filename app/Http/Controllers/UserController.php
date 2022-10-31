@@ -14,6 +14,7 @@ use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
 use Session;
+use Auth;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
@@ -40,7 +41,7 @@ class UserController extends Controller
 
     public function user ()
     {
-       $query = User::select('users.*','roles.name AS rolesName')
+       $query = User::select('users.*','roles.name AS rolesName','user_roles.role_id')
                         ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
                         ->join('roles', 'roles.id', '=', 'user_roles.role_id');
        $query->orderBy('created_at', 'DESC');
@@ -71,6 +72,16 @@ class UserController extends Controller
     public function delete_user (Request $request) {
         DB::connection('mysql')->delete("DELETE FROM user_roles WHERE user_id='".$request->deleteUserId."'");
         DB::connection('mysql')->delete("DELETE FROM users WHERE id='".$request->deleteUserId."'");
+        return redirect()->route("user");
+    }
+
+    public function edit_user (Request $request) {
+        $user = User::find($request->editUserId);
+        $user->channel = $request->selectChannel;
+        $user->name = $request->name;
+        $user->save();
+
+        DB::connection('mysql')->update("UPDATE user_roles SET role_id=".$request->selectRoles." WHERE user_id=".$request->editUserId);
         return redirect()->route("user");
     }
 
@@ -300,13 +311,20 @@ class UserController extends Controller
 
         // die();
 
+        if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { 
+            $channel="DELIVERIN";
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
+            $channel="PAYHUB2U"; 
+        }
+                               
+
         $request = Http::withToken($this->token)->get($this->url.'/store/null/daily_sales', [
             'from' => $from,
             'to' => $to,
             'sortingOrder' => "DESC",
             'pageSize' => 1000,
             'serviceType' => 'DELIVERIN',
-            'channel' => 'DELIVERIN',
+            'channel' => $channel,
             'countryCode' => $selectedCountry
         ]);
 
@@ -346,7 +364,7 @@ class UserController extends Controller
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');        
         //dd($testdata);
         $selectedService="DELIVERIN";
-        $selectedChannel="DELIVERIN";
+        $selectedChannel=$channel;
         return view('dashboard', compact('datechosen','days','selectedService','selectedChannel'));
     }
 
@@ -401,13 +419,19 @@ class UserController extends Controller
         $from = $date->format("Y-m-d");
         $selectedCountry = Session::get('selectedCountry');
 
+        if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { 
+            $channel="DELIVERIN";
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
+            $channel="PAYHUB2U"; 
+        }
+
         $request = Http::withToken($this->token)->get($this->url.'/store/null/report/detailedDailySales', [
             'startDate' => $from,
             'endDate' => $to,
             'sortingOrder' => "DESC",
             'pageSize' => 1000,
             'serviceType' => 'DELIVERIN',
-            'channel' => 'DELIVERIN',
+            'channel' =>  $channel,
             'countryCode' => $selectedCountry
         ]); 
         
@@ -456,7 +480,7 @@ class UserController extends Controller
         // return json_decode($datas);
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
         $selectedService="DELIVERIN";
-        $selectedChannel="DELIVERIN";
+        $selectedChannel= $channel;
 
         return view('components.daily-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
@@ -506,6 +530,13 @@ class UserController extends Controller
         $date = new DateTime('7 days ago');
         $from = $date->format("Y-m-d");
         $selectedCountry = Session::get('selectedCountry');
+        
+        if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { 
+            $channel="DELIVERIN";
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
+            $channel="PAYHUB2U"; 
+        }
+
         if($selectedCountry == 'MYS' || $selectedCountry == 'PAK') 
         {
             $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [
@@ -516,7 +547,7 @@ class UserController extends Controller
                 'sortingOrder' => "DESC",
                 'pageSize' => 1000,
                 'serviceType' => 'DELIVERIN',
-                'channel' => 'DELIVERIN'
+                'channel' => $channel
             ]); 
         }
 
@@ -532,7 +563,7 @@ class UserController extends Controller
         $datechosen = $date->format('F d, Y')." - ".date('F d, Y');
         $region = '';
         $selectedService="DELIVERIN";
-        $selectedChannel="DELIVERIN";
+        $selectedChannel=$channel;
 
         return view('components.daily-group-details', compact('datas','datechosen','selectedService','selectedChannel'));
     }
