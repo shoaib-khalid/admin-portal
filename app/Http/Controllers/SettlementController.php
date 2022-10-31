@@ -13,6 +13,7 @@ use App\Models\StoreDeliveryDetail as StoreDelivery;
 use Carbon\Carbon;
 use DateTime;
 use Session;
+use Auth;
 
 use App\Exports\UsersExport;
 use App\Exports\DetailsExport;
@@ -45,8 +46,13 @@ class SettlementController extends Controller
         $date = new DateTime('90 days ago');
         $from = $date->format("Y-m-d");
         $selectedService="DELIVERIN";
-        $selectedChannel="DELIVERIN";      
         $selectedCountry = Session::get('selectedCountry');
+
+        if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { 
+            $selectedChannel="DELIVERIN";
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
+            $selectedChannel="PAYHUB2U"; 
+        }
 
         $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
                         ->whereBetween('settlementDate', [$from, $to." 23:59:59"])
