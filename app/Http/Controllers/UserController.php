@@ -45,7 +45,7 @@ class UserController extends Controller
                         ->join('user_roles', 'user_roles.user_id', '=', 'users.id')
                         ->join('roles', 'roles.id', '=', 'user_roles.role_id');
        $query->orderBy('created_at', 'DESC');
-       $datas = $query->paginate(15);
+       $datas = $query->paginate(1000);
        $channelList = array('DELIVERIN','PAYHUB2U','ALL');
        $sql="SELECT * FROM roles";
        $rolesList = DB::connection('mysql')->select($sql);
