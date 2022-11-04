@@ -159,7 +159,7 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Product</th>
+                                            <th>Featured Product</th>
                                             <th>
                                                 @if(checkPermission('add_tag_product','POST')) 
                                                  <button class="btn btn-success" style="float: right;" type="button" onclick="addProduct('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
@@ -170,9 +170,7 @@
                                     <tbody>
                                          @foreach ($data->products as $product)
                                         <tr class="text-center">                                           
-                                            <td>{{ $product->productName }}</td>
-                                            <td>                                               
-                                            </td>                                   
+                                            <td colspan="2">{{ $product->productName }}</td>                                  
                                         </tr>
                                         @endforeach
                                     </tbody>

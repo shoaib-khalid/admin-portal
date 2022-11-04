@@ -60,7 +60,8 @@ class TagController extends Controller
 
             $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
                         ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
-                        ->where('tag_product_feature.tagId', '=', $data->id); 
+                        ->where('tag_product_feature.tagId', '=', $data->id)
+                        ->orderBy('sequence', 'ASC');
             $products = $query->get();
             //dd($details);
             $data->products = $products;
@@ -313,6 +314,7 @@ class TagController extends Controller
         $keywordId = $request->keywordId;
         $datas = TagProduct::select('tag_product_feature.*')
                 ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->orderBy('sequence', 'ASC')
                 ->get();  
 
         $query = TagDetails::select('tag_details.*' ,'store.name AS storeName')
@@ -333,6 +335,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->orderBy('sequence', 'ASC')
                 ->get();  
         return response()->json(array('productList'=> $details), 200);
     }
@@ -345,6 +348,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $req->keywordId)
+                ->orderBy('sequence', 'ASC')
                 ->get();  
        // dd($details);      
         return response()->json(array('productList'=> $details), 200); 
@@ -363,6 +367,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $request->keywordId)
+                ->orderBy('sequence', 'ASC')
                 ->get(); 
         return response()->json(array('productList'=> $details), 200); 
         
