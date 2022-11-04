@@ -69,9 +69,9 @@
                         <th>Latitude</th>
                         <th></th>
                         <th></th>
-                        <th style="width: 40%;">Details</th>  
-                        <th style="width: 40%;">Config</th>     
-                                          
+                        <th style="width: 20%;">Details</th>  
+                        <th style="width: 20%;">Config</th>     
+                        <th style="width: 60%;">Featured Product</th>                   
                     </tr>
                 </thead>      
                 <tbody>
@@ -154,6 +154,30 @@
                                     </tbody>
                                 </table>
                             </td>
+
+                            <td>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>
+                                                @if(checkPermission('add_tag_product','POST')) 
+                                                 <button class="btn btn-success" style="float: right;" type="button" onclick="addProduct('{{ $data['id'] }}')"><i class="fas fa-wrench"></i></button>
+                                                @endif
+                                            </th>                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         @foreach ($data->products as $product)
+                                        <tr class="text-center">                                           
+                                            <td>{{ $product->productName }}</td>
+                                            <td>                                               
+                                            </td>                                   
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </td>
                             
                         </tr>
                     @endforeach
@@ -199,6 +223,11 @@
      function addConfig(keywordId) {
         //alert(keywordId);
         window.location.href="/add_tag_config?keywordId="+keywordId;        
+    }
+
+    function addProduct(keywordId) {
+        //alert(keywordId);
+        window.location.href="/add_tag_product?keywordId="+keywordId;        
     }
 </script>
 

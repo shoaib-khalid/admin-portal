@@ -1,3 +1,10 @@
+Version 1.15.0
+------------------------
+Date:4-November-2022
+
+New feature for Tag : featured product 
+
+
 Version 1.14.0
 ------------------------
 Date:31-October-2022

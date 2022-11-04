@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\TagConfig;
 use App\Models\TagDetails;
+use App\Models\TagProduct;
 use App\Models\TagKeyword;
 use Carbon\Carbon;
 use DateTime;
@@ -56,6 +57,13 @@ class TagController extends Controller
             $configs = $query->get();
             //dd($details);
             $data->configs = $configs;
+
+            $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
+                        ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                        ->where('tag_product_feature.tagId', '=', $data->id); 
+            $products = $query->get();
+            //dd($details);
+            $data->products = $products;
         }     
         //dd($datas); 
         $keyworddata=null; 
@@ -301,4 +309,90 @@ class TagController extends Controller
         
     }
 
+    public function add_tag_product(Request $request){
+        $keywordId = $request->keywordId;
+        $datas = TagProduct::select('tag_product_feature.*')
+                ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->get();  
+
+        $query = TagDetails::select('tag_details.*' ,'store.name AS storeName')
+            ->join('store', 'tag_details.storeId' ,'=', 'store.id')
+            ->where('tag_details.tagId', '=', $keywordId); 
+        $storelist = $query->get();
+
+        return view('components.tag-add-product', compact('datas','keywordId','storelist'));
+    }
+
+    public function save_tag_product(Request $request){
+        $data = new TagProduct();
+        $data->tagId = $request->tagId;
+        $data->productId = $request->productId;
+        $data->sequence = $request->sequence;
+        $data->save();      
+
+        $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
+                ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->get();  
+        return response()->json(array('productList'=> $details), 200);
+    }
+
+
+    public function query_tag_product(Request $req){
+       
+        //find details
+        
+        $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
+                ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                ->where('tag_product_feature.tagId', '=', $req->keywordId)
+                ->get();  
+       // dd($details);      
+        return response()->json(array('productList'=> $details), 200); 
+
+    }
+
+
+     public function deletemultiple_tag_product(Request $request){
+        $ids = $request->ids;
+        foreach ($ids as $id) {
+            DB::connection('mysql2')->delete("DELETE FROM tag_product_feature WHERE id='".$id."'");
+        
+        }
+        
+        //find details
+        $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
+                ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                ->where('tag_product_feature.tagId', '=', $request->keywordId)
+                ->get(); 
+        return response()->json(array('productList'=> $details), 200); 
+        
+    }
+
+
+    public function filter_tag_product(Request $req){
+        
+       $sql="SELECT A.*, B.name as storeName, B.city AS storeCity, C.name as category, D.sequence, E.name AS parentcategory
+                    FROM product A 
+                        INNER JOIN store B ON A.storeId=B.id 
+                        INNER JOIN store_category C ON A.categoryId=C.id
+                        LEFT JOIN tag_product_feature D ON D.productId=A.id AND D.tagId=".$req->tagId."
+                        LEFT JOIN store_category E ON C.parentCategoryId=E.id
+                    WHERE A.id IS NOT NULL ";
+        if ($req->store_name<>"") {
+            $sql .= "AND B.name like '%".$req->store_name."%'";    
+        }
+        if ($req->product_name<>"") {
+            $sql .= "AND A.name like '%".$req->product_name."%'";    
+        }
+        if ($req->selectCategory<>"") {
+            $sql .= "AND C.parentCategoryId = '".$req->selectCategory."'";    
+        }
+        if ($req->locationId<>"" && $req->locationId<>"main") {
+            $sql .= "AND B.city = '".$req->locationId."'";    
+        }
+        //echo $sql;
+        $searchresult = DB::connection('mysql2')->select($sql);
+        return response()->json(array('productList'=> $searchresult), 200);        
+
+    }
 }

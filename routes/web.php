@@ -257,8 +257,14 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/save_tag_config', [TagController::class, "save_tag_config"])->name('save_tag_config')->middleware('check-permission:save_tag_config');
     Route::post('query_tag_config', [TagController::class, "query_tag_config"])->name('query_tag_config')->middleware('check-permission:query_tag_config');
     Route::post('deletemultiple_tag_config', [TagController::class, "deletemultiple_tag_config"])->name('deletemultiple_tag_config')->middleware('check-permission:deletemultiple_tag_config');
-    Route::post('/filter_category', [FeaturedCategoryController::class, "filter_category"])->name('filter_category')->middleware('check-permission:filter_category');
+    
+    Route::get('/add_tag_product', [TagController::class, "add_tag_product"])->name('add_tag_product')->middleware('check-permission:add_tag_product');
+    Route::post('/save_tag_product', [TagController::class, "save_tag_product"])->name('save_tag_product')->middleware('check-permission:save_tag_product');
+    Route::post('query_tag_product', [TagController::class, "query_tag_product"])->name('query_tag_product')->middleware('check-permission:query_tag_product');
+    Route::post('deletemultiple_tag_product', [TagController::class, "deletemultiple_tag_product"])->name('deletemultiple_tag_product')->middleware('check-permission:deletemultiple_tag_product');
+     Route::post('filter_tag_product', [TagController::class, "filter_tag_product"])->name('filter_tag_product')->middleware('check-permission:query_tag_product');
 
+    Route::post('/filter_category', [FeaturedCategoryController::class, "filter_category"])->name('filter_category')->middleware('check-permission:filter_category');
 
     Route::get('/mobilelog', [MobileLogController::class, "index"])->name('mobilelog')->middleware('check-permission:mobilelog');
     Route::post('/mobilelog_filter', [MobileLogController::class, "mobilelog_filter"])->name('mobilelog_filter')->middleware('check-permission:mobilelog_filter');
