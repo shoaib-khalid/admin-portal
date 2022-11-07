@@ -581,7 +581,7 @@ class UserController extends Controller
 
         $selectedCountry = $req->region;
         Session::put('selectedCountry', $selectedCountry);
-        
+        //dd($req);
         if($selectedCountry == 'MYS' || $selectedCountry == 'PAK') 
         {
             $request = Http::withToken($this->token)->get($this->url.'/store/null/orderGroupList', [

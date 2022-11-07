@@ -1,3 +1,10 @@
+Version 1.15.1
+------------------------
+Date:7-November-2022
+
+Show order item details in repot 'Daily Details Sales'
+
+
 Version 1.15.0
 ------------------------
 Date:4-November-2022

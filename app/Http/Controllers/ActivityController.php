@@ -1064,7 +1064,64 @@ class ActivityController extends Controller
        
              return response()->json($response);
          }
-        
+
+
+        //Product Details Popup By orderId
+        public function getordergroup_items($orderGroupId = 0){
+            //dd($orderId);                      
+            $sql="SELECT A.*, C.name AS storeName FROM order_item A 
+                INNER JOIN `order` B ON A.orderId=B.id 
+                INNER JOIN `store` C ON B.storeId=C.id
+                WHERE orderGroupId='".$orderGroupId."'";
+            //dd($sql);
+            $datas = DB::connection('mysql2')->select($sql);
+
+            $html = "";
+            //dd($datas);
+           foreach ($datas as $data) {                       
+                $itemDetails = $data->productName;
+                $itemId = $data->id;
+                $sql="SELECT * FROM order_subitem  
+                    WHERE orderItemId='".$itemId."'";
+                //dd($sql);
+                $dataSubItem = DB::connection('mysql2')->select($sql); 
+                $subItemList="";               
+                foreach ($dataSubItem as $subItem) {
+                    if ($subItemList=="")
+                        $subItemList = $subItem->productName;
+                    else
+                        $subItemList = $subItemList . ", " . $subItem->productName;
+                }
+                if (count($dataSubItem)>0) {
+                    $itemDetails = $itemDetails . " : " .$subItemList;
+                }
+
+                $sql="SELECT A.*, C.name AS productName FROM order_item_addon A
+                    LEFT JOIN product_addon B ON A.productAddOnId=B.id  
+                    LEFT JOIN addon_template_item C ON B.addOnTemplateItemId=C.id
+                    WHERE orderItemId='".$itemId."'";
+                $dataAddOn = DB::connection('mysql2')->select($sql); 
+                $addOnItemList="";               
+                foreach ($dataAddOn as $addOn) {
+                    if ($addOnItemList=="")
+                        $addOnItemList = $addOn->productName;
+                    else
+                        $addOnItemList = $addOnItemList . ", " . $addOn->productName;
+                }
+                if (count($dataAddOn)>0) {
+                    $itemDetails = $itemDetails . " : " .$addOnItemList;
+                }
+
+                $html .= "<tr>
+                    <td width='20%'> ".$data->storeName."</td>                                  
+                    <td width='20%'> ".$itemDetails."</td>              
+                    <td width='10%'> ".$data->quantity."</td>
+                 </tr>";
+            }
+            $response['html'] = $html;
+      
+            return response()->json($response);
+        }        
  
 
         public function filter_userdata(Request $req){

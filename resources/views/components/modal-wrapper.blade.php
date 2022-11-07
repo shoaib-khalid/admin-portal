@@ -303,7 +303,34 @@
     </div>
 </div>
 
-
+<div class="modal" tabindex="-1" role="dialog" id="GroupOrderItemDetails">
+    <div class="modal-dialog" role="document" style="max-width: 900px!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Completed Order - Items Details</h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{-- <a href="#" class="btn btn-icon btn-sm btn-danger" data-dismiss="modal" aria-label="Close" style="border-radius: 100px;"><i class="fas fa-times"></i></a> --}}
+            </div>
+            <!-- call product info from view -->
+            <div class="modal-body">
+            <table class="w-100 table table-md table-hover table-borderless" id="orderItemDetails">
+            <thead class="btn-light">
+                            <tr>
+                            <th  width="50%">Store Name</th>
+                            <th  width="40%">Product Name</th>
+                            <th  width="10%">Quantity</th>
+                            </tr>
+                        </thead>
+                      <tbody>
+                      </tbody>
+                   </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
 
 <div class="modal" tabindex="-1" role="dialog" id="AbandonCartDetails">
     <div class="modal-dialog" role="document" style="max-width: 900px!important;">

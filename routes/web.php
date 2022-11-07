@@ -99,6 +99,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/getactivity_details/{sessionId}', [ActivityController::class, "getactivity_details"])->name('getactivity_details')->middleware('check-permission:getactivity_details');
     Route::get('/getcart_details/{sessionId}', [ActivityController::class, "getcart_details"])->name('getcart_details')->middleware('check-permission:getcart_details');
     Route::get('/getorder_details/{sessionId}', [ActivityController::class, "getorder_details"])->name('getorder_details')->middleware('check-permission:getorder_details');
+    Route::get('/getordergroup_items/{orderGroupId}', [ActivityController::class, "getordergroup_items"])->name('getordergroup_items')->middleware('check-permission:getorder_details');
 
     Route::get('/usersitemap', [ActivityController::class, "usersitemap"])->name('usersitemap')->middleware('check-permission:usersitemap');
     Route::post('/filter_usersitemap', [ActivityController::class, "filter_usersitemap"])->name('filter_usersitemap')->middleware('check-permission:filter_usersitemap');

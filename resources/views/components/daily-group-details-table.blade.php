@@ -209,6 +209,9 @@
                                     {{ $data['channel'] }}
                                  @endif
                             </td>
+                            <td>
+                                <a href="#" class='btn btn-primary viewcompletedetails' data-id='{{ $data['id'] }}' >View Details</a>
+                            </td>
                         </tr>
                     @endforeach
                     

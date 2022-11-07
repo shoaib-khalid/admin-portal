@@ -71,6 +71,38 @@
             $('#date_chosen2').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
             $('#date_chosen2_copy').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         });
+
+
+        //Product Details PopUp for Complete Order
+        $('#table-2 tbody').on('click','.viewcompletedetails',function(){
+            
+            var orderGroupId = $(this).attr('data-id');
+            console.log("orderGroupId:"+orderGroupId);
+            if(orderGroupId){
+
+            // AJAX request
+            var url = "{{ route('getordergroup_items',[':orderGroupId']) }}";
+            url = url.replace(':orderGroupId',orderGroupId);
+            console.log("url:"+url);
+            // Empty modal data
+            $('#orderItemDetails tbody').empty();
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function(response){
+
+                    console.log("response:"+response);
+                    // Add details
+                    $('#orderItemDetails tbody').html(response.html);
+
+                    // Display Modal
+                    $('#GroupOrderItemDetails').modal('show'); 
+                }
+            });
+            }
+        });
+
         
     });
     
