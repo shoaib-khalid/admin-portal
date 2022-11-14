@@ -51,6 +51,18 @@
                     </div> 
 
 
+                     <div class="input-group mb-3">                        
+
+                        <div class="col-3">Service Type</div>
+                        <div class="col-7">
+                                                
+                            @foreach ($serviceTypeList as $serviceType)
+                            <input type="checkbox" value="{{$serviceType}}" name="serviceTypeList[]"> 
+                            <label for="serviceTypeList[]">{{$serviceType}}</label>&nbsp;&nbsp;&nbsp;                       
+                            @endforeach
+                        
+                        </div>                      
+                    </div> 
                     
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>

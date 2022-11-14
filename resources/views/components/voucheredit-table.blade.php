@@ -37,7 +37,7 @@
                             foreach ($voucherVerticalList as $verticalCode) {
                                 $checked[$verticalCode] = "checked";    
                             }     
-                            //dd($checked);                       
+                           // dd($voucherVerticalList);                       
                             ?>
                             @foreach ($verticalList as $vertical)
                             <input type="checkbox" value="{{$vertical->code}}" name="verticalList[]"{{$checked[$vertical->code]}} <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>> 
@@ -46,6 +46,28 @@
                         
                         </div>                      
                     </div>  
+
+                     <div class="input-group mb-3">                        
+
+                        <div class="col-3">Service Type</div>
+                        <div class="col-7">
+                                                
+                            <?php 
+                            foreach ($serviceTypeList as $serviceType) {
+                                $checked[$serviceType] = "";
+                            }
+                            foreach ($voucherServiceTypeList as $serviceType) {
+                                $checked[$serviceType] = "checked";    
+                            }     
+                            //dd($checked);                       
+                            ?>
+                            @foreach ($serviceTypeList as $serviceType)
+                            <input type="checkbox" value="{{$serviceType}}" name="serviceTypeList[]"{{$checked[$serviceType]}} <?php if ($voucher->totalRedeem>0) echo "disabled"; ?>> 
+                            <label for="serviceTypeList[]">{{$serviceType}}</label>&nbsp;&nbsp;&nbsp;                       
+                            @endforeach
+                        
+                        </div>                      
+                    </div> 
 
                      <div class="input-group mb-3">
                         <div class="col-3">Select Store</div>

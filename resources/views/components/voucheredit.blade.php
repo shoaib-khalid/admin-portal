@@ -3,7 +3,7 @@
         <h1>Edit Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucheredit-table :voucher="$voucher" :storelist="$storelist" :verticalList="$verticalList" :termsList="$termsList" :voucherVerticalList="$voucherVerticalList" :selectedStorelist="$selectedStorelist"></x-voucheredit-table>
+        <x-voucheredit-table :voucher="$voucher" :storelist="$storelist" :verticalList="$verticalList" :termsList="$termsList" :voucherVerticalList="$voucherVerticalList" :selectedStorelist="$selectedStorelist" :serviceTypeList="$serviceTypeList" :voucherServiceTypeList="$voucherServiceTypeList" ></x-voucheredit-table>
     </div>
 </x-app-layout>
 <script>

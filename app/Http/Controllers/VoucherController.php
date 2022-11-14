@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Voucher;
 use App\Models\VoucherTerms;
 use App\Models\VoucherVertical;
+use App\Models\VoucherServiceType;
 use App\Models\VoucherStore;
 use App\Models\Store;
 use App\Models\User;
@@ -41,9 +42,9 @@ class VoucherController extends Controller
 
         $storelist = Store::orderBy('name', 'ASC')
                         ->get();
-
+        $serviceTypeList = array('DINEIN','DELIVERIN');
         //dd($storelist);
-        return view('components.voucheradd',compact('storelist','verticalList'));
+        return view('components.voucheradd',compact('storelist','verticalList','serviceTypeList'));
     }
 
     public function voucherclaim($voucherId){
@@ -149,6 +150,13 @@ class VoucherController extends Controller
             $vcode->save();
         }
 
+        foreach ($request->serviceTypeList as $serviceType) {
+            $stype = new VoucherServiceType();
+            $stype->id = Str::uuid();
+            $stype->voucherId = $voucherId;
+            $stype->serviceType = $serviceType;
+            $stype->save();
+        }
 
 
         $termList = explode(PHP_EOL, $request->terms);
@@ -166,8 +174,9 @@ class VoucherController extends Controller
                         ->get();
         $sql="SELECT code FROM region_vertical";
         $verticalList = DB::connection('mysql2')->select($sql);
+        $serviceTypeList = array('DINEIN','DELIVERIN');
 
-        return view('components.voucheradd',compact('storelist','verticalList'));
+        return view('components.voucheradd',compact('storelist','verticalList','serviceTypeList'));
     }
 
 
@@ -343,6 +352,16 @@ class VoucherController extends Controller
             $voucherVerticalList[$i] = $vertical->verticalCode;
             $i++;
         }
+        //dd($voucherVerticalList);
+
+        $svcList = VoucherServiceType::where('voucherId', $req->voucherId)                        
+                        ->get();
+        $i=0;
+        $voucherServiceTypeList=array();
+        foreach ($svcList as $stype) {
+            $voucherServiceTypeList[$i] = $stype->serviceType;
+            $i++;
+        }
 
         $sList = VoucherStore::select('voucher_store.*','store.name AS storeName')
                         ->where('voucherId', $req->voucherId)  
@@ -356,8 +375,9 @@ class VoucherController extends Controller
             $x++;
         }
         //print_r($selectedStorelist);
-        
-        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList','voucherVerticalList','selectedStorelist'));
+        $serviceTypeList = array('DINEIN','DELIVERIN');
+
+        return view('components.voucheredit', compact('voucher', 'storelist', 'verticalList','termsList','voucherVerticalList','selectedStorelist','serviceTypeList','voucherServiceTypeList'));
     }
 
     public function post_voucheredit(Request $request){        
@@ -409,6 +429,16 @@ class VoucherController extends Controller
                 $vcode->verticalCode = $verticalCode;
                 $vcode->save();
             }
+
+            DB::connection('mysql2')->delete("DELETE FROM voucher_service_type WHERE voucherId='".$voucher->id."'");
+
+            foreach ($request->serviceTypeList as $serviceType) {
+                $stype = new VoucherServiceType();
+                $stype->id = Str::uuid();
+                $stype->voucherId = $voucher->id;
+                $stype->serviceType = $serviceType;
+                $stype->save();
+            }
         } else {
             $voucher->startDate = $start_date;
             $voucher->endDate = $end_date;
@@ -450,8 +480,18 @@ class VoucherController extends Controller
         $vList = VoucherVertical::where('voucherId', $request->voucherId)                        
                         ->get();
         $i=0;
+        $voucherVerticalList=array();
         foreach ($vList as $vertical) {
             $voucherVerticalList[$i] = $vertical->verticalCode;
+            $i++;
+        }
+
+        $svcList = VoucherServiceType::where('voucherId', $request->voucherId)                        
+                        ->get();
+        $i=0;
+        $voucherServiceTypeList=array();
+        foreach ($svcList as $stype) {
+            $voucherServiceTypeList[$i] = $stype->serviceType;
             $i++;
         }
 
@@ -466,8 +506,9 @@ class VoucherController extends Controller
             $selectedStorelist[$x]['storeId'] = $store->storeId;
             $x++;
         }
+        $serviceTypeList = array('DINEIN','DELIVERIN');
 
-        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList','voucherVerticalList', 'selectedStorelist'));
+        return view('components.voucheredit', compact('voucher','storelist','verticalList','termsList','voucherVerticalList', 'selectedStorelist','serviceTypeList','voucherServiceTypeList'));
     }
 
       public function voucherdelete(Request $req){        
