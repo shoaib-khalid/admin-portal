@@ -27,13 +27,20 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                    <div class="col-2">Select By Country</div>
+                        <div class="col-2">Select By Country</div>
                         <div class="col-4">
-                        <select class="form-control" id="region" name="region">
-                        <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
-                        <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
-                        </select>
-                       </div> 
+                            <select class="form-control" id="region" name="region">
+                            <option  value="MYS"<?php if ($selectedCountry=="MYS") echo "selected"; ?>>Malaysia</option>
+                            <option  value="PAK"<?php if ($selectedCountry=="PAK") echo "selected"; ?>>Pakistan</option>
+                            </select>
+                        </div> 
+                        <div class="col-2">Service Type</div>
+                        <div class="col-4">
+                             <select class="form-control" id="serviceType" name="serviceType">
+                            <option  value="MYS"<?php if ($serviceType=="MYS") echo "selected"; ?>>DELIVERIN</option>
+                            <option  value="PAK"<?php if ($serviceType=="PAK") echo "selected"; ?>>DINEIN</option>
+                            </select>
+                        </div>
                     </div>                    
                     <div class="input-group mb-3">                        
                         <div class="col-2">

@@ -3,7 +3,7 @@
         <h1>Available Voucher</h1>        
     </x-slot>
     <div>
-        <x-voucherlist-table :datas="$datas" :datechosen="$datechosen" :codechosen="$codechosen" :totalClaim="$totalClaim"></x-voucherlist-table>
+        <x-voucherlist-table :datas="$datas" :datechosen="$datechosen" :codechosen="$codechosen" :totalClaim="$totalClaim"  :serviceType="$serviceType"></x-voucherlist-table>
     </div>
 </x-app-layout>
 <script>

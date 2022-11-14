@@ -96,6 +96,14 @@ class TagController extends Controller
             $configs = $query->get();
             //dd($details);
             $data->configs = $configs;
+
+            $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
+                        ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                        ->where('tag_product_feature.tagId', '=', $data->id)
+                        ->orderBy('sequence', 'ASC');
+            $products = $query->get();
+            //dd($details);
+            $data->products = $products;
         }     
         $keyworddata=null; 
         $tagurl = $this->tagurl;
@@ -119,6 +127,14 @@ class TagController extends Controller
             $configs = $query->get();
             //dd($details);
             $data->configs = $configs;
+
+            $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
+                        ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                        ->where('tag_product_feature.tagId', '=', $data->id)
+                        ->orderBy('sequence', 'ASC');
+            $products = $query->get();
+            //dd($details);
+            $data->products = $products;
         }     
         //dd($datas); 
 
@@ -147,6 +163,14 @@ class TagController extends Controller
             $configs = $query->get();
             //dd($details);
             $data->configs = $configs;
+
+            $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
+                        ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                        ->where('tag_product_feature.tagId', '=', $data->id)
+                        ->orderBy('sequence', 'ASC');
+            $products = $query->get();
+            //dd($details);
+            $data->products = $products;
         }   
         $keyworddata=null;  
         $tagurl = $this->tagurl;
@@ -178,6 +202,14 @@ class TagController extends Controller
             $configs = $query->get();
             //dd($details);
             $data->configs = $configs;
+
+            $query = TagProduct::select('tag_product_feature.*','product.name AS productName',)
+                        ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
+                        ->where('tag_product_feature.tagId', '=', $data->id)
+                        ->orderBy('sequence', 'ASC');
+            $products = $query->get();
+            //dd($details);
+            $data->products = $products;
         }     
         $keyworddata=null;
 

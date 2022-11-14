@@ -216,7 +216,8 @@ class VoucherController extends Controller
             }
         }
         $codechosen='';
-        return view('components.voucherlist', compact('datas','datechosen','codechosen','totalClaim'));
+        $serviceType='';
+        return view('components.voucherlist', compact('datas','datechosen','codechosen','totalClaim','serviceType'));
     }
 
 
@@ -274,8 +275,9 @@ class VoucherController extends Controller
         // return $datas;
         // die();
         $datechosen = $req->date_chosen4;    
-        $codechosen = $req->code_chosen;            
-        return view('components.voucherlist', compact('datas', 'datechosen', 'codechosen','totalClaim'));
+        $codechosen = $req->code_chosen;    
+        $serviceType = $req->serviceType;    
+        return view('components.voucherlist', compact('datas', 'datechosen', 'codechosen','totalClaim','serviceType'));
 
     }
 
