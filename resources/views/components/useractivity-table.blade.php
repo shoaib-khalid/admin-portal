@@ -41,9 +41,14 @@
                         <div class="col-4">
                         <input type="text" name="browser_chosen" id="browser_chosen" class="form-control" value="{{$browser}}">
                         </div>
-                        <div class="col-2">Country</div>
+                        <div class="col-2">Channel</div>
                         <div class="col-4">
-                        <input type="text" name="device_chosen" id="device_chosen" class="form-control" value="">
+                        <select class="form-select form-select-lg mb-3" id="channel" name="channel">
+                        <option  value="" <?php if ($selectedChannel=="") echo "selected"; ?>>Website</option>
+                        <option  value="Facebook" <?php if ($selectedChannel=="Facebook") echo "selected"; ?>>Facebook</option>
+                        <option  value="Google" <?php if ($selectedChannel=="Google") echo "selected"; ?>>Google</option>
+                        <option  value="Payhub2U" <?php if ($selectedChannel=="Payhub2U") echo "selected"; ?>>Payhub2U</option>
+                        </select>
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -93,6 +98,7 @@
                         <th>Device</th>
                         <th>OS</th>
                         <th>Browser</th>
+                        <th>Channel</th>
                         <th>Error</th>  
                     </tr>
                 </thead>      
@@ -108,7 +114,8 @@
                             <td>{{ $data->ip}}</td>
                             <td>{{ $data->deviceModel }}</td>
                             <td>{{ $data->os }}</td>
-                            <td>{{ $data->browserType }}</td>                            
+                            <td>{{ $data->browserType }}</td>   
+                            <td>{{ $data->channel }}</td>   
                             <td>{{ $data->errorType }}</td>                            
                         </tr>
                     @endforeach

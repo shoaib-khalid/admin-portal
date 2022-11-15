@@ -169,8 +169,9 @@ class ActivityController extends Controller
         $device = '';  
         $browser = ''; 
         $pageVisited = '';
+        $selectedChannel="";
 
-        return view('components.useractivity',compact('datas','datechosen','storename','customername','device','browser'));
+        return view('components.useractivity',compact('datas','datechosen','storename','customername','device','browser','selectedChannel'));
     }
  
     public function filter_useractivitylog(Request $req){
@@ -235,6 +236,9 @@ class ActivityController extends Controller
         }
         if ($req->browser_chosen<>"") {
             $query->where('browserType', $req->browser_chosen);
+        }
+        if ($req->channel<>"") {
+            $query->where('channel', $req->channel);
         }
 
 //dd($query);
@@ -335,8 +339,9 @@ class ActivityController extends Controller
         $pageVisited = $req->page_chosen;
         $MYS= $req->MYS;
         $PAK= $req->PAK;
+        $selectedChannel=$req->channel;
 
-        return view('components.useractivity', compact('datas', 'datechosen', 'storename', 'customername','device','browser','MYS','PAK'));
+        return view('components.useractivity', compact('datas', 'datechosen', 'storename', 'customername','device','browser','MYS','PAK','selectedChannel'));
 
     }
 
@@ -577,8 +582,9 @@ class ActivityController extends Controller
         $customername = '';
         $device = '';  
         $browser = ''; 
+        $selectedChannel="";
 
-        return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser'));
+        return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser','selectedChannel'));
     }
 
 
@@ -595,6 +601,8 @@ class ActivityController extends Controller
 
         $selectedCountry = $req->region;
         Session::put('selectedCountry', $selectedCountry);
+
+        $selectedChannel = $req->channel;
 
         //query group by sessionId
         $query = UserActivity::select('csession.address AS sessionAddress', 'csession.city AS sessionCity', 'customer_activities.sessionId','customer_activities.storeId','customer_activities.customerId')
@@ -645,6 +653,9 @@ class ActivityController extends Controller
         }
         if ($req->browser_chosen<>"") {
             $query->where('browserType', $req->browser_chosen);
+        }
+        if ($req->channel<>"") {
+            $query->where('channel', $req->channel);
         }
 
         $query->groupBy('customer_activities.sessionId')->orderBy('customer_activities.created', 'DESC');
@@ -835,7 +846,7 @@ class ActivityController extends Controller
         $device = $req->device_chosen;
         $browser = $req->browser_chosen;
 
-        return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser'));
+        return view('components.usersitemap', compact('datas','datechosen','storename','customername','device','browser', 'selectedChannel'));
     }
 
 
@@ -1413,7 +1424,9 @@ class ActivityController extends Controller
         " SELECT DATE(created) as created,
          count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
          count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
+         count(case WHEN LOWER(channel) = 'Payhub2U'  then 1 end) as countP,
          count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
+
          from customer_activities
          WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' AND (pageVisited like '%deliverin.my%' OR pageVisited like '%dev-my%') 
          GROUP BY DATE(created)";
@@ -1423,6 +1436,7 @@ class ActivityController extends Controller
             " SELECT DATE(created) as created,
              count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
              count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
+             count(case WHEN LOWER(channel) = 'Payhub2U'  then 1 end) as countP,
              count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
              from customer_activities
              WHERE  DATE(created) BETWEEN '".$from."' AND '".$to."' AND (pageVisited like '%easydukan.co%' OR  pageVisited like '%dev-pk%') 
@@ -1464,6 +1478,7 @@ class ActivityController extends Controller
         "SELECT DATE(created) as created,
          count(case WHEN LOWER(channel) = 'Google' then 1 end) as countG,
          count(case WHEN LOWER(channel) = 'Facebook'  then 1 end) as countF,
+         count(case WHEN LOWER(channel) = 'Payhub2U'  then 1 end) as countP,
          count(case WHEN LOWER(channel) IS NULL then 1 end) as countO
          from customer_activities
          WHERE  DATE(created) BETWEEN '".$start_date."' AND '".$end_date."' ";

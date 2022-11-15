@@ -3,7 +3,7 @@
         <h1>Customer Site Map</h1>        
     </x-slot>
     <div>
-        <x-usersitemap-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser"></x-usersitemap-table>
+        <x-usersitemap-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser" :selectedChannel="$selectedChannel"></x-usersitemap-table>
     </div>
 </x-app-layout>
 <script>

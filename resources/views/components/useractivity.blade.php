@@ -3,7 +3,7 @@
         <h1>Customer Activity</h1>        
     </x-slot>
     <div>
-        <x-useractivity-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser"></x-useractivity-table>
+        <x-useractivity-table :datas="$datas" :datechosen="$datechosen" :storename="$storename" :customername="$customername" :device="$device" :browser="$browser" :selectedChannel="$selectedChannel"></x-useractivity-table>
     </div>
 </x-app-layout>
 <script>

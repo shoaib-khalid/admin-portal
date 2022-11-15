@@ -61,7 +61,8 @@
                         <th>Date</th>
                         <th>Google</th>
                         <th>Facebook</th>
-                        <th>Organic</th>
+                        <th>Website</th>
+                        <th>Payhub2U</th>
                     </tr>
                 </thead>     
                 <tbody>
@@ -71,6 +72,7 @@
                             <td>{{ $data->countG}}</td> 
                             <td>{{ $data->countF}}</td> 
                             <td>{{ $data->countO}}</td>
+                            <td>{{ $data->countP}}</td>
                         </tr>
                     @endforeach
 
