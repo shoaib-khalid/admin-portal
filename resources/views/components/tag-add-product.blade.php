@@ -294,6 +294,11 @@
             var sequence = document.getElementById("addProd_sequence_"+productId).value;
             var tagId = document.getElementById('keywordId').value;
 
+            if (sequence=="") {
+                alert("Please insert sequence");
+                return false;
+            }
+
             $.ajax({
                type:'POST',
                url:'/save_tag_product',

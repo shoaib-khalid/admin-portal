@@ -4,6 +4,7 @@ Date:15-November-2022
 
 Bug fix for tag
 Filter voucher by service type
+Bug fix for tag product featured
 
 
 Version 1.15.2
