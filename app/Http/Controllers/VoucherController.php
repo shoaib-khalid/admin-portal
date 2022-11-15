@@ -238,7 +238,8 @@ class VoucherController extends Controller
 
         $query = Voucher::select('voucher.*','store.name AS storeName')
                         ->leftJoin('store as store', 'storeId', '=', 'store.id')
-                        ->whereBetween('created_at', [$start_date, $end_date." 23:59:59"]);
+                        ->leftJoin('voucher_service_type as svctype', 'voucherId', '=', 'voucher.id')
+                        ->whereBetween('voucher.created_at', [$start_date, $end_date." 23:59:59"]);
 
         if($req->region == "MYS" ){
             $query->where(function ($query) {
@@ -254,11 +255,14 @@ class VoucherController extends Controller
         if ($req->code_chosen<>"") {
             $query->where('voucherCode', 'like', '%'.$req->code_chosen.'%');
         }
+        if ($req->serviceType<>"") {
+            $query->where('serviceType', '=', $req->serviceType);
+        }
 
 
         $query->orderBy('created_at', 'DESC');
        // dd($query);
-        $datas = $query->get();
+        $datas = $query->distinct()->get();
         $totalClaim=array();
         foreach ($datas as $data) {
             //get total claim

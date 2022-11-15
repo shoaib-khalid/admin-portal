@@ -37,8 +37,9 @@
                         <div class="col-2">Service Type</div>
                         <div class="col-4">
                              <select class="form-control" id="serviceType" name="serviceType">
-                            <option  value="MYS"<?php if ($serviceType=="MYS") echo "selected"; ?>>DELIVERIN</option>
-                            <option  value="PAK"<?php if ($serviceType=="PAK") echo "selected"; ?>>DINEIN</option>
+                                <option  value=""></option>
+                                <option  value="DELIVERIN"<?php if ($serviceType=="DELIVERIN") echo "selected"; ?>>DELIVERIN</option>
+                                <option  value="DINEIN"<?php if ($serviceType=="DINEIN") echo "selected"; ?>>DINEIN</option>
                             </select>
                         </div>
                     </div>                    
