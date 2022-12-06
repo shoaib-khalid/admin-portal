@@ -1,3 +1,10 @@
+Version 1.15.5
+------------------------
+Date:6-Dec-2022
+
+Add sessionTimeout in tag config
+
+
 Version 1.15.4
 ------------------------
 Date:15-November-2022

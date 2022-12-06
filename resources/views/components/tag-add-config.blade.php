@@ -50,7 +50,9 @@
                             <input type="radio" id="bannerMobile" name="prop" value="bannerMobile" onchange="handleChange(this);">
                                 <label for="bannerMobile">Banner Mobile</label>&nbsp;&nbsp;&nbsp;&nbsp;    
                             <input type="radio" id="bannerDesktop" name="prop" value="banner" onchange="handleChange(this);">
-                                <label for="bannerDesktop">Banner Desktop</label>                          
+                                <label for="bannerDesktop">Banner Desktop</label>&nbsp;&nbsp;&nbsp;&nbsp;   
+                             <input type="radio" id="sessionTimeout" name="prop" value="sessionTimeout" onchange="handleChange(this);">
+                                <label for="sessionTimeout">Session Timeout (in minutes)</label>                         
                         </div>                          
                     </div>
 
