@@ -16,13 +16,15 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
     protected $serviceType;
     protected $channel;
     protected $country;
+    protected $url;
 
-    function __construct($from, $to, $serviceType, $channel, $country) {
+    function __construct($from, $to, $serviceType, $channel, $country, $url) {
             $this->from = $from;
             $this->to = $to;
             $this->serviceType = $serviceType;
             $this->channel = $channel;
             $this->country = $country;
+            $this->url = $url;
     }
 
     /**
@@ -32,7 +34,7 @@ class UsersExport implements FromCollection, ShouldAutoSize, WithHeadings
     {
         // return User::all();
 
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/daily_sales', [
+        $request = Http::withToken('accessToken')->get($this->url.'/store/null/daily_sales', [
             'from' => $this->from,
             'to' => $this->to,
             'sortingOrder' => "DESC",

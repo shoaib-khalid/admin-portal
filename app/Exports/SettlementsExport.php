@@ -14,10 +14,12 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     protected $from;
     protected $to;
+    protected $url;
 
-    function __construct($from, $to) {
+    function __construct($from, $to, $url) {
             $this->from = $from;
             $this->to = $to;
+            $this->url = $url;
     }
 
     /**
@@ -32,7 +34,7 @@ class SettlementsExport implements FromCollection, ShouldAutoSize, WithHeadings
         //     'endDate' => $this->to,
         // ]); 
        
-        $request = Http::withToken('accessToken')->get('https://api.symplified.biz/report-service/v1/store/null/settlement', [
+        $request = Http::withToken('accessToken')->get($this->url . '/store/null/settlement', [
             'from' => $this->from,
             'to' => $this->to,
             'sortingOrder' => "DESC",

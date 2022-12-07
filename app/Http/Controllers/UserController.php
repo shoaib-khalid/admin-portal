@@ -177,7 +177,7 @@ class UserController extends Controller
         $from = "2021-08-01";
         $to = "2021-08-30";
 
-        return Excel::download(new UsersExport($from, $to), 'users.xlsx');
+        return Excel::download(new UsersExport($from, $to, $this->url), 'users.xlsx');
 
         // return Excel::download(new MttRegistrationsExport($request->id), 'MttRegistrations.xlsx');
     }
@@ -249,7 +249,7 @@ class UserController extends Controller
         // $from = "2021-08-01";
         // $to = "2021-08-30";
 
-        return Excel::download(new SettlementsExport($start_date, $end_date), 'settlement.xlsx');
+        return Excel::download(new SettlementsExport($start_date, $end_date, $this->url), 'settlement.xlsx');
     }
 
     public function export_merchant(Request $req) 
@@ -633,7 +633,7 @@ class UserController extends Controller
         $channel=$req->channel_copy;
         $country = $req->country_copy;
 
-        return Excel::download(new GroupSalesExport($start_date, $end_date, $service, $channel, $country), 'dailyDetailsSales.xlsx');
+        return Excel::download(new GroupSalesExport($start_date, $end_date, $service, $channel, $country, $this->url), 'dailyDetailsSales.xlsx');
     }
 
 
