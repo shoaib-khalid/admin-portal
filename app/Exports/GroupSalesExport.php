@@ -16,7 +16,8 @@ class GroupSalesExport implements FromCollection, ShouldAutoSize, WithHeadings
     protected $serviceType;
     protected $channel;
     protected $country;
-
+    protected $url;
+    
     function __construct($from, $to, $serviceType, $channel, $country) {
             $this->from = $from;
             $this->to = $to;
