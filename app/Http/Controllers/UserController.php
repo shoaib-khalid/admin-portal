@@ -226,7 +226,7 @@ class UserController extends Controller
         $channel=$req->channel_copy;
         $country = $req->country_copy;
 
-        return Excel::download(new DetailsExport($start_date, $end_date, $service, $channel, $country), 'dailyDetailsSales.xlsx');
+        return Excel::download(new DetailsExport($start_date, $end_date, $service, $channel, $country, $this->url), 'dailyDetailsSales.xlsx');
     }
 
 
