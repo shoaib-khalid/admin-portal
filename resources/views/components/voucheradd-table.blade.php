@@ -57,7 +57,7 @@
                         <div class="col-7">
                                                 
                             @foreach ($serviceTypeList as $serviceType)
-                            <input type="checkbox" value="{{$serviceType}}" name="serviceTypeList[]"> 
+                            <input type="checkbox" value="{{$serviceType}}" name="serviceTypeList[]" checked="true"> 
                             <label for="serviceTypeList[]">{{$serviceType}}</label>&nbsp;&nbsp;&nbsp;                       
                             @endforeach
                         
