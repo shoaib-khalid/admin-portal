@@ -1,3 +1,10 @@
+Version 1.16.1
+------------------------
+Date:12-Jan-2023
+
+Filter out product not active from tag featured product
+
+
 Version 1.16.0
 ------------------------
 Date:7-Dec-2022

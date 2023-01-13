@@ -345,7 +345,9 @@ class TagController extends Controller
     public function add_tag_product(Request $request){
         $keywordId = $request->keywordId;
         $datas = TagProduct::select('tag_product_feature.*')
+                ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->where('product.status', '=', 'ACTIVE')
                 ->orderBy('sequence', 'ASC')
                 ->get();  
 
@@ -367,6 +369,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $request->tagId)
+                ->where('product.status', '=', 'ACTIVE')
                 ->orderBy('sequence', 'ASC')
                 ->get();  
         return response()->json(array('productList'=> $details), 200);
@@ -380,6 +383,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $req->keywordId)
+                ->where('product.status', '=', 'ACTIVE')
                 ->orderBy('sequence', 'ASC')
                 ->get();  
        // dd($details);      
@@ -399,6 +403,7 @@ class TagController extends Controller
         $details = TagProduct::select('tag_product_feature.*', 'product.name AS productName')
                 ->join('product', 'tag_product_feature.productId' ,'=', 'product.id')
                 ->where('tag_product_feature.tagId', '=', $request->keywordId)
+                ->where('product.status', '=', 'ACTIVE')
                 ->orderBy('sequence', 'ASC')
                 ->get(); 
         return response()->json(array('productList'=> $details), 200); 
