@@ -1,3 +1,10 @@
+Version 1.16.2
+------------------------
+Date:2-Feb-2023
+
+Add button to save isFoodCourtOwner in tag details
+
+
 Version 1.16.1
 ------------------------
 Date:12-Jan-2023

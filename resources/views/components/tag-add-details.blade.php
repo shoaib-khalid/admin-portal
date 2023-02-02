@@ -73,7 +73,8 @@
                                 <tr class="text-center">
                                     <th>Store</th>
                                     <th>Product</th>
-                                    <th>Category</th>                                   
+                                    <th>Category</th> 
+                                    <th>FoodCourt Owner</th>                 
                                     <th></th> 
                                     </th>                         
                                 </tr>
@@ -89,6 +90,8 @@
                           
                             <div class="w-full flex flex-row justify-end">
                                  <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteMultiple()"><span>Delete Details</span> 
+                                 </button>
+                                 <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveDetails()"><span>Save Details</span> 
                                  </button>
                             </div>
                         </div>                                    
@@ -412,6 +415,16 @@
                         bodyData+='<td></td>';
                     }  else {
                         bodyData+='<td>'+row.categoryName+'</td>';
+                    } 
+
+                    if (row.isFoodCourtOwner==null) {
+                        bodyData+='<td></td>';
+                    }  else {
+                        if (row.isFoodCourtOwner=="1") {
+                            bodyData+='<td><input name="isFoodCourtOwner" type="radio" value="'+row.id+'" checked></td>';
+                        } else {
+                            bodyData+='<td><input name="isFoodCourtOwner" type="radio" value="'+row.id+'"></td>';    
+                        }                        
                     }                  
                                                      
                     bodyData+='<td>';
@@ -461,6 +474,46 @@
                  $("#msg").html(data.storeList);
                   //console.log(data);
                    alert('Details deleted!');
+                  var resultData = data.storeList;
+                  showData(resultData);
+               }
+            });
+        }
+
+
+    function saveDetails() {
+            
+            var keywordId = document.getElementById("keywordId").value;
+            var checkboxes = document.getElementsByName("isFoodCourtOwner");  
+
+            console.log(checkboxes);
+            const  rowIds=[];
+            var x=0;
+            for(var i = 0; i < checkboxes.length; i++)  
+            {  
+                if(checkboxes[i].checked)  {
+                    console.log(checkboxes[i].value); 
+                    rowIds[x] = checkboxes[i].value;
+                    x++;
+                }
+            }  
+
+            
+            $.ajax({
+               type:'POST',
+               url:'/update_tag_details',
+               headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type' : 'application/x-www-form-urlencoded'
+                },
+               data:{
+                    ids : rowIds,
+                    keywordId : keywordId                           
+                },
+               success:function(data) {
+                 $("#msg").html(data.storeList);
+                  //console.log(data);
+                   alert('Details updated!');
                   var resultData = data.storeList;
                   showData(resultData);
                }

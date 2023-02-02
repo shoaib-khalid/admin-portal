@@ -234,6 +234,7 @@ class TagController extends Controller
         $data->storeId = $request->storeId;
         $data->productId = $request->productId;
         $data->categoryId = $request->categoryId;
+        $data->isFoodCourtOwner = $request->isFoodCourtOwner;
         $data->save();      
         return response()->json($data, 200); 
     }
