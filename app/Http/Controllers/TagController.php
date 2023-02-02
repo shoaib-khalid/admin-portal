@@ -234,9 +234,25 @@ class TagController extends Controller
         $data->storeId = $request->storeId;
         $data->productId = $request->productId;
         $data->categoryId = $request->categoryId;
-        $data->isFoodCourtOwner = $request->isFoodCourtOwner;
+        $data->isFoodCourtOwner = 0;
         $data->save();      
         return response()->json($data, 200); 
+    }
+
+    public function update_tag_details(Request $request){
+        $keywordId = $request->keywordId;
+        $ids = $request->ids;
+        DB::connection('mysql2')->delete("UPDATE tag_details SET isFoodCourtOwner=0 WHERE tagId='".$keywordId."'");
+        foreach ($ids as $id) {
+            DB::connection('mysql2')->delete("UPDATE tag_details SET isFoodCourtOwner=1 WHERE id='".$id."'");
+        }    
+        $query = TagDetails::select('tag_details.*' , 'product.name AS productName', 'store.name AS storeName', 'store_category.name as categoryName')
+            ->leftjoin('product', 'tag_details.productId' ,'=', 'product.id')
+            ->leftjoin('store', 'tag_details.storeId' ,'=', 'store.id')
+            ->leftjoin('store_category', 'tag_details.categoryId' ,'=', 'store_category.id')
+            ->where('tag_details.tagId', '=', $request->keywordId); 
+        $details = $query->get();
+        return response()->json(array('storeList'=> $details), 200); 
     }
 
 

@@ -74,7 +74,7 @@
                                     <th>Store</th>
                                     <th>Product</th>
                                     <th>Category</th> 
-                                    <th>FoodCourt Owner</th>                 
+                                    <th>FoodCourt/Restaurant Owner</th>                 
                                     <th></th> 
                                     </th>                         
                                 </tr>
@@ -89,10 +89,11 @@
                          <div class="col-12">
                           
                             <div class="w-full flex flex-row justify-end">
+                                 <button type="button" class="btn btn-success icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveDetails()"><span>Save Details</span> 
+                                 </button>&nbsp;
                                  <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="deleteMultiple()"><span>Delete Details</span> 
                                  </button>
-                                 <button type="button" class="btn btn-danger icon-left btn-icon" style="margin-bottom: 1rem!important;" onclick="saveDetails()"><span>Save Details</span> 
-                                 </button>
+                                
                             </div>
                         </div>                                    
                     </div>
@@ -514,8 +515,6 @@
                  $("#msg").html(data.storeList);
                   //console.log(data);
                    alert('Details updated!');
-                  var resultData = data.storeList;
-                  showData(resultData);
                }
             });
         }

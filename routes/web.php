@@ -252,7 +252,7 @@ Route::group([ "middleware" => ['auth:sanctum', 'verified'] ], function() {
     Route::post('/save_tag_details', [TagController::class, "save_tag_details"])->name('save_tag_details')->middleware('check-permission:save_tag_details');
     Route::post('query_tag_details', [TagController::class, "query_tag_details"])->name('query_tag_details')->middleware('check-permission:query_tag_details');
     Route::post('deletemultiple_tag_details', [TagController::class, "deletemultiple_tag_details"])->name('deletemultiple_tag_details')->middleware('check-permission:deletemultiple_tag_details');
-
+    Route::post('/update_tag_details', [TagController::class, "update_tag_details"])->name('update_tag_details')->middleware('check-permission:save_tag_details');
 
     Route::get('/add_tag_config', [TagController::class, "add_tag_config"])->name('add_tag_config')->middleware('check-permission:add_tag_config');
     Route::post('/save_tag_config', [TagController::class, "save_tag_config"])->name('save_tag_config')->middleware('check-permission:save_tag_config');
