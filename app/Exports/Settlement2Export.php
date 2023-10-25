@@ -36,7 +36,7 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
         $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
                         ->whereBetween('settlementDate', [$this->from, $this->to." 23:59:59"])  
                         ->where('serviceType',$this->serviceType)  
-                        ->where('channel',$this->channel) 
+                        // ->where('channel',$this->channel) 
                         ->where('store.regionCountryId',$this->country) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
@@ -60,6 +60,7 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
                 $data['totalServiceFee'],
                 $data['totalDeliveryFee'],
                 $data['totalCommisionFee'],
+                $data['totalPaymentFee'],
                 $data['totalStoreShare'],
                 $data['remarks'],
                 $data['serviceType'],
@@ -94,6 +95,7 @@ class Settlement2Export implements FromCollection, ShouldAutoSize, WithHeadings
             'Service Charge',
             'Delivery Charge',
             'Commision',
+            'Payment Fee',
             'Nett Amount',
             'Remarks',
             'Service',

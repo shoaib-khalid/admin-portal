@@ -88,6 +88,9 @@
                                             <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { ?>
                                             <option <?php if ($selectedChannel=="PAYHUB2U") echo "selected"; ?> value="PAYHUB2U">PAYHUB2U</option>
                                             <?php } ?>
+                                            <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { ?>
+                                            <option <?php if ($selectedChannel=="EKEDAI") echo "selected"; ?> value="EKEDAI">EKEDAI</option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                     </div>                   

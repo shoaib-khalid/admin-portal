@@ -117,6 +117,46 @@
         var nettamount = $(e.relatedTarget).data('nettamount');
         var remarks = $(e.relatedTarget).data('remarks');
         var id = $(e.relatedTarget).data('id');
+        var paymentfee = $(e.relatedTarget).data('paymentfee');
+        var storeId = $(e.relatedTarget).data('storeid');
+
+        var order_url = $(e.relatedTarget).data('orderurl');
+
+        // Construct the URL with dynamic parameters
+        var url = order_url + "/orders";
+        url += "?from=" + startdate;
+        url += "&to=" + cutoffdate;
+        url += "&paymentStatus=PAID";
+        url += "&storeId=" + storeId;
+
+        // Make the GET request
+        $.ajax({
+            url: url,
+            type: "GET",
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer accessToken"
+            },
+            success: function(data) {
+                // Handle the response data here
+                var orders = data["data"]["content"];
+
+                var tableBody = $('#ordersTableBody');
+                tableBody.empty(); // Clear the existing rows
+
+                $.each(orders, function(index, order) {
+                  var storeShare = parseFloat(order.storeShare).toFixed(2); // Format to 2 decimal places
+                  var row = '<tr class="text-center"><td>' + order.invoiceId + '</td><td>' + storeShare + '</td></tr>';
+                  tableBody.append(row);
+                });
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle errors here
+                console.error("Request Failed:", textStatus, errorThrown);
+            }
+        });
+
         $('#spayoutdate').val(payoutdate);
         $('#sstorename').val(storename);
         $('#sstartdate').val(startdate);
@@ -128,6 +168,7 @@
         $('#snettamount').val(nettamount);
         $('#sremarks').val(remarks);
         $('#sid').val(id);
+        $('#spaymentfee').val(paymentfee);
    });
 
 

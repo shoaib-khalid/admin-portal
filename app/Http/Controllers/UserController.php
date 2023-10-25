@@ -46,7 +46,7 @@ class UserController extends Controller
                         ->join('roles', 'roles.id', '=', 'user_roles.role_id');
        $query->orderBy('created_at', 'DESC');
        $datas = $query->paginate(1000);
-       $channelList = array('DELIVERIN','PAYHUB2U','ALL');
+       $channelList = array('DELIVERIN','PAYHUB2U','ALL', 'EKEDAI');
        $sql="SELECT * FROM roles";
        $rolesList = DB::connection('mysql')->select($sql);
        $channelSelected='';
@@ -315,6 +315,8 @@ class UserController extends Controller
             $channel="DELIVERIN";
         } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
             $channel="PAYHUB2U"; 
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { 
+            $channel="EKEDAI"; 
         }
                                
 
@@ -423,6 +425,8 @@ class UserController extends Controller
             $channel="DELIVERIN";
         } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
             $channel="PAYHUB2U"; 
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { 
+            $channel="EKEDAI"; 
         }
 
         $request = Http::withToken($this->token)->get($this->url.'/store/null/report/detailedDailySales', [
@@ -535,6 +539,8 @@ class UserController extends Controller
             $channel="DELIVERIN";
         } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
             $channel="PAYHUB2U"; 
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { 
+            $channel="EKEDAI"; 
         }
 
         if($selectedCountry == 'MYS' || $selectedCountry == 'PAK') 

@@ -33,6 +33,7 @@ return [
     'report_svc' => [
         'url' => env('URL_REPORT_SERVICE'),
         'token' => env('TOKEN_REPORT_SERVICE'),
+        'order_url' => env('URL_ORDER_SERVICE')
     ],
 
     'logo_svc' => [

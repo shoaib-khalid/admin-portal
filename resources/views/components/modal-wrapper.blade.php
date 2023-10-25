@@ -577,8 +577,10 @@
                         <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sgrossamount">
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="text-primary">Service Charge</label>
-                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sservicecharge">
+                        <!-- <label class="text-primary">Service Charge</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="sservicecharge"> -->
+                        <label class="text-primary">Payment Fee</label>
+                        <input type="text" class="form-control-plaintext font-weight-bold" readonly="" id="spaymentfee">
                     </div>
                 </div>
                     
@@ -609,6 +611,21 @@
                         <label class="text-primary">Remarks</label>
                         <input type="text" class="form-control font-weight-bold" id="sremarks" name="sremarks">
                     </div>
+                </div>
+
+                <!-- Table to display orders -->
+                <div class="table-responsive">
+                    <table class="table table-md table-borderless">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Invoice ID</th>
+                                <th>Settlement Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Rows will be dynamically added here -->
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="form-row">

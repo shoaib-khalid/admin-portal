@@ -51,6 +51,9 @@
                                 <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { ?>
                                 <option <?php if ($selectedChannel=="PAYHUB2U") echo "selected"; ?> value="PAYHUB2U">PAYHUB2U</option>
                                 <?php } ?>
+                                <?php if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { ?>
+                                <option <?php if ($selectedChannel=="EKEDAI") echo "selected"; ?> value="EKEDAI">EKEDAI</option>
+                                <?php } ?>
                             </select>
                         </div>
                         </div>                   
@@ -97,17 +100,18 @@
                         <th>Service Charge</th>
                         <th>Delivery Charge</th>
                         <th>Commission</th>
+                        <th>Payment Fee</th>
                         <th>Nett Amount</th>
                         <th>Remarks</th>
-                        <th>Service</th>
-                        <th>Channel</th>    
+                        <!-- <th>Service</th> -->
+                        <!-- <th>Channel</th>     -->
                     </tr>
                 </thead>      
                 <tbody>
 
                     @foreach ($datas as $data)
                         <tr class="text-center" data-toggle="modal" data-target="#SettlementDetailsModal"
-                                    data-payoutdate="{{ \Carbon\Carbon::parse($data['settlementDate'])->format('Y-m-d H:i:s') }}"
+                                    data-payoutdate="{{ \Carbon\Carbon::parse($data['settlementDate'])->format('Y-m-d') }}"
                                     data-storename="{{ $data['storeName'] }}"
                                     data-startdate="{{ \Carbon\Carbon::parse($data['cycleStartDate'])->format('Y-m-d H:i:s') }}"
                                     data-cutoffdate="{{ \Carbon\Carbon::parse($data['cycleEndDate'])->format('Y-m-d H:i:s') }}"
@@ -118,6 +122,9 @@
                                     data-nettamount="{{ $data['totalStoreShare'] }}"
                                     data-remarks="{{ $data['remarks'] }}"
                                     data-id="{{ $data['id'] }}"
+                                    data-paymentfee="{{ $data['totalPaymentFee'] }}"
+                                    data-orderurl="{{ config('services.report_svc.order_url') }}"
+                                    data-storeid="{{ $data['storeId'] }}"
                                     >
                             <td>{{ \Carbon\Carbon::parse($data['settlementDate'])->format('Y-m-d') }}</td>
                             <td>{{ $data['storeName'] }}</td>
@@ -127,10 +134,11 @@
                             <td>{{ $data['totalServiceFee'] }}</td>
                             <td>{{ $data['totalDeliveryFee'] }}</td>
                             <td>{{ $data['totalCommisionFee'] }}</td>
+                            <td>{{ $data['totalPaymentFee'] }}</td>
                             <td>{{ $data['totalStoreShare'] }}</td>
                             <td>{{ $data['remarks'] }}</td>  
-                            <td>{{ $data['serviceType'] }}</td>  
-                            <td><?php if ($data['channel']=="DELIVERIN") echo "WEBSITE"; else echo $data['channel']; ?></td>                            
+                            <!-- <td>{{ $data['serviceType'] }}</td>   -->
+                            <!-- <td><?php if ($data['channel']=="DELIVERIN") echo "WEBSITE"; else echo $data['channel']; ?></td>                             -->
                         </tr>
                     @endforeach
 

@@ -28,6 +28,7 @@ class Settlement extends Model
                             'totalRefund',                            
                             'totalStoreShare',
                             'settlementStatus',
-                            'remarks'
+                            'remarks',
+                            'totalPaymentFee'
                         ];
 }

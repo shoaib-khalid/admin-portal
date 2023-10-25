@@ -34,10 +34,12 @@ class SettlementController extends Controller
 
     protected $url;
     protected $token;
+    protected $order_url;
 
     function __construct() {
             $this->url = config('services.report_svc.url');
             $this->token = config('services.report_svc.token');
+            $this->order_url = config('services.report_svc.order_url');
     }
 
     public function settlement2(){
@@ -52,6 +54,8 @@ class SettlementController extends Controller
             $selectedChannel="DELIVERIN";
         } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
             $selectedChannel="PAYHUB2U"; 
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { 
+            $selectedChannel="EKEDAI"; 
         }
 
         $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
@@ -61,7 +65,6 @@ class SettlementController extends Controller
                         ->where('store.regionCountryId',$selectedCountry) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
-        //print_r($datas);                    
 
         // return $datas;
         // die();        
@@ -88,7 +91,6 @@ class SettlementController extends Controller
         $datas = Settlement::join('store as store', 'store_settlement2.storeId', '=', 'store.id')
                         ->whereBetween('settlementDate', [$start_date, $end_date." 23:59:59"])  
                         ->where('serviceType',$req->selectService)  
-                        ->where('channel',$req->selectChannel) 
                         ->where('store.regionCountryId',$selectedCountry) 
                         ->orderBy('settlementDate', 'DESC')
                         ->get();
@@ -104,13 +106,23 @@ class SettlementController extends Controller
 
     public function update_settlement2(Request $request){
 
+        if (Auth::user()->channel=="ALL" || Auth::user()->channel=="DELIVERIN" ) { 
+            $selectedChannel="DELIVERIN";
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="PAYHUB2U" ) { 
+            $selectedChannel="PAYHUB2U"; 
+        } else if (Auth::user()->channel=="ALL" || Auth::user()->channel=="EKEDAI" ) { 
+            $selectedChannel="EKEDAI"; 
+        }
+
         //update refund record
         try{    
             //save file to public folder
             //dd($request);
             $settlement = Settlement::find($request->sid);            
-            $settlement->remarks = $request->sremarks;
-            $res = $settlement->save();
+            if ($settlement) {
+                $settlement->remarks = $request->sremarks;
+                $res = $settlement->save();
+            } 
             //dd($res); 
 
         }catch(QueryException $ex){ 
@@ -124,8 +136,10 @@ class SettlementController extends Controller
         $datas = Settlement::whereBetween('settlementDate', [$from, $to." 23:59:59"])  
                         ->orderBy('settlementDate', 'DESC')
                         ->get(); 
-        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');         
-        return view('components.settlement2', compact('datas', 'datechosen'));
+        $datechosen = $date->format('F d, Y')." - ".date('F d, Y');   
+        $selectedService="DELIVERIN";      
+
+        return view('components.settlement2', compact('datas', 'datechosen','selectedService','selectedChannel'));
     }
 
     public function export_settlement2(Request $req) 
