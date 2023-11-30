@@ -5,4 +5,4 @@
     </svg>
 </a> -->
 
-<img src="./img/symbol.png" alt="" class="img-fluid" style="width: 100px; height: auto;">
+<img src="./img/symbol.png" alt="" class="img-fluid" style="width: 200px; height: auto;">

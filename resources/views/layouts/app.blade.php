@@ -77,7 +77,7 @@
 
         <footer class="main-footer" style="margin-top: 0px;">
             <div class="footer-left">
-            Copyright &copy; 2021 <div class="bullet"></div> Powered By <a href="https://symplified.biz/">Symplified</a>
+            Copyright &copy; 2023 <div class="bullet"></div> Powered By <a href="https://e-kedai.my/">e-Kedai</a>
             </div>
             <div class="footer-right">
                 @version('label').@version('major').@version('minor').@version('patch')-@version('prerelease')
